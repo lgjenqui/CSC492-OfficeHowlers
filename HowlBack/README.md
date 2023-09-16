@@ -8,7 +8,7 @@ Build with:
 
 Run with: 
 
-```podman run -p 3000:3000 --network sdc --name api howlback```
+```podman run -p 3000:3000 --network sdc --env-file .env --name api howlback```
 
 Placing HowlBack behind Shibboleth reverse proxy gives these headers, providing the names and IDs we will need to authorize users: 
 
