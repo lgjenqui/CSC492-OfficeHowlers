@@ -1,0 +1,3 @@
+## General notes
+
+To run the application, navigate to the root directory (where the ```compose.yaml``` file is located) and run the command ```docker compose up``` to build the images and run them inside separate containers. You can use ```docker compose down``` to delete the running containers when you're done with them. The compose file automatically creates a network and runs all containers within that network. 
