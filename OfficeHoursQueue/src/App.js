@@ -1,15 +1,13 @@
 import React from "react";
 import logo from "./logo.svg";
+import { useEffect } from 'react';
 import "./App.css";
 
 function App() {
   const [data, setData] = React.useState(null);
 
-  React.useEffect(() => {
-    fetch("/")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+  // Make a call to the backend endpoint - for testing connectivity 
+  testCall()
 
   return (
     <div>
@@ -47,6 +45,11 @@ function App() {
       </div>
     </div>
   );
+}
+
+async function testCall() {
+    const response = await fetch("http://localhost:8080/test");
+    console.log(response.json())
 }
 
 export default App;
