@@ -1,7 +1,6 @@
-import React from "react";
-import logo from "./logo.svg";
-import { useEffect } from 'react';
-import "./App.css";
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -48,8 +47,8 @@ function App() {
 }
 
 async function testCall() {
-    const response = await fetch("http://localhost:8080/test");
-    console.log(response.json())
+  const response = await fetch("http://localhost:8080/test");
+  console.log(response.json())
 }
 
 export default App;

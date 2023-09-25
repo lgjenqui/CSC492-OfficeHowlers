@@ -1,10 +1,10 @@
-const express = require('express')
+import express from "express";
+import cors from "cors";
+import { db } from "./db";
+
 const app = express()
 const port = 8080
-const db = require("./db.js");
-const cors = require('cors')
-
-var corsOptions = {
+const corsOptions = {
   origin: '*'
 }
 
@@ -18,8 +18,6 @@ app.get('/test', cors(corsOptions), (req, res) => {
 
   res.send(status)
 });
-
-require("./routes/course.routes")(app);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
