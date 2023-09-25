@@ -1,0 +1,34 @@
+services:
+  db:
+    build: ./MariaDB
+    restart: always
+    container_name: maria_db
+    env_file: ./MariaDB/.env.dev
+    ports:
+      - "3306:3306"
+    healthcheck:
+      # Check if an external user can connect to the TCP port of the MariaDB server
+      test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect"]
+      interval: 3s
+      retries: 5
+
+  backend:
+    build: ./HowlBack
+    restart: always
+    container_name: howl_back
+    env_file: ./HowlBack/.env.dev
+    depends_on: 
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./OfficeHoursQueue
+    restart: always
+    container_name: office_hours_queue
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+    ports:
+      - "3000:3000"

@@ -1,7 +1,7 @@
 FROM node:18
 
-# Create backend directory
-WORKDIR /usr/src/app/backend
+# Create frontend directory
+WORKDIR /usr/src/app/frontend
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -13,6 +13,7 @@ RUN npm install
 # RUN npm ci --omit=dev
 # Bundle app source
 COPY . .
-EXPOSE 8080
-CMD [ "node", "app.js" ]
+RUN npm run build
+EXPOSE 3000
+CMD [ "npm", "start" ]
 
