@@ -1,5 +1,13 @@
 import { Sequelize } from "sequelize";
 
+export interface Course {
+
+}
+
+export interface CourseAttributes {
+  
+}
+
 const sequelize = new Sequelize(process.env.MARIADB_DATABASE, process.env.MARIADB_ROOT_USERNAME, process.env.MARIADB_ROOT_PASSWORD, {
   host: process.env.MARIADB_HOST,
   port: Number(process.env.MARIADB_PORT),
