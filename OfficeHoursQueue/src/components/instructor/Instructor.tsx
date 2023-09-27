@@ -15,12 +15,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import Start from "@mui/icons-material/Start";
 
 interface Props {
   lastName: string;
   salutation: string;
   onCourseClick: () => void;
+  onInstructorOptionsClick: (options: string) => void;
 }
 
 const courses = ["CSC 116 (001)", "CSC 216 (002)", "CSC 230 (004)"];
@@ -70,7 +70,12 @@ const getIcon = (index: number) => {
   else return <SettingsIcon />;
 };
 
-const Instructor = ({ lastName, salutation, onCourseClick }: Props) => {
+const Instructor = ({
+  lastName,
+  salutation,
+  onCourseClick,
+  onInstructorOptionsClick,
+}: Props) => {
   return (
     <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
       <Box
@@ -84,14 +89,18 @@ const Instructor = ({ lastName, salutation, onCourseClick }: Props) => {
         }}
       >
         <List>
-          {instructorOptions.map((text, index) => (
-            <ListItem key={text} disablePadding>
+          {instructorOptions.map((option, index) => (
+            <ListItem
+              onClick={() => onInstructorOptionsClick(option)}
+              key={index}
+              disablePadding
+            >
               <ListItemButton>
                 <ListItemIcon>{getIcon(index)}</ListItemIcon>
                 <ListItemText
                   sx={{ fontSize: "25px" }}
                   disableTypography
-                  primary={text}
+                  primary={option}
                 />
               </ListItemButton>
             </ListItem>
