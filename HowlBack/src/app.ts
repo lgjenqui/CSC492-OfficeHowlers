@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import sequelize from "../sequalize";
+import sequelize from "../sequelize_db";
 import courseRouter from "../routes/course.routes";
 
 const app = express()

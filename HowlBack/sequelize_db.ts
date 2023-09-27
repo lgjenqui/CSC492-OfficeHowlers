@@ -1,4 +1,4 @@
-// sequelize.ts
+// sequelize_db.ts
 
 import { Sequelize } from 'sequelize';
 

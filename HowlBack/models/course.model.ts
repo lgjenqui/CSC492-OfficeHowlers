@@ -1,5 +1,5 @@
-import { Model, DataTypes, Sequelize, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
-import sequelize from '../sequalize'; // Import path from module sequalize is imprted from
+import { Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
