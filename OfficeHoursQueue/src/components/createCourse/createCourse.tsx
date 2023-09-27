@@ -3,8 +3,16 @@ import Typography from "@mui/material/Typography";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useState } from "react";
 
-const CreateCourse = () => {
+interface Props {
+  onCreateCourse: (name: string, desc: string) => void;
+}
+
+const CreateCourse = ({ onCreateCourse }: Props) => {
+  const [courseName, setCourseName] = useState("");
+  const [courseDesc, setCourseDesc] = useState("");
+
   return (
     <Box
       sx={{
@@ -20,16 +28,6 @@ const CreateCourse = () => {
       />
       <Grid sx={{ flexGrow: 1 }} container spacing={3}>
         <Grid item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>Course Code</Typography>
-          <TextField
-            required
-            id="outlined-required"
-            label="Course Code"
-            defaultValue=""
-            sx={{ mr: "20px" }}
-          />
-        </Grid>
-        <Grid item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>Course Name</Typography>
           <TextField
             required
@@ -37,6 +35,24 @@ const CreateCourse = () => {
             label="Course Name"
             defaultValue=""
             sx={{ mr: "20px" }}
+            onChange={(e) => {
+              setCourseName(e.target.value);
+            }}
+          />
+        </Grid>
+        <Grid item>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
+            Course Description
+          </Typography>
+          <TextField
+            required
+            id="outlined-required"
+            label="Course Description"
+            defaultValue=""
+            sx={{ mr: "20px" }}
+            onChange={(e) => {
+              setCourseDesc(e.target.value);
+            }}
           />
         </Grid>
         <Grid item>
@@ -105,6 +121,7 @@ const CreateCourse = () => {
           },
         }}
         variant="contained"
+        onClick={() => onCreateCourse(courseName, courseDesc)}
       >
         Create course
       </Button>

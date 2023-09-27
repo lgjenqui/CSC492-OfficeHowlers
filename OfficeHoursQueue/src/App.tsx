@@ -9,8 +9,12 @@ import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
 import { Box } from "@mui/material";
+import Course from "../../HowlBack/models/course.model";
+import { setCourses } from "./components/instructor/Instructor";
 
 const systemRoles = ["Instructor", "TA", "Student"];
+
+var courses: Course[] = [];
 
 function App() {
   const navigate = useNavigate();
@@ -70,13 +74,36 @@ function App() {
 
           <Route path="/instructor/course/CSC216" />
 
-          <Route path="/instructor/createCourse" element={<CreateCourse />} />
+          <Route
+            path="/instructor/createCourse"
+            element={<CreateCourse onCreateCourse={createCourse} />}
+          />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
       </div>
     </LocalizationProvider>
   );
+}
+
+async function createCourse(name: string, desc: string) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      courseName: name,
+      courseDescription: desc,
+    }),
+  };
+
+  // Create the new course
+  await fetch("http://localhost:8080/api/course/create", requestOptions);
+
+  // Update the existing list of courses in the system
+  var res = await fetch("http://localhost:8080/api/course/all");
+  courses = await res.json();
+  setCourses(courses);
+  console.log(courses);
 }
 
 export default App;

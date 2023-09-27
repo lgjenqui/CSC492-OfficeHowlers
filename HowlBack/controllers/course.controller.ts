@@ -3,6 +3,7 @@ import Course from '../models/course.model';
 
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log(req);
     // Create a course in the database
     const createdCourse = await Course.create({
       courseName: req.body.courseName || "Empty name",

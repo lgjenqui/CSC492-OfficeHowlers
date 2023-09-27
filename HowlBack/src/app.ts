@@ -4,6 +4,7 @@ import sequelize from "../sequalize";
 import courseRouter from "../routes/course.routes";
 
 const app = express()
+app.use(cors())
 const port = 8080
 const corsOptions = {
   origin: '*'

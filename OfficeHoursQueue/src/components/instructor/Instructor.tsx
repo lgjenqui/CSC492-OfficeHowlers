@@ -15,6 +15,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import Course from "../../../../HowlBack/models/course.model";
 
 interface Props {
   lastName: string;
@@ -23,12 +24,17 @@ interface Props {
   onInstructorOptionsClick: (options: string) => void;
 }
 
-const courses = ["CSC 116 (001)", "CSC 216 (002)", "CSC 230 (004)"];
-const courseDescriptions = [
-  "Intro To Computing - Java",
-  "Software Development Fundamentals",
-  "C and Software Tools",
-];
+export function setCourses(updatedCourses: Course[]) {
+  courses = updatedCourses;
+}
+
+var courses: Course[] = [];
+// const courses = ["CSC 116 (001)", "CSC 216 (002)", "CSC 230 (004)"];
+// const courseDescriptions = [
+//   "Intro To Computing - Java",
+//   "Software Development Fundamentals",
+//   "C and Software Tools",
+// ];
 const instructorOptions = [
   "Create course",
   "Start help session",
@@ -132,7 +138,8 @@ const Instructor = ({
                 }}
                 onClick={onCourseClick}
               >
-                {card(course, courseDescriptions[index])}
+                {/* {card(course, courseDescriptions[index])} */}
+                {card(course.courseName, course.description)}
               </Card>
             </Grid>
           ))}
