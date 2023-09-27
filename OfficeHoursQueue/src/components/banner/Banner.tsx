@@ -8,7 +8,15 @@ interface Props {
 
 const Banner = ({ title, subtitle }: Props) => {
   return (
-    <Box sx={{ bgcolor: "#CC0000", width: "100%", height: "100%" }}>
+    <Box
+      sx={{
+        bgcolor: "#CC0000",
+        width: "100%",
+        height: "150px",
+        m: 0,
+        color: "white",
+      }}
+    >
       <Box
         sx={{
           width: "fit-content",

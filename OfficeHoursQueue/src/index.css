@@ -3,9 +3,14 @@
   src: url("./assets/Roboto/Roboto-Regular.ttf");
 }
 
+#root {
+  height: 100%;
+}
+
 html, body {
-  /* height: 100%; */
   width: 100%;
   margin: 0;
   font-family: Roboto !important;
+  min-height: 1920px;
+  min-width: 1080px;
 }
