@@ -13,6 +13,7 @@ RUN npm install
 # RUN npm ci --omit=dev
 # Bundle app source
 COPY . .
+RUN npm run build
 EXPOSE 8080
-CMD [ "node", "app.js" ]
+CMD [ "node", "dist/src/app.js" ]
 
