@@ -6,9 +6,5 @@ const courseRouter: Router = express.Router();
 // Create a course
 courseRouter.get('/', createCourse);
 
-// const setupRoutes = (app: Application): void => {
-//   app.use('/api/course', courseRouter);
-// };
-
 export default courseRouter;
 
