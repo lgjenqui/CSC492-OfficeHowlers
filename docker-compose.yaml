@@ -31,4 +31,4 @@ services:
     #   backend:
     #     condition: service_healthy
     ports:
-      - "3000:3000"
+      - "5173:5173"
