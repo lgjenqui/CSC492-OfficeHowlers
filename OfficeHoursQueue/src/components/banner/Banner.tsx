@@ -4,9 +4,10 @@ import { ReactNode } from "react";
 interface Props {
   title: ReactNode;
   subtitle: ReactNode;
+  onReturnHome: () => void;
 }
 
-const Banner = ({ title, subtitle }: Props) => {
+const Banner = ({ title, subtitle, onReturnHome }: Props) => {
   return (
     <Box
       sx={{
@@ -16,7 +17,14 @@ const Banner = ({ title, subtitle }: Props) => {
         m: 0,
         color: "white",
         userSelect: "none",
+        ":hover": {
+          cursor: "pointer",
+        },
+        ":active": {
+          color: "lightgrey",
+        },
       }}
+      onClick={() => onReturnHome()}
     >
       <Box
         sx={{

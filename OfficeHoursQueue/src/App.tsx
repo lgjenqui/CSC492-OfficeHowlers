@@ -35,7 +35,11 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
-        <Banner title={"OfficeHowlers"} subtitle="Think and Do"></Banner>
+        <Banner
+          title={"OfficeHowlers"}
+          subtitle="Think and Do"
+          onReturnHome={onReturnHome}
+        ></Banner>
         <Box
           sx={{
             position: "absolute",
