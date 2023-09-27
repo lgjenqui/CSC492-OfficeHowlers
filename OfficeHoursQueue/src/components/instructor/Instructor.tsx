@@ -125,6 +125,19 @@ const Instructor = ({
         >
           My courses
         </Typography>
+        {courses.length == 0 ? (
+          <Typography
+            sx={{
+              fontSize: "35px",
+              mt: "20px",
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            It looks like you have no courses. Use the 'Create course' menu to
+            the left to create one.
+          </Typography>
+        ) : null}
         <Grid sx={{ flexGrow: 1 }} container spacing={3}>
           {courses.map((course, index) => (
             <Grid item key={index}>
