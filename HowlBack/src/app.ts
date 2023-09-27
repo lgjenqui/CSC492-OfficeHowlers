@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { db } from "./db";
+import sequelize from "../sequalize";
 import courseRouter from "../routes/course.routes";
 
 const app = express()
@@ -10,7 +10,7 @@ const corsOptions = {
 }
 app.use(express.json());
 app.use("/api/course", courseRouter);
-db.sequelize.sync();
+sequelize.sync();
 
 app.get('/test', cors(corsOptions), (req, res) => {
   const status = {

@@ -6,11 +6,8 @@ interface Course {
   description: string;
 }
 
-interface CourseAttributes extends Course {
-  // Add any additional attributes you need when creating a course
-}
-
 class Course extends Model<InferAttributes<Course>, InferCreationAttributes<Course>> {
+  declare id: number;
   declare courseName: string;
   declare description: string;
 
@@ -21,6 +18,11 @@ class Course extends Model<InferAttributes<Course>, InferCreationAttributes<Cour
 
 Course.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     courseName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,4 +38,5 @@ Course.init(
   }
 );
 
+sequelize.sync();
 export default Course;

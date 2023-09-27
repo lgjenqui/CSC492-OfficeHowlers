@@ -1,39 +1,37 @@
 import { Request, Response } from 'express';
 import Course from '../models/course.model'; 
-import CourseAttributes from '../models/course.model';
 
-type CourseBasicInfo = Pick<Course, 'courseName' | 'description'>;
-
-const course: CourseBasicInfo = {
-  courseName: "default",
-  description: "Another default"
-}
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
-  course.courseName = req.body.courseName || "invalid body ig";
-  course.description = req.body.courseDescription || "Invalid desc";
+  try {
+    // Create a course in the database
+    const createdCourse = await Course.create({
+      courseName: req.body.courseName || "Empty name",
+      description: req.body.courseDescription || "Empty description",
+    });
 
-
-  // try {
-  //   // Create a course in the database
-  //   const createdCourse = await Course.create(testcourse);
-
-  //   // Send the created course as a response
-  //   res.status(201).json(createdCourse);
-  // } catch (error) {
-  //   res.status(500).json({ message: 'Error creating the course', error: error.message });
-  // }
-
-  res.send(course);
-
+    // Send the created course as a response
+    res.status(201).json(createdCourse);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating the course', error: error.message });
+  }
 };
 
 
 export const getCourse = async (req: Request, res: Response): Promise<void> => {
+  const course = await Course.findByPk(Number(req.query.id as string))
   res.send(course);
 };
 
+export const getAllCourses = async (req: Request, res: Response): Promise<void> => {
+  const courses = await Course.findAll();
+  res.send(courses);
+};
+
 export const deleteCourse = async (req: Request, res: Response): Promise<void> => {
-  course.courseName = "deleted";
-  course.description = "deleted too";
-  res.send(course);
+  try {
+    Course.destroy({ where: { id: Number(req.query.id as string) } });
+    res.status(200).send(true);
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting the course', error: error.message });
+  }
 };
