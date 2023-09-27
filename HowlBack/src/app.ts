@@ -8,8 +8,8 @@ const port = 8080
 const corsOptions = {
   origin: '*'
 }
-
-app.use("/apa", courseRouter);
+app.use(express.json());
+app.use("/api/course", courseRouter);
 db.sequelize.sync();
 
 app.get('/test', cors(corsOptions), (req, res) => {

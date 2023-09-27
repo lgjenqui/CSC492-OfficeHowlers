@@ -4,11 +4,13 @@ import CourseAttributes from '../models/course.model';
 
 type CourseBasicInfo = Pick<Course, 'courseName' | 'description'>;
 
+const course: CourseBasicInfo = {
+  courseName: "default",
+  description: "Another default"
+}
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
-  const testcourse: CourseBasicInfo = {
-    courseName: 'CSC316',
-    description: 'algos bb'
-  };
+  course.courseName = req.body.courseName || "invalid body ig";
+  course.description = req.body.courseDescription || "Invalid desc";
 
 
   // try {
@@ -21,6 +23,17 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
   //   res.status(500).json({ message: 'Error creating the course', error: error.message });
   // }
 
-  res.send(testcourse);
+  res.send(course);
 
+};
+
+
+export const getCourse = async (req: Request, res: Response): Promise<void> => {
+  res.send(course);
+};
+
+export const deleteCourse = async (req: Request, res: Response): Promise<void> => {
+  course.courseName = "deleted";
+  course.description = "deleted too";
+  res.send(course);
 };

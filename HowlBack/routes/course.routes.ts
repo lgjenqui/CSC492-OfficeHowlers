@@ -1,10 +1,14 @@
 import express, { Application, Request, Response, Router } from 'express';
-import { createCourse } from '../controllers/course.controller';
+import { createCourse, getCourse, deleteCourse } from '../controllers/course.controller';
 
 const courseRouter: Router = express.Router();
 
 // Create a course
-courseRouter.get('/', createCourse);
+courseRouter.post('/create', createCourse );
+
+courseRouter.get('/', getCourse );
+
+courseRouter.get('/delete', deleteCourse );
 
 export default courseRouter;
 
