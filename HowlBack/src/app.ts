@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { db } from "./db";
+import courseRouter from "../routes/course.routes";
 
 const app = express()
 const port = 8080
@@ -8,6 +9,7 @@ const corsOptions = {
   origin: '*'
 }
 
+app.use("/apa", courseRouter);
 db.sequelize.sync();
 
 app.get('/test', cors(corsOptions), (req, res) => {

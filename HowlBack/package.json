@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Backend for HowlLine Office Hours Queue Application",
   "author": "Luke Jenquin lgjenqui@ncsu.edu",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
