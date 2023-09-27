@@ -15,7 +15,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import Course from "../../../../HowlBack/models/course.model";
+import Course from "../../../../Models/course.model";
 
 interface Props {
   lastName: string;

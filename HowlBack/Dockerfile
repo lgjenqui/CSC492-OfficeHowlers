@@ -6,14 +6,18 @@ WORKDIR /usr/src/app/backend
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
+RUN mkdir ./HowlBack
+COPY ./HowlBack/package*.json ./HowlBack
+WORKDIR /usr/src/app/backend/HowlBack
 RUN npm install
 
 # If you are building your code for production
 # RUN npm ci --omit=dev
 # Bundle app source
-COPY . .
+COPY ./HowlBack .
+COPY ./Models ../Models
 RUN npm run build
 EXPOSE 8080
-CMD [ "node", "dist/src/app.js" ]
+RUN ls -a
+CMD [ "node", "dist/HowlBack/src/app.js" ]
 

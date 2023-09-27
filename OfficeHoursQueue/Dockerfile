@@ -3,7 +3,7 @@ FROM node:18-alpine
 # Create frontend directory
 WORKDIR /usr/src/app/frontend
 
-EXPOSE 3000
+EXPOSE 5173
 
 COPY package.json package-lock.json ./
 

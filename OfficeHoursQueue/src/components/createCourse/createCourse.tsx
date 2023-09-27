@@ -71,7 +71,7 @@ const CreateCourse = ({ onCreateCourse }: Props) => {
             <DatePicker />
           </LocalizationProvider>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <Typography sx={{ fontSize: 20 }}>
             Manually enter student and TA emails
           </Typography>
@@ -104,7 +104,7 @@ const CreateCourse = ({ onCreateCourse }: Props) => {
             Upload course roster as a CSV
           </Typography>
           <input accept="*.csv" type="file" />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Button
         sx={{

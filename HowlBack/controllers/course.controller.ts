@@ -6,7 +6,7 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
     console.log(req);
     // Create a course in the database
     const createdCourse = await Course.create({
-      courseName: req.body.courseName || "Empty name",
+      name: req.body.courseName || "Empty name",
       description: req.body.courseDescription || "Empty description",
     });
 

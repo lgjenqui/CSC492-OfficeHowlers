@@ -1,14 +1,10 @@
 import { Model, DataTypes, Sequelize, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import sequelize from '../sequalize'; // Import path from module sequalize is imprted from
+import CourseModel from "../../Models/course.model";
 
-interface Course {
-  courseName: string;
-  description: string;
-}
-
-class Course extends Model<InferAttributes<Course>, InferCreationAttributes<Course>> {
+class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
   declare id: number;
-  declare courseName: string;
+  declare name: string;
   declare description: string;
 
   // You can add class-level methods or associations here
@@ -23,7 +19,7 @@ Course.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    courseName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
