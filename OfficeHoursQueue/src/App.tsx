@@ -1,17 +1,27 @@
 import { Box } from "@mui/material";
-import * as React from "react";
+import { useNavigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/banner/Banner";
 import Login from "./components/login/Login";
+import Instructor from "./components/instructor/Instructor";
+
+const systemRoles = ["Instructor", "TA", "Student"];
 
 function App() {
+  const navigate = useNavigate();
+
+  const onLogin = (role: string) => {
+    navigate("/" + role.toLowerCase());
+  };
+
+  const onCourseClick = () => {
+    navigate("/instructor/course/CSC216");
+  };
+
   return (
-    <React.StrictMode>
+    <div>
       <Banner title={"OfficeHowlers"} subtitle="Think and Do"></Banner>
-      <Box sx={{ width: "100%", height: "100%", m: 0 }}>
-        <Login />
-      </Box>
       <Box
         sx={{
           position: "absolute",
@@ -21,7 +31,27 @@ function App() {
       >
         <img src={NCSULogo} width="162" height="78" alt="" />
       </Box>
-    </React.StrictMode>
+
+      <Routes>
+        <Route
+          path="/"
+          element={<Login systemRoles={systemRoles} onLogin={onLogin} />}
+        ></Route>
+
+        <Route
+          path="/instructor"
+          element={
+            <Instructor
+              salutation="Dr."
+              lastName="King"
+              onCourseClick={onCourseClick}
+            />
+          }
+        ></Route>
+
+        <Route path="/instructor/course/CSC216"></Route>
+      </Routes>
+    </div>
   );
 }
 

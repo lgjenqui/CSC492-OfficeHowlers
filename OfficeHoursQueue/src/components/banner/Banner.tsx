@@ -15,6 +15,7 @@ const Banner = ({ title, subtitle }: Props) => {
         height: "150px",
         m: 0,
         color: "white",
+        userSelect: "none",
       }}
     >
       <Box
