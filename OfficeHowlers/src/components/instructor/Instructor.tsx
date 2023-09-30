@@ -18,8 +18,6 @@ import Typography from "@mui/material/Typography";
 import Course from "../../../../Models/course.model";
 
 interface Props {
-  lastName: string;
-  salutation: string;
   onCourseClick: () => void;
   onInstructorOptionsClick: (options: string) => void;
 }
@@ -76,12 +74,7 @@ const getIcon = (index: number) => {
   else return <SettingsIcon />;
 };
 
-const Instructor = ({
-  lastName,
-  salutation,
-  onCourseClick,
-  onInstructorOptionsClick,
-}: Props) => {
+const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
   return (
     <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
       <Box
@@ -90,8 +83,9 @@ const Instructor = ({
           height: "min-height: 1000px",
           m: "auto",
           ml: "50px",
+          mt: "50px",
           userSelect: "none",
-          border: "1px solid black",
+          borderRight: "1px solid black",
         }}
       >
         <List>
@@ -151,8 +145,7 @@ const Instructor = ({
                 }}
                 onClick={onCourseClick}
               >
-                {/* {card(course, courseDescriptions[index])} */}
-                {card(course.courseName, course.description)}
+                {card(course.name, course.description)}
               </Card>
             </Grid>
           ))}

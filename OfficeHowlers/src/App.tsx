@@ -64,8 +64,6 @@ function App() {
             path="/instructor"
             element={
               <Instructor
-                salutation="Dr."
-                lastName="King"
                 onCourseClick={onCourseClick}
                 onInstructorOptionsClick={onInstructorOptionsClick}
               />
