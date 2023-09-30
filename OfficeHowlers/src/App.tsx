@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/banner/Banner";
-import CreateCourse from "./components/createCourse/createCourse";
+import CreateCourse from "./components/createCourse/CreateCourse";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";

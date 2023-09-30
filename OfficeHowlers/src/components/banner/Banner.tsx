@@ -17,14 +17,7 @@ const Banner = ({ title, subtitle, onReturnHome }: Props) => {
         m: 0,
         color: "white",
         userSelect: "none",
-        ":hover": {
-          cursor: "pointer",
-        },
-        ":active": {
-          color: "lightgrey",
-        },
       }}
-      onClick={() => onReturnHome()}
     >
       <Box
         sx={{
@@ -32,7 +25,14 @@ const Banner = ({ title, subtitle, onReturnHome }: Props) => {
           position: "relative",
           top: "50%",
           transform: "transLateY(-50%)",
+          ":hover": {
+            cursor: "pointer",
+          },
+          ":active": {
+            color: "lightgrey",
+          },
         }}
+        onClick={() => onReturnHome()}
       >
         <Box sx={{ fontSize: "48px", ml: "30px" }}>{title}</Box>
 
