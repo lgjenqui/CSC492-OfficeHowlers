@@ -1,5 +1,4 @@
 import Course from "../../../../Models/course.model";
-import { setCourses } from "../../components/instructor/Instructor";
 
 export async function createCourse(name: string, desc: string) {
     const requestOptions = {
@@ -13,9 +12,9 @@ export async function createCourse(name: string, desc: string) {
   
     // Create the new course
     await fetch("http://localhost:8080/api/course/create", requestOptions);
-  
+}
+
+export async function getCourses(): Promise<Course[]> {
     // Update the existing list of courses in the system
-    var res = await fetch("http://localhost:8080/api/course/all");
-    var courses: Course[] = await res.json();
-    setCourses(courses);
-  }
+    return (await fetch("http://localhost:8080/api/course/all")).json();
+}

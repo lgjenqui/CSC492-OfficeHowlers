@@ -17,23 +17,14 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Course from "../../../../Models/course.model";
+import { useEffect, useState } from "react";
+import { getCourses } from "../../services/api/course";
 
 interface Props {
   onCourseClick: () => void;
   onInstructorOptionsClick: (options: string) => void;
 }
 
-export function setCourses(updatedCourses: Course[]) {
-  courses = updatedCourses;
-}
-
-var courses: Course[] = [];
-// const courses = ["CSC 116 (001)", "CSC 216 (002)", "CSC 230 (004)"];
-// const courseDescriptions = [
-//   "Intro To Computing - Java",
-//   "Software Development Fundamentals",
-//   "C and Software Tools",
-// ];
 const instructorOptions = [
   "Create course",
   "Edit course roster",
@@ -69,6 +60,29 @@ const card = (course: string, courseDescription: string) => {
   );
 };
 
+function getCourseCards(courses: Course[], onCourseClick: () => void) {
+  if (!courses) {
+    return <h1>Still loading courses...</h1>;
+  }
+
+  return courses.map((course, index) => (
+    <Grid item key={index}>
+      <Card
+        sx={{
+          mt: "20px",
+          backgroundColor: "#CC0000",
+          backgroundClip: "padding-box",
+          color: "white",
+          borderRadius: "15px",
+        }}
+        onClick={onCourseClick}
+      >
+        {card(course.name, course.description)}
+      </Card>
+    </Grid>
+  ));
+}
+
 const getIcon = (index: number) => {
   if (index == 0) return <AddIcon />;
   else if (index == 1) return <PersonAddAltIcon />;
@@ -78,6 +92,21 @@ const getIcon = (index: number) => {
 };
 
 const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [coursesLoaded, setCoursesLoaded] = useState<boolean>(false);
+
+  // Check if new courses have been created when the component is reloaded
+  useEffect(() => {
+    let res = getCourses();
+    res.then((value) => {
+      setCourses(value);
+      setCoursesLoaded(true);
+    });
+    res.catch((error) => {
+      console.error(error);
+    });
+  }, []);
+
   return (
     <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
       <Box
@@ -111,18 +140,20 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
         </List>
       </Box>
       <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        <Typography
-          sx={{
-            fontSize: "35px",
-            fontWeight: "bold",
-            mt: "20px",
-            display: "inline-block",
-            width: "100%",
-          }}
-        >
-          My courses
-        </Typography>
-        {courses.length == 0 ? (
+        {coursesLoaded ? (
+          <Typography
+            sx={{
+              fontSize: "35px",
+              fontWeight: "bold",
+              mt: "20px",
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            My courses
+          </Typography>
+        ) : null}
+        {coursesLoaded && courses.length == 0 ? (
           <Typography
             sx={{
               fontSize: "35px",
@@ -136,22 +167,7 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
           </Typography>
         ) : null}
         <Grid sx={{ flexGrow: 1 }} container spacing={3}>
-          {courses.map((course, index) => (
-            <Grid item key={index}>
-              <Card
-                sx={{
-                  mt: "20px",
-                  backgroundColor: "#CC0000",
-                  backgroundClip: "padding-box",
-                  color: "white",
-                  borderRadius: "15px",
-                }}
-                onClick={onCourseClick}
-              >
-                {card(course.name, course.description)}
-              </Card>
-            </Grid>
-          ))}
+          {getCourseCards(courses, onCourseClick)}
         </Grid>
       </Box>
     </Grid>
