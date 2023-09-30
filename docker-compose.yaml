@@ -26,9 +26,9 @@ services:
       - "8080:8080"
 
   frontend:
-    build: ./OfficeHoursQueue
+    build: ./OfficeHowlers
     restart: always
-    container_name: office_hours_queue
+    container_name: office_howlers
     # depends_on:
     #   backend:
     #     condition: service_healthy
