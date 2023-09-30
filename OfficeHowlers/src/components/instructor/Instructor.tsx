@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import StartIcon from "@mui/icons-material/Start";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import SettingsIcon from "@mui/icons-material/Settings";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import {
   Box,
   Card,
@@ -35,6 +36,7 @@ var courses: Course[] = [];
 // ];
 const instructorOptions = [
   "Create course",
+  "Edit course roster",
   "Start help session",
   "Course analytics",
   "Settings",
@@ -69,8 +71,9 @@ const card = (course: string, courseDescription: string) => {
 
 const getIcon = (index: number) => {
   if (index == 0) return <AddIcon />;
-  else if (index == 1) return <StartIcon />;
-  else if (index == 2) return <AssessmentIcon />;
+  else if (index == 1) return <PersonAddAltIcon />;
+  else if (index == 2) return <StartIcon />;
+  else if (index == 3) return <AssessmentIcon />;
   else return <SettingsIcon />;
 };
 
