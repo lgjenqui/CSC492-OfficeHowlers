@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/Roboto/Roboto-Regular.ttf");
+}
+
+#root {
+  height: 100%;
+}
+
+html, body {
+  width: 100%;
+  margin: 0;
+  font-family: Roboto !important;
+  min-height: 900px;
+  min-width: 1080px;
+}
