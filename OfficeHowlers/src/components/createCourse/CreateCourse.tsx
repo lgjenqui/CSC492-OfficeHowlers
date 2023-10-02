@@ -4,9 +4,27 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
+import { createCourse } from "../../services/api/course";
+import { getStatusTSX } from "../../services/util";
 
 interface Props {
   onCreateCourse: (name: string, desc: string) => void;
+}
+
+var statusMessages = []
+
+function createCourseWrapper(courseName: string, courseDesc: string) {
+    if (courseName.length == 0) {
+        statusMessages.append(getStatusTSX("Please provide a course name.", "error"));
+    }
+
+    if (courseDesc.length == 0) {
+        console.log("Please provide a course description.");
+    }
+}
+
+function getStatusMessage() {
+    return <h1>error!</h1>
 }
 
 const CreateCourse = ({ onCreateCourse }: Props) => {
@@ -121,10 +139,11 @@ const CreateCourse = ({ onCreateCourse }: Props) => {
           },
         }}
         variant="contained"
-        onClick={() => onCreateCourse(courseName, courseDesc)}
+        onClick={() => createCourseWrapper(courseName, courseDesc)}
       >
         Create course
       </Button>
+      {getStatusMessage()}
     </Box>
   );
 };
