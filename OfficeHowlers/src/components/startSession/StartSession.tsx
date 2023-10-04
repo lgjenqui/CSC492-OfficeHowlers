@@ -11,7 +11,7 @@ import dayjs, { Dayjs } from "dayjs";
 interface Props {
   onStartSession: (
     courses: Course[],
-    mode: string | null,
+    modes: string[],
     startTime: Dayjs | null,
     endTime: Dayjs | null
   ) => void;
@@ -19,7 +19,7 @@ interface Props {
 
 const StartSession = ({ onStartSession }: Props) => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [mode, setMode] = useState<string | null>("");
+  const [modes, setModes] = useState<string[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
   const [startTime, setStartTime] = React.useState<Dayjs | null>(
     dayjs().add(0, "hour")
@@ -28,6 +28,8 @@ const StartSession = ({ onStartSession }: Props) => {
     dayjs().add(1, "hour")
   );
 
+  // Grab the courses for this instructor
+  // NOTE - this is grabbing ALL system courses for now
   useEffect(() => {
     let res = getCourses();
     res.then((value) => {
@@ -86,17 +88,25 @@ const StartSession = ({ onStartSession }: Props) => {
           />
         </Grid>
         <Grid sx={{ width: "30%" }} item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>Mode</Typography>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
+            Mode of delivery
+          </Typography>
           <Autocomplete
             sx={{ minWidth: "100%" }}
+            multiple
             id="tags-standard"
             options={["In Person", "Zoom"]}
-            value={mode}
+            value={modes}
             onChange={(event, newValue) => {
-              setMode(newValue);
+              setModes(newValue);
             }}
             renderInput={(params) => (
-              <TextField required {...params} variant="standard" label="Mode" />
+              <TextField
+                required
+                {...params}
+                variant="standard"
+                label="Select a mode or modes"
+              />
             )}
           />
         </Grid>
@@ -135,10 +145,10 @@ const StartSession = ({ onStartSession }: Props) => {
         }}
         variant="contained"
         onClick={() =>
-          onStartSession(selectedCourses, mode, startTime, endTime)
+          onStartSession(selectedCourses, modes, startTime, endTime)
         }
       >
-        Create session
+        Start session
       </Button>
     </Box>
   );
