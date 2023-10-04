@@ -1,6 +1,6 @@
 import { Box, TextField, Divider, Grid, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete from "@mui/material/Autocomplete";
 import Course from "../../../../Models/course.model";
 import { useEffect, useState } from "react";
 import { getCourses } from "../../services/api/session";
@@ -9,15 +9,24 @@ import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 
 interface Props {
-  onStartSession: (courses: Course[], mode: string | null, startTime: Dayjs | null, endTime:Dayjs | null) => void;
+  onStartSession: (
+    courses: Course[],
+    mode: string | null,
+    startTime: Dayjs | null,
+    endTime: Dayjs | null
+  ) => void;
 }
 
 const StartSession = ({ onStartSession }: Props) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [mode, setMode] = useState<string | null>("");
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
-  const [startTime, setStartTime ] = React.useState<Dayjs | null>(dayjs().add(0,'hour'));
-  const [endTime, setEndTime ] = React.useState<Dayjs | null>(dayjs().add(1,'hour'));
+  const [startTime, setStartTime] = React.useState<Dayjs | null>(
+    dayjs().add(0, "hour")
+  );
+  const [endTime, setEndTime] = React.useState<Dayjs | null>(
+    dayjs().add(1, "hour")
+  );
 
   useEffect(() => {
     let res = getCourses();
@@ -38,22 +47,28 @@ const StartSession = ({ onStartSession }: Props) => {
         alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Create a session</Typography>
+      <Typography sx={{ fontSize: 42, mb: "5px" }}>Start a session</Typography>
       <Divider
         sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
       />
-      <Grid sx={{ flexGrow: 1 }} container spacing={3}>
-        <Grid sx={{width:"30%"}} item>
-        <Typography sx={{ fontSize: 20, mb: "5px" }}>
+      <Grid
+        sx={{
+          flexGrow: 1,
+        }}
+        container
+        spacing={3}
+      >
+        <Grid sx={{ width: "30%" }} item>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course Selection
-        </Typography>
+          </Typography>
           <Autocomplete
-            sx ={{minWidth: "100%"}}
+            sx={{ minWidth: "100%" }}
             multiple
             id="tags-standard"
             options={courses}
             getOptionLabel={(option: { name: string }) => {
-              return option?.name
+              return option?.name;
             }}
             isOptionEqualToValue={(option, value) => option.name === value.name}
             value={selectedCourses}
@@ -62,33 +77,26 @@ const StartSession = ({ onStartSession }: Props) => {
             }}
             renderInput={(params) => (
               <TextField
-               required
+                required
                 {...params}
                 variant="standard"
-                label="Multiple values"
+                label="Select a course or courses"
               />
             )}
           />
         </Grid>
-        <Grid sx={{width:"30%"}} item>
-        <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            Mode
-        </Typography>
+        <Grid sx={{ width: "30%" }} item>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>Mode</Typography>
           <Autocomplete
-            sx ={{minWidth: "100%"}}
+            sx={{ minWidth: "100%" }}
             id="tags-standard"
-            options={["In Person","Zoom"]}
-            value = {mode}
+            options={["In Person", "Zoom"]}
+            value={mode}
             onChange={(event, newValue) => {
               setMode(newValue);
             }}
             renderInput={(params) => (
-              <TextField
-                required
-                {...params}
-                variant="standard"
-                label="Mode"
-              />
+              <TextField required {...params} variant="standard" label="Mode" />
             )}
           />
         </Grid>
@@ -96,19 +104,19 @@ const StartSession = ({ onStartSession }: Props) => {
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Session start time
           </Typography>
-            <TimePicker
+          <TimePicker
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
-            />
+          />
         </Grid>
         <Grid item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            Session start time
+            Session end time
           </Typography>
-            <TimePicker
+          <TimePicker
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
-            />
+          />
         </Grid>
       </Grid>
       <Button
@@ -126,7 +134,9 @@ const StartSession = ({ onStartSession }: Props) => {
           },
         }}
         variant="contained"
-        onClick={() => onStartSession(selectedCourses, mode, startTime, endTime)}
+        onClick={() =>
+          onStartSession(selectedCourses, mode, startTime, endTime)
+        }
       >
         Create session
       </Button>
