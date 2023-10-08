@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -8,8 +9,6 @@ import CreateCourse from "./components/createCourse/CreateCourse";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
-import { Box } from "@mui/material";
-import { createCourse } from "./services/api/course";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -69,10 +68,7 @@ function App() {
 
           <Route path="/instructor/course/CSC216" />
 
-          <Route
-            path="/instructor/createCourse"
-            element={<CreateCourse onCreateCourse={createCourse} />}
-          />
+          <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
