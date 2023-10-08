@@ -34,21 +34,17 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div>
+      <Box
+        sx={{
+          height: "100%",
+          position: "relative",
+        }}
+      >
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
           onReturnHome={onReturnHome}
         ></Banner>
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 15,
-            left: 15,
-          }}
-        >
-          <img src={NCSULogo} width="162" height="78" alt="" />
-        </Box>
 
         <Routes>
           <Route
@@ -72,7 +68,17 @@ function App() {
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
-      </div>
+
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 15,
+            left: 15,
+          }}
+        >
+          <img src={NCSULogo} width="162" height="78" alt="" />
+        </Box>
+      </Box>
     </LocalizationProvider>
   );
 }
