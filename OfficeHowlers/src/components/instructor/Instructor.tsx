@@ -1,8 +1,8 @@
 import AddIcon from "@mui/icons-material/Add";
-import StartIcon from "@mui/icons-material/Start";
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import SettingsIcon from "@mui/icons-material/Settings";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import SettingsIcon from "@mui/icons-material/Settings";
+import StartIcon from "@mui/icons-material/Start";
 import {
   Box,
   Card,
@@ -15,9 +15,11 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import Typography from "@mui/material/Typography";
-import Course from "../../../../Models/course.model";
 import { useEffect, useState } from "react";
+import Course from "../../../../Models/course.model";
 import { getCourses } from "../../services/api/course";
 
 interface Props {
@@ -93,18 +95,21 @@ const getIcon = (index: number) => {
 
 const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [coursesLoaded, setCoursesLoaded] = useState<boolean>(false);
+  const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
+    boolean | null
+  >(null);
 
   // Check if new courses have been created when the component is reloaded
   useEffect(() => {
-    let res = getCourses();
-    res.then((value) => {
-      setCourses(value);
-      setCoursesLoaded(true);
-    });
-    res.catch((error) => {
-      console.error(error);
-    });
+    getCourses()
+      .then((res) => {
+        setCourses(res);
+        setCoursesLoadedSuccessfully(true);
+      })
+      .catch((err) => {
+        setCoursesLoadedSuccessfully(false);
+        console.error(err);
+      });
   }, []);
 
   return (
@@ -140,7 +145,7 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
         </List>
       </Box>
       <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        {coursesLoaded ? (
+        {coursesLoadedSuccessfully && courses.length > 0 ? (
           <Typography
             sx={{
               fontSize: "35px",
@@ -153,7 +158,7 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
             My courses
           </Typography>
         ) : null}
-        {coursesLoaded && courses.length == 0 ? (
+        {coursesLoadedSuccessfully && courses.length == 0 ? (
           <Typography
             sx={{
               fontSize: "35px",
@@ -166,6 +171,26 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
             the left to create one.
           </Typography>
         ) : null}
+        {!coursesLoadedSuccessfully ? (
+          <Alert
+            sx={{
+              fontSize: "35px",
+              width: "60%",
+              borderRadius: "15px",
+              "& .MuiAlert-icon": {
+                fontSize: 40,
+              },
+            }}
+            severity="error"
+          >
+            <AlertTitle sx={{ fontWeight: "bold", fontSize: "35px" }}>
+              Error
+            </AlertTitle>
+            There was an unexpected problem while fetching your courses. <br />
+            <br /> Please <strong>reload the page</strong> to try again.
+          </Alert>
+        ) : null}
+
         <Grid sx={{ flexGrow: 1 }} container spacing={3}>
           {getCourseCards(courses, onCourseClick)}
         </Grid>
