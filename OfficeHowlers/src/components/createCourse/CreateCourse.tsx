@@ -150,6 +150,7 @@ const CreateCourse = () => {
     <Box
       sx={{
         width: "60%",
+        maxWidth: "1200px",
         m: "auto",
         mt: "20px",
         alignContent: "center",
@@ -157,9 +158,18 @@ const CreateCourse = () => {
     >
       <Typography sx={{ fontSize: 42, mb: "5px" }}>Create a course</Typography>
       <Divider
-        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        sx={{
+          borderTop: "1px solid lightgrey",
+          width: "100%",
+          m: "auto",
+          mb: "20px",
+        }}
       />
-      <Grid sx={{ flexGrow: 1 }} container spacing={3}>
+      <Grid
+        sx={{ flexGrow: 1, justifyContent: "center" }}
+        container
+        spacing={3}
+      >
         <Grid item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>Course Name</Typography>
           <TextField
