@@ -10,7 +10,6 @@ import StartSession from "./components/startSession/StartSession";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
-import { startSession } from "./services/api/session";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -70,10 +69,7 @@ function App() {
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
-          <Route
-            path="/instructor/startSession"
-            element={<StartSession onStartSession={startSession} />}
-          />
+          <Route path="/instructor/startSession" element={<StartSession />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

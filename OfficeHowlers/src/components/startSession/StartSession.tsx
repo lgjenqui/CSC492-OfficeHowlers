@@ -1,32 +1,107 @@
-import { Box, TextField, Divider, Grid, Button } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import Course from "../../../../Models/course.model";
-import { useEffect, useState } from "react";
-import { getCourses } from "../../services/api/session";
+import Typography from "@mui/material/Typography";
 import { TimePicker } from "@mui/x-date-pickers";
-import React from "react";
 import dayjs, { Dayjs } from "dayjs";
+import React, { useEffect, useState } from "react";
+import Course from "../../../../Models/course.model";
+import { getCourses } from "../../services/api/session";
+import Alert from "@mui/material/Alert";
+import { startSession } from "./services/api/session";
 
-interface Props {
-  onStartSession: (
-    courses: Course[],
-    modes: string[],
-    startTime: Dayjs | null,
-    endTime: Dayjs | null
-  ) => void;
-}
-
-const StartSession = ({ onStartSession }: Props) => {
+const StartSession = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [modes, setModes] = useState<string[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
+  const [modes, setModes] = useState<string[]>([]);
   const [startTime, setStartTime] = React.useState<Dayjs | null>(
     dayjs().add(0, "hour")
   );
   const [endTime, setEndTime] = React.useState<Dayjs | null>(
     dayjs().add(1, "hour")
   );
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [selectedCoursesError, setSelectedCoursesError] =
+    useState<boolean>(false);
+  const [modesError, setModesError] = useState<boolean>(false);
+  const [startTimeError, setStartTimeError] = useState<boolean>(false);
+  const [endTimeError, setEndTimeError] = useState<boolean>(false);
+
+  // Checks if the provided input is valid
+  function inputIsValid(): boolean {
+    // Reset the error values
+    setSelectedCoursesError(false);
+    setModesError(false);
+    setStartTimeError(false);
+    setEndTimeError(false);
+
+    let newErrorMessages: string[] = [];
+    // Check if at least one course was selected
+    if (selectedCourses.length <= 0) {
+      newErrorMessages.push("Please select 1 or more courses for this session");
+      setSelectedCoursesError(true);
+    }
+
+    // Check if at least one mode of delivery was selected
+    if (modes.length <= 0) {
+      newErrorMessages.push("Please select 1 or more modes of delivery");
+      setModesError(true);
+    }
+
+    // Check if one or both of the start and end times was not provided
+    if (!startTime) {
+      newErrorMessages.push("Please provide a session start time");
+      setStartTimeError(true);
+    }
+
+    if (!endTime) {
+      newErrorMessages.push("Please provide a session end time");
+      setEndTimeError(true);
+    }
+
+    // Check a start and end time were provided
+    if (startTime && endTime) {
+      // The end time must be after the start time
+      if (
+        startTime.isAfter(endTime, "minute") ||
+        startTime.isSame(endTime, "minute")
+      ) {
+        newErrorMessages.push(
+          "The session end time must be after the session start time"
+        );
+        setEndTimeError(true);
+      }
+
+      // The start and end times must not have already passed
+      if (startTime.isBefore(dayjs(), "minute")) {
+        newErrorMessages.push(
+          "The session start time must be the current time or later"
+        );
+        setStartTimeError(true);
+      }
+      if (endTime.isBefore(dayjs(), "minute")) {
+        newErrorMessages.push(
+          "The session end time must be the current time or later"
+        );
+        setEndTimeError(true);
+      }
+    }
+
+    // Update the value of the error messages array and return a boolean indicating whether the input was valid
+    setErrorMessages(newErrorMessages);
+
+    if (newErrorMessages.length > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  // Starts a session
+  function onSubmit() {
+    // Check if the provided values are valid
+    if (inputIsValid()) {
+      console.log("input is valid!");
+    }
+  }
 
   // Grab the courses for this instructor
   // NOTE - this is grabbing ALL system courses for now
@@ -82,6 +157,7 @@ const StartSession = ({ onStartSession }: Props) => {
             renderInput={(params) => (
               <TextField
                 required
+                error={selectedCoursesError}
                 {...params}
                 variant="standard"
                 label="Select a course or courses"
@@ -105,6 +181,7 @@ const StartSession = ({ onStartSession }: Props) => {
             renderInput={(params) => (
               <TextField
                 required
+                error={modesError}
                 {...params}
                 variant="standard"
                 label="Select a mode or modes"
@@ -120,6 +197,11 @@ const StartSession = ({ onStartSession }: Props) => {
             sx={{ width: "90%" }}
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
+            slotProps={{
+              textField: {
+                error: startTimeError,
+              },
+            }}
           />
         </Grid>
         <Grid item sx={{ width: "40%" }}>
@@ -130,30 +212,59 @@ const StartSession = ({ onStartSession }: Props) => {
             sx={{ width: "90%" }}
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
+            slotProps={{
+              textField: {
+                error: endTimeError,
+              },
+            }}
           />
         </Grid>
       </Grid>
-      <Button
+      <Box
         sx={{
-          m: 0,
+          width: "50%",
+          alignContent: "center",
+          m: "auto",
           mt: "25px",
-          position: "absolute",
-          left: "50%",
-          msTransform: "translateX(-50%)",
-          transform: "translatex(-50%)",
-          fontSize: 20,
-          backgroundColor: "#CC0000",
-          ":hover": {
-            backgroundColor: "#9e0000",
-          },
+          textAlign: "center",
         }}
-        variant="contained"
-        onClick={() =>
-          onStartSession(selectedCourses, modes, startTime, endTime)
-        }
       >
-        Start session
-      </Button>
+        <Button
+          sx={{
+            fontSize: 20,
+            backgroundColor: "#CC0000",
+            ":hover": {
+              backgroundColor: "#9e0000",
+            },
+          }}
+          variant="contained"
+          onClick={() => onSubmit()}
+        >
+          Start session
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          textAlign: "center",
+          m: "auto",
+        }}
+      >
+        {errorMessages.map(function (msg) {
+          return (
+            <Alert
+              key={msg}
+              severity="error"
+              sx={{
+                mt: "15px",
+                borderRadius: "20px",
+                width: "fit-content",
+              }}
+            >
+              {msg}
+            </Alert>
+          );
+        })}
+      </Box>
     </Box>
   );
 };
