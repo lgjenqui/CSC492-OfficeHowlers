@@ -44,6 +44,7 @@ const StartSession = ({ onStartSession }: Props) => {
     <Box
       sx={{
         width: "60%",
+        maxWidth: "1200px",
         m: "auto",
         mt: "20px",
         alignContent: "center",
@@ -56,16 +57,17 @@ const StartSession = ({ onStartSession }: Props) => {
       <Grid
         sx={{
           flexGrow: 1,
+          justifyContent: "center",
         }}
         container
         spacing={3}
       >
-        <Grid sx={{ width: "30%" }} item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course Selection
           </Typography>
           <Autocomplete
-            sx={{ minWidth: "100%" }}
+            sx={{ width: "90%" }}
             multiple
             id="tags-standard"
             options={courses}
@@ -87,12 +89,12 @@ const StartSession = ({ onStartSession }: Props) => {
             )}
           />
         </Grid>
-        <Grid sx={{ width: "30%" }} item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Mode of delivery
           </Typography>
           <Autocomplete
-            sx={{ minWidth: "100%" }}
+            sx={{ width: "90%" }}
             multiple
             id="tags-standard"
             options={["In Person", "Zoom"]}
@@ -110,20 +112,22 @@ const StartSession = ({ onStartSession }: Props) => {
             )}
           />
         </Grid>
-        <Grid item>
+        <Grid item sx={{ width: "40%" }}>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Session start time
           </Typography>
           <TimePicker
+            sx={{ width: "90%" }}
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
           />
         </Grid>
-        <Grid item>
+        <Grid item sx={{ width: "40%" }}>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Session end time
           </Typography>
           <TimePicker
+            sx={{ width: "90%" }}
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
           />
@@ -132,7 +136,7 @@ const StartSession = ({ onStartSession }: Props) => {
       <Button
         sx={{
           m: 0,
-          mt: "15px",
+          mt: "25px",
           position: "absolute",
           left: "50%",
           msTransform: "translateX(-50%)",
