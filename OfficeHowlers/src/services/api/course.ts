@@ -1,6 +1,6 @@
 import Course from "../../../../Models/course.model";
 
-export async function createCourse(name: string, desc: string) {
+export async function createCourse(name: string, desc: string): Promise<any> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -11,7 +11,7 @@ export async function createCourse(name: string, desc: string) {
     };
   
     // Create the new course
-    await fetch("http://localhost:8080/api/course/create", requestOptions);
+    return (await fetch("http://localhost:8080/api/course/create", requestOptions));
 }
 
 export async function getCourses(): Promise<Course[]> {
