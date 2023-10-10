@@ -177,7 +177,7 @@ const StartSession = () => {
             sx={{ width: "90%" }}
             multiple
             id="tags-standard"
-            options={["In Person", "Zoom"]}
+            options={["In Person", "Virtual"]}
             value={modes}
             onChange={(event, newValue) => {
               setModes(newValue);
