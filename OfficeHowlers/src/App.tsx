@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -8,8 +9,6 @@ import CreateCourse from "./components/createCourse/CreateCourse";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
-import { Box } from "@mui/material";
-import { createCourse } from "./services/api/course";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -35,21 +34,17 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div>
+      <Box
+        sx={{
+          height: "100%",
+          position: "relative",
+        }}
+      >
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
           onReturnHome={onReturnHome}
         ></Banner>
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 15,
-            left: 15,
-          }}
-        >
-          <img src={NCSULogo} width="162" height="78" alt="" />
-        </Box>
 
         <Routes>
           <Route
@@ -69,14 +64,21 @@ function App() {
 
           <Route path="/instructor/course/CSC216" />
 
-          <Route
-            path="/instructor/createCourse"
-            element={<CreateCourse onCreateCourse={createCourse} />}
-          />
+          <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
-      </div>
+
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 15,
+            left: 15,
+          }}
+        >
+          <img src={NCSULogo} width="162" height="78" alt="" />
+        </Box>
+      </Box>
     </LocalizationProvider>
   );
 }
