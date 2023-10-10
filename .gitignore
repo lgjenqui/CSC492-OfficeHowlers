@@ -1,4 +1,5 @@
 **/.DS_Store
 HowlBack/node_modules/
 HowlBack/dist/
+HowlBack/coverage/
 **/.env
