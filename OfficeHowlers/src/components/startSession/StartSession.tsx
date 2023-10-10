@@ -1,45 +1,68 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import Typography from "@mui/material/Typography";
-import { TimePicker } from "@mui/x-date-pickers";
-import dayjs, { Dayjs } from "dayjs";
-import React, { useEffect, useState } from "react";
-import Course from "../../../../Models/course.model";
-import { getCourses } from "../../services/api/session";
 import Alert from "@mui/material/Alert";
+import Autocomplete from "@mui/material/Autocomplete";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Typography from "@mui/material/Typography";
+import { TimePicker, heIL } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
+import React, { useEffect, useState } from "react";
+import Course from "../../../../Models/course.model";
+import { getCourses, startSession } from "../../services/api/session";
 import { getTimeDiffStr } from "../../services/util/misc";
-import { startSession } from "../../services/api/session";
 
 const StartSession = () => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
   const [modes, setModes] = useState<string[]>([]);
+  const [virtualLocation, setVirtualLocation] = useState<string>("");
+  const [inPersonLocation, setInPersonLocation] = useState<string>("");
   const [startTime, setStartTime] = React.useState<Dayjs | null>(
     dayjs().add(0, "hour")
   );
   const [endTime, setEndTime] = React.useState<Dayjs | null>(
     dayjs().add(1, "hour")
   );
+  const [virtualLocationDisplay, setVirtualLocationDisplay] =
+    useState<string>("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [selectedCoursesError, setSelectedCoursesError] =
     useState<boolean>(false);
   const [modesError, setModesError] = useState<boolean>(false);
   const [startTimeError, setStartTimeError] = useState<boolean>(false);
   const [endTimeError, setEndTimeError] = useState<boolean>(false);
+  const [virtualLocationError, setVirtualLocationError] =
+    useState<boolean>(false);
+  const [inPersonLocationError, setInPersonLocationError] =
+    useState<boolean>(false);
+  const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
+    useState<boolean>(false);
 
-  // Checks if the provided input is valid
-  function inputIsValid(): boolean {
-    // Reset the error values
+  // Resets all error values so the fields don't display with red outlines and such
+  function resetErrorValues(): void {
     setSelectedCoursesError(false);
     setModesError(false);
     setStartTimeError(false);
     setEndTimeError(false);
+    setVirtualLocationError(false);
+    setInPersonLocationError(false);
+    setVirtualLocationDisplayError(false);
+  }
+
+  // Checks if the provided input is valid
+  function inputIsValid(): boolean {
+    console.log(virtualLocationDisplay);
+    // Reset the error values
+    resetErrorValues();
 
     let newErrorMessages: string[] = [];
     // Check if at least one course was selected
@@ -91,6 +114,24 @@ const StartSession = () => {
         );
         setEndTimeError(true);
       }
+
+      // If the user specified virtual or In-Person delivery, they must provide the information
+      if (modes.includes("Virtual") && !virtualLocation) {
+        newErrorMessages.push(
+          "Please provide a virtual location (meeting link/info)"
+        );
+        setVirtualLocationError(true);
+      }
+      if (modes.includes("In-Person") && !inPersonLocation) {
+        newErrorMessages.push("Please provide an in-person location");
+        setInPersonLocationError(true);
+      }
+    }
+
+    // Check if a virtual location display option is chosen if there's a virtual location
+    if (modes.includes("Virtual") && virtualLocationDisplay.length == 0) {
+      newErrorMessages.push("Please choose a virtual location display option");
+      setVirtualLocationDisplayError(true);
     }
 
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
@@ -177,10 +218,16 @@ const StartSession = () => {
             sx={{ width: "90%" }}
             multiple
             id="tags-standard"
-            options={["In Person", "Virtual"]}
+            options={["In-Person", "Virtual"]}
             value={modes}
             onChange={(event, newValue) => {
               setModes(newValue);
+              if (newValue.includes("Virtual")) {
+                setVirtualLocationError(false);
+              }
+              if (newValue.includes("In-Person")) {
+                setInPersonLocationError(false);
+              }
             }}
             renderInput={(params) => (
               <TextField
@@ -193,8 +240,6 @@ const StartSession = () => {
             )}
           />
         </Grid>
-        {}
-
         <Grid item sx={{ width: "40%" }}>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Session start time
@@ -225,6 +270,72 @@ const StartSession = () => {
             }}
           />
         </Grid>
+        {modes.map(function (mode) {
+          return (
+            <Grid sx={{ width: "40%" }} item key={mode}>
+              <Typography sx={{ fontSize: 20, mb: "5px" }}>
+                {mode} Location
+              </Typography>
+              <TextField
+                required
+                label={mode + " Location"}
+                value={mode == "Virtual" ? virtualLocation : inPersonLocation}
+                sx={{ mr: "20px", width: "90%" }}
+                onChange={(e) => {
+                  if (mode == "Virtual") {
+                    setVirtualLocation(e.target.value);
+                    setVirtualLocationError(false);
+                  } else {
+                    setInPersonLocation(e.target.value);
+                    setInPersonLocationError(false);
+                  }
+                }}
+                error={
+                  mode == "Virtual"
+                    ? virtualLocationError
+                    : inPersonLocationError
+                }
+              />
+            </Grid>
+          );
+        })}
+        {modes.includes("Virtual") && (
+          <Grid item sx={{ width: "40%" }}>
+            <FormControl error={virtualLocationDisplayError} required={true}>
+              <FormLabel
+                id="demo-controlled-radio-buttons-group"
+                sx={{ fontSize: 20, fontWeight: 400 }}
+              >
+                Virtual location should display to:
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={virtualLocationDisplay}
+                onChange={(e) => {
+                  setVirtualLocationDisplayError(false);
+                  setVirtualLocationDisplay(e.target.value);
+                }}
+              >
+                <FormControlLabel
+                  value="all"
+                  control={<Radio />}
+                  label="All students in the queue"
+                />
+                <FormControlLabel
+                  value="helpedStudent"
+                  control={<Radio />}
+                  label="Only the student(s) being helped"
+                />
+                <FormControlLabel
+                  value="manual"
+                  control={<Radio />}
+                  label="Only the student(s) I send it to"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        )}
       </Grid>
       <Box
         sx={{
