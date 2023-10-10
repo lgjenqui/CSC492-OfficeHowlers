@@ -12,6 +12,19 @@ import { createCourse } from "../../services/api/course";
 import { sleep } from "../../services/util/sleep";
 
 const CreateCourse = () => {
+  const [courseName, setCourseName] = useState("");
+  const [courseDesc, setCourseDesc] = useState("");
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [courseNameError, setCourseNameError] = useState<boolean>(false);
+  const [courseDescError, setCourseDescError] = useState<boolean>(false);
+  const [startDateError, setStartDateError] = useState<boolean>(false);
+  const [endDateError, setEndDateError] = useState<boolean>(false);
+  const [courseCreationSuccessful, setCourseCreationSuccessful] =
+    useState<boolean>(false);
+
+  // Checks if the provided input is valid
   function inputIsValid(): boolean {
     // Reset the error values
     setCourseNameError(false);
@@ -82,6 +95,7 @@ const CreateCourse = () => {
 
   const navigate = useNavigate();
 
+  // Creates a new course
   function onSubmit() {
     // Set the course creation successful to false to clear any success message that may be displayed
     setCourseCreationSuccessful(false);
@@ -113,18 +127,6 @@ const CreateCourse = () => {
         });
     }
   }
-
-  const [courseName, setCourseName] = useState("");
-  const [courseDesc, setCourseDesc] = useState("");
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const [courseNameError, setCourseNameError] = useState<boolean>(false);
-  const [courseDescError, setCourseDescError] = useState<boolean>(false);
-  const [startDateError, setStartDateError] = useState<boolean>(false);
-  const [endDateError, setEndDateError] = useState<boolean>(false);
-  const [courseCreationSuccessful, setCourseCreationSuccessful] =
-    useState<boolean>(false);
 
   // Create a message to display if course creation was successful or unsuccessful
   let requestStatusMsg = null;
@@ -302,7 +304,6 @@ const CreateCourse = () => {
           m: "auto",
         }}
       >
-        {requestStatusMsg}
         {errorMessages.map(function (msg) {
           return (
             <Alert

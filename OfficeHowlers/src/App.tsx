@@ -6,6 +6,7 @@ import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/banner/Banner";
 import CreateCourse from "./components/createCourse/CreateCourse";
+import StartSession from "./components/startSession/StartSession";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
@@ -25,6 +26,8 @@ function App() {
 
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
+    else if (option == "Start help session")
+      navigate("/instructor/startSession");
     else navigate("/instructor/deadend");
   };
 
@@ -65,6 +68,8 @@ function App() {
           <Route path="/instructor/course/CSC216" />
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
+
+          <Route path="/instructor/startSession" element={<StartSession />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
