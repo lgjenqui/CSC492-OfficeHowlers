@@ -7,9 +7,16 @@ import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
 import { getCourses } from "../../services/api/session";
 import Alert from "@mui/material/Alert";
-import { startSession } from "./services/api/session";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { getTimeDiffStr } from "../../services/util/misc";
+import { startSession } from "../../services/api/session";
 
 const StartSession = () => {
+  const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
   const [modes, setModes] = useState<string[]>([]);
@@ -97,10 +104,7 @@ const StartSession = () => {
 
   // Starts a session
   function onSubmit() {
-    // Check if the provided values are valid
-    if (inputIsValid()) {
-      console.log("input is valid!");
-    }
+    console.log("submitting!");
   }
 
   // Grab the courses for this instructor
@@ -189,6 +193,8 @@ const StartSession = () => {
             )}
           />
         </Grid>
+        {}
+
         <Grid item sx={{ width: "40%" }}>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Session start time
@@ -238,7 +244,11 @@ const StartSession = () => {
             },
           }}
           variant="contained"
-          onClick={() => onSubmit()}
+          onClick={() => {
+            if (inputIsValid()) {
+              setOpen(true);
+            }
+          }}
         >
           Start session
         </Button>
@@ -264,6 +274,40 @@ const StartSession = () => {
             </Alert>
           );
         })}
+      </Box>
+      <Box>
+        <Dialog
+          open={open}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Start the session?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This session will be {getTimeDiffStr(startTime, endTime)} long.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Go back
+            </Button>
+            <Button
+              onClick={() => {
+                setOpen(false);
+                onSubmit();
+              }}
+              autoFocus
+            >
+              Start session
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );
