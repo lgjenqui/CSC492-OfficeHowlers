@@ -1,5 +1,5 @@
 describe('test2:coursecreation', () => {
-  it('works', () => {
+  it('should create a valid course', () => {
     // from your src/components/MyComponent.cy.ts
     cy.visit('http://localhost:5173')
 
@@ -16,7 +16,7 @@ describe('test2:coursecreation', () => {
     cy.get('#end-date-field').click().type('04/30/2024');
 
     //click on create course 
-    // cy.get('#create-course-button').click();
+    cy.get('#create-course-button').click();
   })
 
 })
