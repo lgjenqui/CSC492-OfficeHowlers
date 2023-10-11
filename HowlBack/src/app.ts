@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import sequelize from "../sequelize_db";
 import courseRouter from "../routes/course.routes";
+import User from "../models/user.model";
 
 const app = express()
 app.use(cors())
@@ -12,6 +13,11 @@ const corsOptions = {
 app.use(express.json());
 app.use("/api/course", courseRouter);
 sequelize.sync();
+
+app.use(async (req, res, next) => {
+  console.log(req.headers['x-shib_mail']);
+  next();
+});
 
 app.get('/test', cors(corsOptions), (req, res) => {
   const status = {
