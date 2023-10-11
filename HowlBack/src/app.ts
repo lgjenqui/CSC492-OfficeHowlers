@@ -11,8 +11,6 @@ const corsOptions = {
   origin: '*'
 }
 app.use(express.json());
-app.use("/api/course", courseRouter);
-sequelize.sync();
 
 app.use(async (req, res, next) => {
   const email = req.headers['x-shib_mail'];
@@ -32,6 +30,8 @@ app.use(async (req, res, next) => {
   }
   next();
 });
+
+app.use("/api/course", courseRouter);
 
 app.get('/test', cors(corsOptions), (req, res) => {
   const status = {

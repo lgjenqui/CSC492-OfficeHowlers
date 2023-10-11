@@ -9,8 +9,8 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
       name: req.body.courseName || "Empty name",
       description: req.body.courseDescription || "Empty description",
     });
-    const instructorUser = await User.findByPk(req.headers['x-shib_mail'] as string);
-    await instructorUser.addCourse(createdCourse);
+    const instructorUser = await User.findByPk((req.headers['x-shib_mail']) as string);
+    await instructorUser.addInstructorCourse(createdCourse);
     // const ourUser = await User.findByPk(createdUser.email, {
     //   include: [User.associations.courses],
     //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!

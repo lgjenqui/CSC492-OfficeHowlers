@@ -10,21 +10,29 @@ import Course from "./course.model";
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   declare name: string;
   declare email: string;
-  declare courses?: NonAttribute<Course[]>;
+  declare instructorCourses?: NonAttribute<Course[]>;
+  declare assistantCourses?: NonAttribute<Course[]>;
+  declare studentCourses?: NonAttribute<Course[]>;
 
-  declare getCourses: HasManyGetAssociationsMixin<Course>; // Note the null assertions!
-  declare addCourse: HasManyAddAssociationMixin<Course, number>;
-  declare addCourses: HasManyAddAssociationsMixin<Course, number>;
-  declare setCourses: HasManySetAssociationsMixin<Course, number>;
-  declare removeCourse: HasManyRemoveAssociationMixin<Course, number>;
-  declare removeCourses: HasManyRemoveAssociationsMixin<Course, number>;
-  declare hasCourse: HasManyHasAssociationMixin<Course, number>;
-  declare hasCourses: HasManyHasAssociationsMixin<Course, number>;
-  declare countCourses: HasManyCountAssociationsMixin;
+  declare getInstructorCourses: HasManyGetAssociationsMixin<Course>; // Note the null assertions!
+  declare addInstructorCourse: HasManyAddAssociationMixin<Course, number>;
+  declare getAssistantCourses: HasManyGetAssociationsMixin<Course>; // Note the null assertions!
+  declare addAssistantCourse: HasManyAddAssociationMixin<Course, number>;
+  declare getStudentCourses: HasManyGetAssociationsMixin<Course>; // Note the null assertions!
+  declare addStudentCourse: HasManyAddAssociationMixin<Course, number>;
+  // declare addCourses: HasManyAddAssociationsMixin<Course, number>;
+  // declare setCourses: HasManySetAssociationsMixin<Course, number>;
+  // declare removeCourse: HasManyRemoveAssociationMixin<Course, number>;
+  // declare removeCourses: HasManyRemoveAssociationsMixin<Course, number>;
+  // declare hasCourse: HasManyHasAssociationMixin<Course, number>;
+  // declare hasCourses: HasManyHasAssociationsMixin<Course, number>;
+  // declare countCourses: HasManyCountAssociationsMixin;
   // declare createCourse: HasManyCreateAssociationMixin<Course, "userId">;
 
   declare static associations: {
-    courses: Association<User, Course>;
+    instructorCourses: Association<User, Course>;
+    assistantCourses: Association<User, Course>;
+    studentCourses: Association<User, Course>;
   };
 }
 
@@ -49,8 +57,20 @@ User.init(
 
 User.hasMany(Course, {
   sourceKey: 'email',
-  foreignKey: 'userId',
-  as: 'courses' // this determines the name in `associations`!
+  foreignKey: 'instructorId',
+  as: 'instructorCourses' // this determines the name in `associations`!
+});
+
+User.hasMany(Course, {
+  sourceKey: 'email',
+  foreignKey: 'assistantId',
+  as: 'assistantCourses' // this determines the name in `associations`!
+});
+
+User.hasMany(Course, {
+  sourceKey: 'email',
+  foreignKey: 'studentId',
+  as: 'studentCourses' // this determines the name in `associations`!
 });
 
 sequelize.sync();
