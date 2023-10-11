@@ -73,5 +73,22 @@ User.hasMany(Course, {
   as: 'studentCourses' // this determines the name in `associations`!
 });
 
-sequelize.sync();
+Course.hasMany(User, {
+  sourceKey: 'id',
+  foreignKey: 'instructorCourseId',
+  as: 'instructors' // this determines the name in `associations`!
+});
+
+Course.hasMany(User, {
+  sourceKey: 'id',
+  foreignKey: 'assistantCourseId',
+  as: 'assistants' // this determines the name in `associations`!
+});
+
+Course.hasMany(User, {
+  sourceKey: 'id',
+  foreignKey: 'studentCourseId',
+  as: 'students' // this determines the name in `associations`!
+});
+
 export default User;
