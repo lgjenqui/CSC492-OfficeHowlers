@@ -40,8 +40,16 @@ export const getCourse = async (req: Request, res: Response): Promise<void> => {
   res.send(course);
 };
 
-export const getAllCourses = async (req: Request, res: Response): Promise<void> => {
-  const courses = await Course.findAll({include: [Course.associations.instructors, Course.associations.assistants, Course.associations.students]});
+export const getAllMyCourses = async (req: Request, res: Response): Promise<void> => {
+  // const courses = await Course.findAll({include: [Course.associations.instructors, Course.associations.assistants, Course.associations.students]});
+  const user = await User.findByPk((req.headers['x-shib_mail']) as string);
+  const instructorCourses = await user.getInstructorCourses();
+  const assistantCourses = await user.getAssistantCourses();
+  const studentCourses = await user.getStudentCourses();
+  const courses = { instructorCourses: instructorCourses, 
+    assistantCourses: assistantCourses, 
+    studentCourses: studentCourses
+  };
   res.send(courses);
 };
 
