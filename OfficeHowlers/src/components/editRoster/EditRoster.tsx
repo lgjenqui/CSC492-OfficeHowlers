@@ -1,42 +1,17 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
-import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
 import { getCourses} from "../../services/api/session";
-import { getTimeDiffStr } from "../../services/util/misc";
 
 const EditRoster = () => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const [selectedCoursesError, setSelectedCoursesError] =
-    useState<boolean>(false);
-  const [modesError, setModesError] = useState<boolean>(false);
-  const [startTimeError, setStartTimeError] = useState<boolean>(false);
-  const [endTimeError, setEndTimeError] = useState<boolean>(false);
-  const [virtualLocationError, setVirtualLocationError] =
-    useState<boolean>(false);
-  const [inPersonLocationError, setInPersonLocationError] =
-    useState<boolean>(false);
-  const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
-    useState<boolean>(false);
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {
-    setSelectedCoursesError(false);
-    setModesError(false);
-    setStartTimeError(false);
-    setEndTimeError(false);
-    setVirtualLocationError(false);
-    setInPersonLocationError(false);
-    setVirtualLocationDisplayError(false);
   }
 
   // Checks if the provided input is valid
