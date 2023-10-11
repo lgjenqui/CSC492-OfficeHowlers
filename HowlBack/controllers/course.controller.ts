@@ -11,6 +11,17 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
     });
     const instructorUser = await User.findByPk((req.headers['x-shib_mail']) as string);
     await instructorUser.addInstructorCourse(createdCourse);
+    createdCourse.addInstructor(instructorUser);
+    await Promise.all(req.body.studentRoster.map( async (email: string ) => {
+      let student = await User.findByPk(email);
+      if (!student) {
+        student = await User.create({
+          name: "Unset name",
+          email: email,
+        });
+      }
+      return createdCourse.addStudent(student);
+    }));
     // const ourUser = await User.findByPk(createdUser.email, {
     //   include: [User.associations.courses],
     //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!
@@ -23,14 +34,14 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-
 export const getCourse = async (req: Request, res: Response): Promise<void> => {
-  const course = await Course.findByPk(Number(req.query.id as string))
+  const course = await Course.findByPk(Number(req.query.id as string), 
+    {include: [Course.associations.instructors, Course.associations.assistants, Course.associations.students]});
   res.send(course);
 };
 
 export const getAllCourses = async (req: Request, res: Response): Promise<void> => {
-  const courses = await Course.findAll();
+  const courses = await Course.findAll({include: [Course.associations.instructors, Course.associations.assistants, Course.associations.students]});
   res.send(courses);
 };
 
