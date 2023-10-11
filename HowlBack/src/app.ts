@@ -15,7 +15,21 @@ app.use("/api/course", courseRouter);
 sequelize.sync();
 
 app.use(async (req, res, next) => {
-  console.log(req.headers['x-shib_mail']);
+  const email = req.headers['x-shib_mail'];
+  console.log("User creating request: " + email);
+  if (email) {
+    const user = await User.findByPk(email as string);
+    if (!user) {
+      const createdUser = await User.create({
+        name: "Unset name",
+        email: email as string,
+      });
+      console.log("User not found, created user with email: " + email);
+    }
+  } else {
+    res.status(401).json({ success: false, error: "Unauthenticated user." });
+    return;
+  }
   next();
 });
 

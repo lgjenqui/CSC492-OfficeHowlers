@@ -8,7 +8,6 @@ import UserModel from "../../Models/user.model";
 import Course from "./course.model";
 
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
-  declare id: number;
   declare name: string;
   declare email: string;
   declare courses?: NonAttribute<Course[]>;
@@ -31,11 +30,6 @@ class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<Use
 
 User.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -43,6 +37,8 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      primaryKey: true,
+      unique: true
     },
   },
   {
@@ -52,7 +48,7 @@ User.init(
 );
 
 User.hasMany(Course, {
-  sourceKey: 'id',
+  sourceKey: 'email',
   foreignKey: 'userId',
   as: 'courses' // this determines the name in `associations`!
 });

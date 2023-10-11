@@ -14,7 +14,7 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
       email: req.body.userEmail || "Empty email",
     });
     await createdUser.addCourse(createdCourse);
-    const ourUser = await User.findByPk(createdUser.id, {
+    const ourUser = await User.findByPk(createdUser.email, {
       include: [User.associations.courses],
       rejectOnEmpty: true // Specifying true here removes `null` from the return type!
     });
