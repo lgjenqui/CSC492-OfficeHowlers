@@ -20,7 +20,7 @@ app.use(async (req, res, next) => {
   if (email) {
     const user = await User.findByPk(email as string);
     if (!user) {
-      const createdUser = await User.create({
+      await User.create({
         name: "Unset name",
         email: email as string,
       });

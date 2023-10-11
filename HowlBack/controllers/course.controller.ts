@@ -9,18 +9,15 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
       name: req.body.courseName || "Empty name",
       description: req.body.courseDescription || "Empty description",
     });
-    const createdUser = await User.create({
-      name: req.body.userName || "Empty name",
-      email: req.body.userEmail || "Empty email",
-    });
-    await createdUser.addCourse(createdCourse);
-    const ourUser = await User.findByPk(createdUser.email, {
-      include: [User.associations.courses],
-      rejectOnEmpty: true // Specifying true here removes `null` from the return type!
-    });
+    const instructorUser = await User.findByPk(req.headers['x-shib_mail'] as string);
+    await instructorUser.addCourse(createdCourse);
+    // const ourUser = await User.findByPk(createdUser.email, {
+    //   include: [User.associations.courses],
+    //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!
+    // });
 
     // Send the created course as a response
-    res.status(201).json(ourUser);
+    res.status(201).json(createdCourse);
   } catch (error) {
     res.status(500).json({ message: 'Error creating the course', error: error.message });
   }
