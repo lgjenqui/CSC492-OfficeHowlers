@@ -25,12 +25,10 @@ services:
     ports:
       - "8080:8080"
 
-  # frontend:
-  #   build: ./OfficeHowlers
-  #   restart: always
-  #   container_name: office_howlers
-  #   # depends_on:
-  #   #   backend:
-  #   #     condition: service_healthy
-  #   ports:
-  #     - "5173:5173"
+  frontend:
+    build: 
+      dockerfile: ./OfficeHowlers/Dockerfile
+    restart: always
+    container_name: office_howlers
+    ports:
+      - "5173:5173"
