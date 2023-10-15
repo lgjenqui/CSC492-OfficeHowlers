@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
-import sequelize from "../sequelize_db";
 import courseRouter from "../routes/course.routes";
-import User from "../models/user.model";
+import { findOrCreateUser } from "../services/user.service";
 
 const app = express()
 app.use(cors())
@@ -13,17 +12,10 @@ const corsOptions = {
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-  const email = req.headers['x-shib_mail'];
+  const email = req.headers['x-shib_mail'] as string;
   console.log("User creating request: " + email);
   if (email) {
-    const user = await User.findByPk(email as string);
-    if (!user) {
-      await User.create({
-        name: "Unset name",
-        email: email as string,
-      });
-      console.log("User not found, created user with email: " + email);
-    }
+    await findOrCreateUser(email);
   } else {
     res.status(401).json({ success: false, error: "Unauthenticated user." });
     return;

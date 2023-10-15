@@ -1,5 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, NonAttribute, 
-  HasManyGetAssociationsMixin, HasManyAddAssociationMixin } from 'sequelize';
+  HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin } from 'sequelize';
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
@@ -8,6 +8,8 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare id: number;
   declare name: string;
   declare description: string;
+  declare startDate: Date;
+  declare endDate: Date;
   declare instructors?: NonAttribute<User[]>;
   declare assistants?: NonAttribute<User[]>;
   declare students?: NonAttribute<User[]>;
@@ -18,6 +20,9 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare addAssistant: HasManyAddAssociationMixin<User, number>;
   declare getStudents: HasManyGetAssociationsMixin<User>; // Note the null assertions!
   declare addStudent: HasManyAddAssociationMixin<User, number>;
+  declare setInstructors: HasManySetAssociationsMixin<User, number>;
+  declare setAssistants: HasManySetAssociationsMixin<User, number>;
+  declare setStudents: HasManySetAssociationsMixin<User, number>;
 
   declare static associations: {
     instructors: Association<Course, User>;
@@ -38,6 +43,12 @@ Course.init(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    startDate: {
+      type: DataTypes.DATE
+    },
+    endDate: {
+      type: DataTypes.DATE
     },
     description: {
       type: DataTypes.STRING,

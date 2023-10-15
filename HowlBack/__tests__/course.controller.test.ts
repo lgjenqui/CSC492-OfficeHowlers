@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import {
   createCourse,
   getCourse,
-  getAllCourses,
+  getAllMyCourses,
   deleteCourse,
 } from '../controllers/course.controller';
 import Course from '../models/course.model';
@@ -92,7 +92,7 @@ describe('Course Controller', () => {
     });
   });
 
-  describe('getAllCourses', () => {
+  describe('getAllMyCourses', () => {
     it('should get all courses', async () => {
       const mockCourses = [
         { id: 1, name: 'CSC226', description: 'Discrete Mathematics' },
@@ -102,7 +102,7 @@ describe('Course Controller', () => {
       // Mock a successful retrieval of all courses
       (Course.findAll as jest.Mock).mockResolvedValueOnce(mockCourses);
   
-      await getAllCourses(mockRequest as Request, mockResponse as Response);
+      await getAllMyCourses(mockRequest as Request, mockResponse as Response);
   
       expect(mockResponse.status).toHaveBeenCalledWith(200); // Checking for a success status
       expect(mockResponse.send).toHaveBeenCalledWith(mockCourses); // Checking for the correct response
