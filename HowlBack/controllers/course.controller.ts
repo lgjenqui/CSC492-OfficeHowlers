@@ -79,6 +79,21 @@ export const setInstructorsByEmail = async (req: Request, res: Response): Promis
   }
 };
 
+export const getCourseInstructors = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(Number(req.query.id as string));
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const instructors = await course.getInstructors();
+      const instructorEmails = instructors.map((instructor) => instructor.email);
+      res.status(200).json({ instructors: instructorEmails });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course instructors" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving course instructors', error: error.message });
+  }
+};
+
 export const setAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(Number(req.query.id as string));
@@ -96,6 +111,21 @@ export const setAssistantsByEmail = async (req: Request, res: Response): Promise
   }
 };
 
+export const getCourseAssistants = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(Number(req.query.id as string));
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const assistants = await course.getAssistants();
+      const assistantEmails = assistants.map((assistant) => assistant.email);
+      res.status(200).json({ assistants: assistantEmails });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course assistants" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving course teaching assistants', error: error.message });
+  }
+};
+
 export const setStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(Number(req.query.id as string));
@@ -110,6 +140,21 @@ export const setStudentsByEmail = async (req: Request, res: Response): Promise<v
     }
   } catch (error) {
     res.status(500).json({ message: 'Error setting assistants for the course', error: error.message });
+  }
+};
+
+export const getCourseStudents = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(Number(req.query.id as string));
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const students = await course.getStudents();
+      const studentEmails = students.map((student) => student.email);
+      res.status(200).json({ students: studentEmails });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course roster" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving student roster', error: error.message });
   }
 };
 
