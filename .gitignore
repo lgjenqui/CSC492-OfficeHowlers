@@ -4,3 +4,5 @@ HowlBack/dist/
 HowlBack/coverage/
 **/.env
 node_modules
+logs
+*.log

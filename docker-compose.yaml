@@ -32,3 +32,20 @@ services:
     container_name: office_howlers
     ports:
       - "5173:5173"
+
+  apacheshib:
+    image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
+    ports:
+      - 443:443
+    volumes:
+      - ./logs:/var/log/apache2
+    environment:
+      - FRONTEND_HOST=localhost
+      - FRONTEND_PORT=5173
+      - FRONTEND_PROTOCOL=http
+      - BACKEND_HOST=localhost
+      - BACKEND_PORT=8080
+      - BACKEND_PROTOCOL=http
+      - LOGIN_PATH=/
+
+
