@@ -3,6 +3,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
+import Session from "./session.model";
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
   declare id: number;
@@ -13,6 +14,7 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare instructors?: NonAttribute<User[]>;
   declare assistants?: NonAttribute<User[]>;
   declare students?: NonAttribute<User[]>;
+  declare session?: NonAttribute<Session>;
 
   declare getInstructors: HasManyGetAssociationsMixin<User>; // Note the null assertions!
   declare addInstructor: HasManyAddAssociationMixin<User, number>;
@@ -60,5 +62,7 @@ Course.init(
     modelName: 'Course',
   }
 );
+
+Course.hasOne(Session);
 
 export default Course;
