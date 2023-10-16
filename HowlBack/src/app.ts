@@ -14,6 +14,8 @@ app.use("/api/course", courseRouter);
 sequelize.sync();
 
 app.get('/test', cors(corsOptions), (req, res) => {
+
+  console.log(req);
   const status = {
     "Status": "Running",
     "Message": "Hello World!"

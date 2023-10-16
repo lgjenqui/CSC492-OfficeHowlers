@@ -2,7 +2,7 @@ services:
   db:
     build: ./MariaDB
     restart: always
-    container_name: maria_db
+    container_name: mariaDB
     env_file: ./MariaDB/.env.dev
     ports:
       - "3306:3306"
@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: ./HowlBack/Dockerfile
     restart: always
-    container_name: howl_back
+    container_name: howlBack
     env_file: ./HowlBack/.env.dev
     depends_on: 
       db:
@@ -29,7 +29,7 @@ services:
     build: 
       dockerfile: ./OfficeHowlers/Dockerfile
     restart: always
-    container_name: office_howlers
+    container_name: officeHowlers
     ports:
       - "5173:5173"
 
@@ -40,12 +40,13 @@ services:
     volumes:
       - ./logs:/var/log/apache2
     environment:
-      - FRONTEND_HOST=localhost
+      - FRONTEND_HOST=frontend
       - FRONTEND_PORT=5173
       - FRONTEND_PROTOCOL=http
-      - BACKEND_HOST=localhost
+      - BACKEND_HOST=backend
       - BACKEND_PORT=8080
       - BACKEND_PROTOCOL=http
       - LOGIN_PATH=/
+      - SERVER_NAME=localhost
 
 
