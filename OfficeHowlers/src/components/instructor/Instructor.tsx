@@ -23,7 +23,7 @@ import Course from "../../../../Models/course.model";
 import { getCourses } from "../../services/api/course";
 
 interface Props {
-  onCourseClick: () => void;
+  onCourseClick: (course: string) => void;
   onInstructorOptionsClick: (options: string) => void;
 }
 
@@ -62,7 +62,7 @@ const card = (course: string, courseDescription: string) => {
   );
 };
 
-function getCourseCards(courses: Course[], onCourseClick: () => void) {
+function getCourseCards(courses: Course[], onCourseClick: (courseName:string) => void) {
   if (!courses) {
     return <h1>Still loading courses...</h1>;
   }
@@ -77,7 +77,7 @@ function getCourseCards(courses: Course[], onCourseClick: () => void) {
           color: "white",
           borderRadius: "15px",
         }}
-        onClick={onCourseClick}
+        onClick={()=> onCourseClick(course.name)}
       >
         {card(course.name, course.description)}
       </Card>

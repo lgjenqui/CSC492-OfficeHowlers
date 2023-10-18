@@ -8,6 +8,17 @@ import { getCourses} from "../../services/api/session";
 const EditRoster = () => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [Error, setError] =
+    useState<boolean>(false);
+  const [studentError, setStudentError] =
+    useState<boolean>(false);
+  const [teachingAssistantError, setTeachingAssistantError] =
+    useState<boolean>(false);
+  const [professorError, setProfessorError] =
+    useState<boolean>(false);
+  const [students, setStudents] = useState("");
+  const [teachingAssistants, setTeachingAssistants] = useState("");
+  const [professors, setProfessors] = useState("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   // Resets all error values so the fields don't display with red outlines and such
@@ -21,6 +32,28 @@ const EditRoster = () => {
 
     let newErrorMessages: string[] = [];
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
+    if (!students && !professors && !teachingAssistants) {
+      newErrorMessages.push("Please provide a value for at least one box");
+      setError(true);
+    }
+    
+    var regex = new RegExp('^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$')
+    var testStudents = regex.exec(students);
+    var testTeachingAssitants = regex.exec(teachingAssistants);
+    var testProfessors = regex.exec(professors);
+    if(students.length > 0 && testStudents == null){
+      newErrorMessages.push("Incorrect format in student input");
+      setStudentError(true);
+    }
+    if(teachingAssistants.length > 0 && testTeachingAssitants== null){
+      newErrorMessages.push("Incorrect format in TA input");
+      setTeachingAssistantError(true);
+    }
+    if(professors.length > 0 && testProfessors== null){
+      newErrorMessages.push("Incorrect format in professor input");
+      setProfessorError(true);
+    }
+
     setErrorMessages(newErrorMessages);
 
     if (newErrorMessages.length > 0) {
@@ -31,7 +64,9 @@ const EditRoster = () => {
 
   // Starts a session
   function onSubmit() {
-    console.log("submitting!");
+    if(inputIsValid()){
+      console.log("submitted")
+    }
   }
 
   // Grab the courses for this instructor
@@ -56,13 +91,13 @@ const EditRoster = () => {
         alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Start a session</Typography>
+      <Typography sx={{ fontSize: 42, mb: "5px" }}>Edit Roster</Typography>
       <Divider
         sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
       />
       <Grid
         sx={{
-          width: "90%",
+          width: "100%",
           flexGrow: 1,
           justifyContent: "center",
         }}
@@ -71,7 +106,7 @@ const EditRoster = () => {
       >
          <Grid item>
           <Typography sx={{ fontSize: 20 }}>
-            Manually enter student and TA emails
+            Manually enter student, TA, and professor emails
           </Typography>
           <Typography sx={{ fontSize: 14, mb: "15px" }}>
             One on each line in this format: <i>johndoe@org.edu</i>
@@ -83,6 +118,12 @@ const EditRoster = () => {
             rows={4}
             defaultValue=""
             sx={{ mr: "10px" }}
+            onChange={(e) => {
+              setStudents(e.target.value);
+              setStudentError(false);
+              setError(false);
+            }}
+            error={Error || studentError}
           />
           <TextField
             id="outlined-multiline-static"
@@ -90,18 +131,30 @@ const EditRoster = () => {
             multiline
             rows={4}
             defaultValue=""
+            sx={{ mr: "10px" }}
+            onChange={(e) => {
+              setTeachingAssistants(e.target.value);
+              setTeachingAssistantError(false);
+              setError(false);
+            }}
+            error={Error || teachingAssistantError}
+          />
+          <TextField
+
+            id="outlined-multiline-static"
+            label="Professor Emails"
+            multiline
+            rows={4}
+            defaultValue=""
+            onChange={(e) => {
+              setProfessors(e.target.value);
+              setProfessorError(false);
+              setError(false);
+            }}
+            error={Error || professorError}
           />
         </Grid>
         <Grid item>
-          <Typography sx={{ fontSize: 25, mr: "15px", ml: "25px" }}>
-            <u>or</u>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            Upload course roster as a CSV
-          </Typography>
-          <input accept=".csv" type="file" />
         </Grid>
       </Grid>
       <Box
@@ -122,11 +175,7 @@ const EditRoster = () => {
             },
           }}
           variant="contained"
-          onClick={() => {
-            if (inputIsValid()) {
-              setOpen(true);
-            }
-          }}
+          onClick={() => onSubmit()}
         >
           Edit Roster
         </Button>

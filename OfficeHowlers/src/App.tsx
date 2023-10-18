@@ -21,8 +21,9 @@ function App() {
     navigate("/" + role.toLowerCase());
   };
 
-  const onCourseClick = () => {
-    navigate("/instructor/course/CSC216");
+  const onCourseClick = (course: string) => {
+    console.log(course);
+    navigate("/instructor/course/" + course);
   };
 
   const onInstructorOptionsClick = (option: string) => {
@@ -68,7 +69,7 @@ function App() {
             }
           />
 
-          <Route path="/instructor/course/CSC216" />
+          <Route path="/instructor/course/:course" element={<EditRoster />} />
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
