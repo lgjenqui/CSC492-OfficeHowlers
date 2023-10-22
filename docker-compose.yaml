@@ -27,6 +27,7 @@ services:
 
   frontend:
     build: 
+      context: .
       dockerfile: ./OfficeHowlers/Dockerfile
     restart: always
     container_name: officeHowlers

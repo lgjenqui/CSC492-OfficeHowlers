@@ -1,0 +1,57 @@
+---
+- name: Deploy Howlback Docker Compose
+  hosts: server
+  become: yes
+  become_method: sudo
+  gather_facts: no
+
+  vars_prompt:
+    - name: git_pw
+      prompt: 'Enter git password'
+      private: yes # Hide user input (password)
+
+  tasks:
+    - name: Install apt packages
+      apt:
+        name:
+          - docker.io
+          - python3-pip
+        state: latest
+
+    - name: Clone repo
+      git:
+        repo: https://lgjenqui:{{ git_pw }}@github.ncsu.edu/engr-csc-sdc/2023FallTeam09-CSC-Faculty.git
+        dest: /howlback
+        depth: 1
+        version: development
+
+    - name: Expose port 80 with iptables
+      shell: 
+        "sudo iptables -I INPUT -p tcp -m tcp --dport 80 -j ACCEPT"
+
+    - name: Expose port 443 with iptables
+      shell: 
+        "sudo iptables -I INPUT -p tcp -m tcp --dport 443 -j ACCEPT"
+
+    - name: Install Docker Python library
+      pip:
+        name: 
+          - docker
+          - docker-compose
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Tear down existing services
+      community.docker.docker_compose:
+        project_src: /howlback
+        state: absent
+
+    - name: Create and start services
+      community.docker.docker_compose:
+        project_src: /howlback
+        state: present
+        build: true
