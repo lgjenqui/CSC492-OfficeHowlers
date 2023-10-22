@@ -7,7 +7,8 @@ WORKDIR /usr/src/app/backend
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 RUN mkdir ./HowlBack
-COPY ./HowlBack/package*.json ./HowlBack
+COPY ./HowlBack/package.json ./HowlBack
+COPY ./HowlBack/package-lock.json ./HowlBack
 WORKDIR /usr/src/app/backend/HowlBack
 RUN npm install
 
