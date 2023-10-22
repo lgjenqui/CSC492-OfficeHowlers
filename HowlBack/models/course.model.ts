@@ -1,9 +1,9 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, NonAttribute, 
-  HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin } from 'sequelize';
+  HasManyGetAssociationsMixin, HasManyAddAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin } from 'sequelize';
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
-import Session from "./session.model";
+// import Session from "./session.model";
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
   declare id: number;
@@ -14,13 +14,15 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare instructors?: NonAttribute<User[]>;
   declare assistants?: NonAttribute<User[]>;
   declare students?: NonAttribute<User[]>;
-  declare session?: NonAttribute<Session>;
+  // declare session?: NonAttribute<Session>;
 
   declare getInstructors: HasManyGetAssociationsMixin<User>; // Note the null assertions!
+  declare addInstructors: HasManyAddAssociationsMixin<User, number>;
   declare addInstructor: HasManyAddAssociationMixin<User, number>;
   declare getAssistants: HasManyGetAssociationsMixin<User>; // Note the null assertions!
-  declare addAssistant: HasManyAddAssociationMixin<User, number>;
+  declare addAssistants: HasManyAddAssociationsMixin<User, number>;
   declare getStudents: HasManyGetAssociationsMixin<User>; // Note the null assertions!
+  declare addStudents: HasManyAddAssociationsMixin<User, number>;
   declare addStudent: HasManyAddAssociationMixin<User, number>;
   declare setInstructors: HasManySetAssociationsMixin<User, number>;
   declare setAssistants: HasManySetAssociationsMixin<User, number>;
@@ -63,6 +65,6 @@ Course.init(
   }
 );
 
-Course.hasOne(Session);
+// Course.hasOne(Session);
 
 export default Course;

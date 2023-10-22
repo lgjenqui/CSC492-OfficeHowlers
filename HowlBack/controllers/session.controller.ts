@@ -10,8 +10,10 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
     // Create a course in the database
     const createdSession = await Session.create(req.body);
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
-    await instructorUser.session(createdSession);
-    createdSession.addInstructor(instructorUser);
+    if(instructorUser) {
+      // await instructorUser.session(createdSession);
+      // createdSession.addInstructor(instructorUser);
+    }
     // const ourUser = await User.findByPk(createdUser.email, {
     //   include: [User.associations.courses],
     //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!

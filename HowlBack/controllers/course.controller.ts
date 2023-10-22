@@ -57,25 +57,23 @@ export const deleteCourse = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const setInstructorsByEmail = async (req: Request, res: Response): Promise<void> => {
+export const addInstructorsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(Number(req.query.id as string));
     const instructorEmail = (req.headers['x-shib_mail']) as string;
     if (await isValidInstructorForCourse(instructorEmail, course)) {
-      if (req.body.emails.includes(instructorEmail)) {
-        const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
-          return findOrCreateUser(email);
-        }));
-        await course.setInstructors(instructors);
-        res.status(200).json({ success: true });
-      } else {
-        res.status(400).json({ success: false, error: "Not permitted to remove oneself from the course" });
-      }
-    } else {
+      const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
+        return findOrCreateUser(email);
+      }));
+      await course.addInstructors(instructors);
+      res.status(200).json({success:true});
+    } 
+    else {
       res.status(403).json({ success: false, error: "Unauthorized for course modification" });
     }
+    
   } catch (error) {
-    res.status(500).json({ message: 'Error setting assistants for the course', error: error.message });
+    res.status(500).json({ message: 'Error adding instructor for the course', error: error.message });
   }
 };
 
@@ -94,20 +92,20 @@ export const getCourseInstructors = async (req: Request, res: Response): Promise
   }
 };
 
-export const setAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
+export const addAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(Number(req.query.id as string));
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await Promise.all(req.body.emails.map(async (email: string) => {
         return findOrCreateUser(email);
       }));
-      await course.setAssistants(assistants);
+      await course.addAssistants(assistants);
       res.status(200).json({ success: true });
     } else {
       res.status(403).json({ success: false, error: "Unauthorized for course modification" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error setting assistants for the course', error: error.message });
+    res.status(500).json({ message: 'Error adding assistants for the course', error: error.message });
   }
 };
 
@@ -126,14 +124,14 @@ export const getCourseAssistants = async (req: Request, res: Response): Promise<
   }
 };
 
-export const setStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
+export const addStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(Number(req.query.id as string));
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await Promise.all(req.body.emails.map(async (email: string) => {
         return findOrCreateUser(email);
       }));
-      await course.setStudents(students);
+      await course.addStudents(students);
       res.status(200).json({ success: true });
     } else {
       res.status(403).json({ success: false, error: "Unauthorized for course modification" });

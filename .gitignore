@@ -2,4 +2,7 @@
 HowlBack/node_modules/
 HowlBack/dist/
 HowlBack/coverage/
+node_modules/
+package-lock.json
+package.json
 **/.env
