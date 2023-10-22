@@ -6,6 +6,8 @@
   gather_facts: no
 
   vars_prompt:
+    - name: git_user
+      prompt: 'Enter git username'
     - name: git_pw
       prompt: 'Enter git password'
       private: yes # Hide user input (password)
@@ -20,7 +22,7 @@
 
     - name: Clone repo
       git:
-        repo: https://lgjenqui:{{ git_pw }}@github.ncsu.edu/engr-csc-sdc/2023FallTeam09-CSC-Faculty.git
+        repo: https://{{ git_user }}:{{ git_pw }}@github.ncsu.edu/engr-csc-sdc/2023FallTeam09-CSC-Faculty.git
         dest: /howlback
         depth: 1
         version: feature/lgj/deploy2
