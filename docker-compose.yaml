@@ -37,6 +37,7 @@ services:
   apacheshib:
     image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
     ports:
+      - 80:80
       - 443:443
     volumes:
       - ./logs:/var/log/apache2
