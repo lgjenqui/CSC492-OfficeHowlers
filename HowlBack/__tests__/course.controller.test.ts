@@ -6,12 +6,31 @@ import {
   deleteCourse,
 } from '../controllers/course.controller';
 import Course from '../models/course.model';
+import User from '../models/user.model';
+import { retrieveUser } from '../services/user.service';
 
 jest.mock('../models/course.model', () => ({
   create: jest.fn(),
   findByPk: jest.fn(),
   findAll: jest.fn(),
   destroy: jest.fn(),
+  belongsToMany: jest.fn()
+}));
+
+jest.mock('../models/user.model', () => ({
+  create: jest.fn(),
+  findByPk: jest.fn(),
+  findAll: jest.fn(),
+  destroy: jest.fn(),
+  belongsToMany: jest.fn(),
+  getInstructorCourses: jest.fn(), 
+  getAssistantCourses: jest.fn(), 
+  getStudentCourses: jest.fn(),
+}));
+
+jest.mock('../services/user.service', () => ({
+  findOrCreateUser: jest.fn(),
+  retrieveUser: jest.fn()
 }));
 
 describe('Course Controller', () => {
@@ -94,18 +113,25 @@ describe('Course Controller', () => {
 
   describe('getAllMyCourses', () => {
     it('should get all courses', async () => {
+      const newUser: any = User; //assigning the object to a constant of type any. This recognizes the getCourse methods
+      (retrieveUser as jest.Mock).mockImplementation(() => Promise.resolve(newUser));
       const mockCourses = [
         { id: 1, name: 'CSC226', description: 'Discrete Mathematics' },
         { id: 2, name: 'CSC316', description: 'Data Structures and Algorithms' },
       ];
+      (newUser.getInstructorCourses as jest.Mock).mockImplementation(() => Promise.resolve(mockCourses));
+      (newUser.getAssistantCourses as jest.Mock).mockImplementation(() => Promise.resolve([]));
+      (newUser.getStudentCourses as jest.Mock).mockImplementation(() => Promise.resolve([]));
+      mockRequest.headers = {'x-shib_mail': "john@mail.com"};
   
       // Mock a successful retrieval of all courses
-      (Course.findAll as jest.Mock).mockResolvedValueOnce(mockCourses);
+      // (Course.findAll as jest.Mock).mockResolvedValueOnce(mockCourses);
   
       await getAllMyCourses(mockRequest as Request, mockResponse as Response);
   
       expect(mockResponse.status).toHaveBeenCalledWith(200); // Checking for a success status
-      expect(mockResponse.send).toHaveBeenCalledWith(mockCourses); // Checking for the correct response
+      expect(mockResponse.send).toHaveBeenCalledWith({instructorCourses: mockCourses, 
+        assistantCourses: [], studentCourses: []}); // Checking for the correct response
     });
   });
 
