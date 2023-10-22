@@ -8,6 +8,7 @@
   vars_prompt:
     - name: git_user
       prompt: 'Enter git username'
+      private: no
     - name: git_pw
       prompt: 'Enter git password'
       private: yes # Hide user input (password)
