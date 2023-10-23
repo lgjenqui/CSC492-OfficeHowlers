@@ -19,7 +19,7 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
 
 
 export const getCourse = async (req: Request, res: Response): Promise<void> => {
-  const course = await Course.findByPk(Number(req.query.id as string))
+  const course = await Course.findByPk(req.query.id as string)
   res.send(course);
 };
 
@@ -30,7 +30,7 @@ export const getAllCourses = async (req: Request, res: Response): Promise<void> 
 
 export const deleteCourse = async (req: Request, res: Response): Promise<void> => {
   try {
-    Course.destroy({ where: { id: Number(req.query.id as string) } });
+    Course.destroy({ where: { id: req.query.id as string } });
     res.status(200).send(true);
   } catch (error) {
     res.status(500).json({ message: 'Error deleting the course', error: error.message });
