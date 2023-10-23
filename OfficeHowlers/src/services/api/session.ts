@@ -25,5 +25,5 @@ export async function startSession(courses: Course[], modes: string[] | null , s
 }
 export async function getCourses(): Promise<Course[]> {
     // Update the existing list of courses in the system
-    return (await fetch("http://localhost:8080/api/course/all")).json();
+    return (await fetch(window.location.origin + "/api/course/all")).json();
 }

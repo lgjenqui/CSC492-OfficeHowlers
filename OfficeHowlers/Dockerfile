@@ -5,10 +5,10 @@ WORKDIR /usr/src/app/frontend
 
 EXPOSE 5173
 
-COPY package.json package-lock.json ./
+COPY /OfficeHowlers/package.json /OfficeHowlers/package-lock.json ./
 
 RUN npm install --silent
 
-COPY . ./
+COPY /OfficeHowlers ./
 
 CMD ["npm", "run", "dev"]
