@@ -25,7 +25,7 @@ export const getCourse = async (req: Request, res: Response): Promise<void> => {
 
 export const getAllCourses = async (req: Request, res: Response): Promise<void> => {
   const courses = await Course.findAll();
-  res.send(courses);
+  res.status(200).send(courses);
 };
 
 export const deleteCourse = async (req: Request, res: Response): Promise<void> => {
