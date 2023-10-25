@@ -2,10 +2,8 @@ import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
-import React, { useEffect, useState } from "react";
-import Course from "../../../../Models/course.model";
+import { useEffect, useState } from "react";
 import {
-  getCourses,
   getInstructors,
   getStudents,
   getAssistants,
@@ -18,8 +16,6 @@ const EditRoster = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const courseUUID = urlParams.get("id") || "invalid";
-  const [open, setOpen] = React.useState(false);
-  const [courses, setCourses] = useState<Course[]>([]);
   const [Error, setError] = useState<boolean>(false);
   const [studentError, setStudentError] = useState<boolean>(false);
   const [teachingAssistantError, setTeachingAssistantError] =
