@@ -11,10 +11,10 @@ export async function createCourse(name: string, desc: string): Promise<any> {
     };
   
     // Create the new course
-    return (await fetch("http://localhost:8080/api/course/create", requestOptions));
+    return (await fetch(window.location.origin + "/api/course/create", requestOptions));
 }
 
 export async function getCourses(): Promise<Course[]> {
     // Update the existing list of courses in the system
-    return (await fetch("http://localhost:8080/api/course/all")).json();
+    return (await fetch(window.location.origin + "/api/course/all")).json();
 }

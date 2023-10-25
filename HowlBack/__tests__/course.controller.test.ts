@@ -91,11 +91,11 @@ describe('Course Controller', () => {
 
   describe('getCourse', () => {
     it('should get a course by ID', async () => {
-      const courseId = 1;
+      const courseId = 'xyzuuid';
       const mockCourse = { id: courseId, name: 'CSC246', description: 'Operating System' };
       (Course.findByPk as jest.Mock).mockResolvedValueOnce(mockCourse);
 
-      mockRequest.query = { id: courseId.toString() };
+      mockRequest.query = { id: courseId };
       mockRequest.headers = {'x-shib_mail': "john@mail.com"};
 
       await getCourse(mockRequest as Request, mockResponse as Response);
@@ -108,12 +108,12 @@ describe('Course Controller', () => {
 
   describe('deleteCourse', () => {
     it('should delete a course', async () => {
-      const courseId = 1;
+      const courseId = 'xyzuuid';
   
       // Mock a successful course deletion
       (Course.destroy as jest.Mock).mockResolvedValueOnce(1); // Assuming 1 row was affected (course deleted)
   
-      mockRequest.query = { id: courseId.toString() };
+      mockRequest.query = { id: courseId };
   
       await deleteCourse(mockRequest as Request, mockResponse as Response);
   
@@ -127,8 +127,8 @@ describe('Course Controller', () => {
       const newUser: any = User; //assigning the object to a constant of type any. This recognizes the getCourse methods
       (retrieveUser as jest.Mock).mockImplementation(() => Promise.resolve(newUser));
       const mockCourses = [
-        { id: 1, name: 'CSC226', description: 'Discrete Mathematics' },
-        { id: 2, name: 'CSC316', description: 'Data Structures and Algorithms' },
+        { id: 'xyzuuid', name: 'CSC226', description: 'Discrete Mathematics' },
+        { id: 'abcuuid', name: 'CSC316', description: 'Data Structures and Algorithms' },
       ];
       (newUser.getInstructorCourses as jest.Mock).mockImplementation(() => Promise.resolve(mockCourses));
       (newUser.getAssistantCourses as jest.Mock).mockImplementation(() => Promise.resolve([]));
