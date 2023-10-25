@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Course from '../models/course.model';
-import User from '../models/user.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidUserForCourse } from '../services/course.service';
 

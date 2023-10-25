@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import courseRouter from "../routes/course.routes";
+import userRouter from "../routes/user.routes";
 import { findOrCreateUser } from "../services/user.service";
 
 const app = express()
@@ -30,9 +31,12 @@ app.get('/test', cors(corsOptions), (req, res) => {
     "Status": "Running",
     "Message": "Hello World!"
   }
+  console.log(req);
 
   res.send(status)
 });
+
+app.use("/username", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
