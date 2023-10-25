@@ -26,7 +26,7 @@
         repo: https://{{ git_user }}:{{ git_pw }}@github.ncsu.edu/engr-csc-sdc/2023FallTeam09-CSC-Faculty.git
         dest: /howlback
         depth: 1
-        version: feature/lgj/deploy2
+        version: development
 
     - name: Expose port 80 with iptables
       shell: 
