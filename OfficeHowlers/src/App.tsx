@@ -10,6 +10,7 @@ import StartSession from "./components/startSession/StartSession";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
+import { getUser } from "./services/api/user";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -46,6 +47,7 @@ function App() {
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
+          greeting = {"Hello" + getUser()}
           onReturnHome={onReturnHome}
         ></Banner>
 

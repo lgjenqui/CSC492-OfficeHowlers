@@ -4,8 +4,9 @@ import { ReactNode } from "react";
 interface Props {
   title: ReactNode;
   subtitle: ReactNode;
+  greeting: ReactNode;
   onReturnHome: () => void;
-}
+};
 
 const Banner = ({ title, subtitle, onReturnHome }: Props) => {
   return (
