@@ -1,11 +1,16 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
+import { useLocation } from 'react-router-dom';
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses} from "../../services/api/course";
+import { getCourses, getInstructors, getStudents, getAssistants, 
+          addInstructors, addAssistants, addStudents } from "../../services/api/course";
 
 const EditRoster = () => {
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const courseUUID = urlParams.get('id') || "invalid";
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [Error, setError] =
@@ -65,20 +70,39 @@ const EditRoster = () => {
   // Starts a session
   function onSubmit() {
     if(inputIsValid()){
+      addInstructors(professors.split('\n'), courseUUID).then(() => {
+        addAssistants(teachingAssistants.split('\n'), courseUUID).then(() => {
+          addStudents(students.split('\n'), courseUUID).then(() => {
+            fetchAllCourseEmails();
+          });
+        });
+      });
       console.log("submitted")
     }
+  }
+
+  function fetchAllCourseEmails() {
+    getInstructors(courseUUID).then((instructorEmails) => {
+      setProfessors(instructorEmails.instructors.join('\n'));
+    }).catch((error) => {
+      console.error(error);
+    });
+    getAssistants(courseUUID).then((assistantEmails) => {
+      setTeachingAssistants(assistantEmails.assistants.join('\n'));
+    }).catch((error) => {
+      console.error(error);
+    });
+    getStudents(courseUUID).then((studentEmails) => {
+      setStudents(studentEmails.students.join('\n'));
+    }).catch((error) => {
+      console.error(error);
+    });
   }
 
   // Grab the courses for this instructor
   // NOTE - this is grabbing ALL system courses for now
   useEffect(() => {
-    let res = getCourses();
-    res.then((value) => {
-      setCourses(value.instructorCourses);
-    });
-    res.catch((error) => {
-      console.error(error);
-    });
+    fetchAllCourseEmails();
   }, []);
 
   return (
@@ -116,8 +140,8 @@ const EditRoster = () => {
             label="Student Emails"
             multiline
             rows={4}
-            defaultValue=""
             sx={{ mr: "10px" }}
+            value={students}
             onChange={(e) => {
               setStudents(e.target.value);
               setStudentError(false);
@@ -130,8 +154,8 @@ const EditRoster = () => {
             label="TA Emails"
             multiline
             rows={4}
-            defaultValue=""
             sx={{ mr: "10px" }}
+            value={ teachingAssistants }
             onChange={(e) => {
               setTeachingAssistants(e.target.value);
               setTeachingAssistantError(false);
@@ -145,7 +169,7 @@ const EditRoster = () => {
             label="Professor Emails"
             multiline
             rows={4}
-            defaultValue=""
+            value={professors}
             onChange={(e) => {
               setProfessors(e.target.value);
               setProfessorError(false);

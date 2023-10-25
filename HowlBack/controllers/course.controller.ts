@@ -55,7 +55,7 @@ export const deleteCourse = async (req: Request, res: Response): Promise<void> =
 
 export const addInstructorsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     const instructorEmail = (req.headers['x-shib_mail']) as string;
     if (await isValidInstructorForCourse(instructorEmail, course)) {
       const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
@@ -75,7 +75,7 @@ export const addInstructorsByEmail = async (req: Request, res: Response): Promis
 
 export const getCourseInstructors = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const instructors = await course.getInstructors();
       const instructorEmails = instructors.map((instructor) => instructor.email);
@@ -90,7 +90,7 @@ export const getCourseInstructors = async (req: Request, res: Response): Promise
 
 export const addAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await Promise.all(req.body.emails.map(async (email: string) => {
         return findOrCreateUser(email);
@@ -107,7 +107,7 @@ export const addAssistantsByEmail = async (req: Request, res: Response): Promise
 
 export const getCourseAssistants = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await course.getAssistants();
       const assistantEmails = assistants.map((assistant) => assistant.email);
@@ -122,7 +122,7 @@ export const getCourseAssistants = async (req: Request, res: Response): Promise<
 
 export const addStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await Promise.all(req.body.emails.map(async (email: string) => {
         return findOrCreateUser(email);
@@ -139,7 +139,7 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
 
 export const getCourseStudents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await course.getStudents();
       const studentEmails = students.map((student) => student.email);
@@ -155,7 +155,7 @@ export const getCourseStudents = async (req: Request, res: Response): Promise<vo
 export const joinCourse = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await retrieveUser(req.headers['x-shib_mail'] as string);
-    const course = await Course.findByPk(Number(req.query.id as string));
+    const course = await Course.findByPk(req.query.id as string);
     course.addStudent(user);
     res.status(201).json({ success: true });
   } catch (error) {

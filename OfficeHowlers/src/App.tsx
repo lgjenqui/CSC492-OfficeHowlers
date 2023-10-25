@@ -21,9 +21,9 @@ function App() {
     navigate("/" + role.toLowerCase());
   };
 
-  const onCourseClick = (course: string) => {
-    console.log(course);
-    navigate("/instructor/course/" + course);
+  const onCourseClick = (courseUUID: string) => {
+    console.log(courseUUID);
+    navigate("/instructor/course?id=" + courseUUID);
   };
 
   const onInstructorOptionsClick = (option: string) => {
@@ -69,7 +69,7 @@ function App() {
             }
           />
 
-          <Route path="/instructor/course/:course" element={<EditRoster />} />
+          <Route path="/instructor/course" element={<EditRoster />} />
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
