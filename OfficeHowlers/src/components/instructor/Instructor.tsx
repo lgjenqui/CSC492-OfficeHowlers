@@ -103,7 +103,7 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
   useEffect(() => {
     getCourses()
       .then((res) => {
-        setCourses(res);
+        setCourses(res.instructorCourses);
         setCoursesLoadedSuccessfully(true);
       })
       .catch((err) => {

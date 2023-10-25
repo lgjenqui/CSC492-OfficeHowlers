@@ -3,7 +3,7 @@ import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses} from "../../services/api/session";
+import { getCourses} from "../../services/api/course";
 
 const EditRoster = () => {
   const [open, setOpen] = React.useState(false);
@@ -74,7 +74,7 @@ const EditRoster = () => {
   useEffect(() => {
     let res = getCourses();
     res.then((value) => {
-      setCourses(value);
+      setCourses(value.instructorCourses);
     });
     res.catch((error) => {
       console.error(error);
