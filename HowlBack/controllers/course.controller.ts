@@ -11,10 +11,6 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
     await instructorUser.addInstructorCourse(createdCourse);
     await createdCourse.addInstructor(instructorUser);
-    // const ourUser = await User.findByPk(createdUser.email, {
-    //   include: [User.associations.courses],
-    //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!
-    // });
 
     // Send the created course as a response
     res.status(201).json(createdCourse);
@@ -24,7 +20,7 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
 };
 
 export const getCourse = async (req: Request, res: Response): Promise<void> => {
-  const course = await Course.findByPk(Number(req.query.id as string), 
+  const course = await Course.findByPk(Number(req.query.id as string),
     {include: [Course.associations.instructors, Course.associations.assistants, Course.associations.students]});
   if (await isValidUserForCourse((req.headers['x-shib_mail']) as string, course)) {
     res.send(course);
