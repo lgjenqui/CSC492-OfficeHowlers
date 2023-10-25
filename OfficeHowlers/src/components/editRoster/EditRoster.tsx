@@ -1,22 +1,22 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
-import { useLocation } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
+  addAssistants,
+  addInstructors,
+  addStudents,
+  getAssistants,
   getInstructors,
   getStudents,
-  getAssistants,
-  addInstructors,
-  addAssistants,
-  addStudents,
 } from "../../services/api/course";
 
 const EditRoster = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const courseUUID = urlParams.get("id") || "invalid";
-  const [Error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const [studentError, setStudentError] = useState<boolean>(false);
   const [teachingAssistantError, setTeachingAssistantError] =
     useState<boolean>(false);
@@ -152,7 +152,7 @@ const EditRoster = () => {
               setStudentError(false);
               setError(false);
             }}
-            error={Error || studentError}
+            error={error || studentError}
           />
           <TextField
             id="outlined-multiline-static"
@@ -166,7 +166,7 @@ const EditRoster = () => {
               setTeachingAssistantError(false);
               setError(false);
             }}
-            error={Error || teachingAssistantError}
+            error={error || teachingAssistantError}
           />
           <TextField
             id="outlined-multiline-static"
@@ -179,7 +179,7 @@ const EditRoster = () => {
               setInstructorError(false);
               setError(false);
             }}
-            error={Error || instructorError}
+            error={error || instructorError}
           />
         </Grid>
         <Grid item></Grid>
