@@ -102,7 +102,7 @@ const CreateCourse = () => {
 
     // Create the course if there were no errors
     if (inputIsValid()) {
-      createCourse(courseName, courseDesc)
+      createCourse(courseName, courseDesc, startDate, endDate)
         .then(async (res) => {
           if (res.status == 201) {
             setCourseCreationSuccessful(true);

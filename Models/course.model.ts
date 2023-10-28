@@ -5,4 +5,6 @@ export default interface CourseModel extends Model {
     id: UUID;
     name: string;
     description: string;
+    startDate: Date;
+    endDate: Date;
 }
