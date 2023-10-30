@@ -8,7 +8,7 @@ interface Props {
   onReturnHome: () => void;
 };
 
-const Banner = ({ title, subtitle, onReturnHome }: Props) => {
+const Banner = ({ title, subtitle, greeting, onReturnHome }: Props) => {
   return (
     <Box
       sx={{
@@ -41,6 +41,29 @@ const Banner = ({ title, subtitle, onReturnHome }: Props) => {
           {subtitle}
         </Box>
       </Box>
+
+      <Box
+        sx={{
+          width: "fit-content",
+          position: "relative",
+          top: "50%",
+          transform: "transLateY(-50%)",
+          ":hover": {
+            cursor: "pointer",
+          },
+          ":active": {
+            color: "lightgrey",
+          },
+        }}
+        // onClick={() => onReturnHome()}
+      >
+        {greeting}
+         {/* <Box sx={{ margin: "auto", width: "fit-content", fontSize: "32px" }}>
+          {greeting}
+        </Box> */}
+
+      </Box>
+
     </Box>
   );
 };

@@ -6,5 +6,5 @@ export async function getUser(): Promise<any> {
     };
   
     // Create the new course
-    return (await fetch("http://localhost:8080/api/username", requestOptions));
+    return (await fetch(window.location.origin + "/api/username", requestOptions));
 }
