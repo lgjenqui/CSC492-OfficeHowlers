@@ -12,6 +12,7 @@ import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
 import { getUser } from "./services/api/user";
 import EditRoster from "./components/editRoster/EditRoster";
+import { useEffect, useState } from "react";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -27,6 +28,9 @@ function App() {
     navigate("/instructor/course?id=" + courseUUID);
   };
 
+  const [user, setUser] = useState<string>("");
+
+
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
     else if (option == "Start help session")
@@ -40,6 +44,17 @@ function App() {
     navigate("/");
   };
 
+  useEffect(() => {
+    getUser()
+      .then((res) => {
+        setUser(res);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
@@ -51,7 +66,7 @@ function App() {
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
-          greeting = {"Hello" + getUser()}
+          greeting = {"Hello, " + user }
           onReturnHome={onReturnHome}
         ></Banner>
 

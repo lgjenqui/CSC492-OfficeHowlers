@@ -43,25 +43,14 @@ const Banner = ({ title, subtitle, greeting, onReturnHome }: Props) => {
       </Box>
 
       <Box
-        sx={{
-          width: "fit-content",
-          position: "relative",
-          top: "50%",
-          transform: "transLateY(-50%)",
-          ":hover": {
-            cursor: "pointer",
-          },
-          ":active": {
-            color: "lightgrey",
-          },
+        sx={{   
+          position: "absolute",
+          right: "15px",
+          top: "50px",
+          fontSize: "25px"
         }}
-        // onClick={() => onReturnHome()}
       >
         {greeting}
-         {/* <Box sx={{ margin: "auto", width: "fit-content", fontSize: "32px" }}>
-          {greeting}
-        </Box> */}
-
       </Box>
 
     </Box>
