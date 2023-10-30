@@ -16,7 +16,8 @@ import { TimePicker, heIL } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses, startSession } from "../../services/api/session";
+import { getCourses } from "../../services/api/course";
+import { startSession } from "../../services/api/session";
 import { getTimeDiffStr } from "../../services/util/misc";
 
 const StartSession = () => {
@@ -153,7 +154,7 @@ const StartSession = () => {
   useEffect(() => {
     let res = getCourses();
     res.then((value) => {
-      setCourses(value);
+      setCourses(value.instructorCourses);
     });
     res.catch((error) => {
       console.error(error);

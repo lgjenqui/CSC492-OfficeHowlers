@@ -23,7 +23,3 @@ export async function startSession(courses: Course[], modes: string[] | null , s
     // Create the new course
     //await fetch("http://localhost:8080/api/course/create", requestOptions);
 }
-export async function getCourses(): Promise<Course[]> {
-    // Update the existing list of courses in the system
-    return (await fetch("http://localhost:8080/api/course/all")).json();
-}

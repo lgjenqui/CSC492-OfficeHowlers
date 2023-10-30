@@ -102,7 +102,7 @@ const CreateCourse = () => {
 
     // Create the course if there were no errors
     if (inputIsValid()) {
-      createCourse(courseName, courseDesc)
+      createCourse(courseName, courseDesc, startDate, endDate)
         .then(async (res) => {
           if (res.status == 201) {
             setCourseCreationSuccessful(true);
@@ -177,6 +177,7 @@ const CreateCourse = () => {
           <TextField
             required
             label="Course Name"
+            id='course-name-field'
             value={courseName}
             sx={{ mr: "20px" }}
             onChange={(e) => {
@@ -193,6 +194,7 @@ const CreateCourse = () => {
           <TextField
             required
             label="Course Description"
+            id='course-description'
             value={courseDesc}
             sx={{ mr: "20px" }}
             onChange={(e) => {
@@ -216,6 +218,7 @@ const CreateCourse = () => {
               slotProps={{
                 textField: {
                   error: startDateError,
+                  id:'start-date-field',
                 },
               }}
             />
@@ -235,6 +238,7 @@ const CreateCourse = () => {
               slotProps={{
                 textField: {
                   error: endDateError,
+                  id:'end-date-field',
                 },
               }}
             />
@@ -285,6 +289,7 @@ const CreateCourse = () => {
         }}
       >
         <Button
+          id="create-course-button"
           sx={{
             fontSize: 20,
             backgroundColor: "#CC0000",

@@ -3,10 +3,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
-// import Session from "./session.model";
+import { UUID } from 'crypto';
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
-  declare id: number;
+  declare id: UUID;
   declare name: string;
   declare description: string;
   declare startDate: Date;
@@ -40,9 +40,9 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
 Course.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     name: {
       type: DataTypes.STRING,

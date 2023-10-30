@@ -24,9 +24,11 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/api/course", courseRouter);
+app.use("/course", courseRouter);
 
 app.get('/test', cors(corsOptions), (req, res) => {
+
+  console.log(req);
   const status = {
     "Status": "Running",
     "Message": "Hello World!"

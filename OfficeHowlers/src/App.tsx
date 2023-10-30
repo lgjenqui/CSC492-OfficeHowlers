@@ -11,6 +11,7 @@ import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
 import { getUser } from "./services/api/user";
+import EditRoster from "./components/editRoster/EditRoster";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -21,14 +22,17 @@ function App() {
     navigate("/" + role.toLowerCase());
   };
 
-  const onCourseClick = () => {
-    navigate("/instructor/course/CSC216");
+  const onCourseClick = (courseUUID: string) => {
+    console.log(courseUUID);
+    navigate("/instructor/course?id=" + courseUUID);
   };
 
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
     else if (option == "Start help session")
       navigate("/instructor/startSession");
+    else if (option == "Edit course roster")
+      navigate("/instructor/editRoster")
     else navigate("/instructor/deadend");
   };
 
@@ -67,11 +71,13 @@ function App() {
             }
           />
 
-          <Route path="/instructor/course/CSC216" />
+          <Route path="/instructor/course" element={<EditRoster />} />
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
           <Route path="/instructor/startSession" element={<StartSession />} />
+
+          <Route path="/instructor/editRoster" element={<EditRoster/>}/>
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
