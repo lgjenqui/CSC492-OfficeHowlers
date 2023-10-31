@@ -35,8 +35,6 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   };
 }
 
-// Course.belongsToMany(User, { through: 'CourseStudent' });
-
 Course.init(
   {
     id: {

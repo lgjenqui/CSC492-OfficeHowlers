@@ -11,16 +11,13 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
     const createdSession = await Session.create(req.body);
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
     if(instructorUser) {
-      // await instructorUser.session(createdSession);
-      // createdSession.addInstructor(instructorUser);
+      createdSession.setInstructor(instructorUser);
+      res.status(201).json(createdSession);
     }
-    // const ourUser = await User.findByPk(createdUser.email, {
-    //   include: [User.associations.courses],
-    //   rejectOnEmpty: true // Specifying true here removes `null` from the return type!
-    // });
-
-    // Send the created course as a response
-    res.status(201).json(createdSession);
+    else {
+      throw new Error("invalid/empty instructor");
+    }
+    
   } catch (error) {
     res.status(500).json({ message: 'Error creating the course', error: error.message });
   }

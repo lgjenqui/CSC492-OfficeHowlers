@@ -1,5 +1,5 @@
-import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, NonAttribute, 
-    HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin, ForeignKey} from 'sequelize';
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, 
+  HasOneSetAssociationMixin, ForeignKey} from 'sequelize';
   import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
   import SessionModel from "../../Models/session.model";
   import Course from "./course.model";
@@ -11,13 +11,15 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     declare startTime: Date;
     declare endTime: Date;
     declare courseId: ForeignKey<Course['id']>;
+    declare setInstructor: HasOneSetAssociationMixin<User, User['email']>; 
+
     // declare tickets?: NonAttribute<Ticket[]>;
   
     // declare getTickets: HasManyGetAssociationsMixin<Ticket>; // Note the null assertions!
     // declare addTicket: HasManyAddAssociationMixin<Ticket, number>;
   
     declare static associations: {
-    //   tickets: Association<Session, Ticket>;
+      user: Association<Session, User>;
     };
   }
   
@@ -41,8 +43,11 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     }
   );
 
-  Session.belongsTo(Course, { targetKey: 'id' });
-  Course.hasOne(Session, { sourceKey: 'id' });
+  // Session.belongsTo(Course, { targetKey: 'id' });
+  // Course.hasOne(Session, { sourceKey: 'id' });
+
+  Session.belongsTo(User, { targetKey: 'id' });
+  User.hasOne(User, { sourceKey: 'id' });
   
   export default Session;
   
