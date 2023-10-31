@@ -4,10 +4,11 @@ import { ReactNode } from "react";
 interface Props {
   title: ReactNode;
   subtitle: ReactNode;
+  greeting: ReactNode;
   onReturnHome: () => void;
 }
 
-const Banner = ({ title, subtitle, onReturnHome }: Props) => {
+const Banner = ({ title, subtitle, greeting, onReturnHome }: Props) => {
   return (
     <Box
       sx={{
@@ -39,6 +40,17 @@ const Banner = ({ title, subtitle, onReturnHome }: Props) => {
         <Box sx={{ margin: "auto", width: "fit-content", fontSize: "32px" }}>
           {subtitle}
         </Box>
+      </Box>
+
+      <Box
+        sx={{
+          position: "absolute",
+          right: "25px",
+          top: "50px",
+          fontSize: "25px",
+        }}
+      >
+        {greeting}
       </Box>
     </Box>
   );
