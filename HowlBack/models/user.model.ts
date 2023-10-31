@@ -11,6 +11,7 @@ import Course from "./course.model";
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   declare firstName: string;
   declare email: string;
+  declare primaryRole: string;
   declare instructorCourses?: NonAttribute<Course[]>;
   declare assistantCourses?: NonAttribute<Course[]>;
   declare studentCourses?: NonAttribute<Course[]>;

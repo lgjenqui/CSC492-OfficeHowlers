@@ -21,6 +21,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
 import { getCourses } from "../../services/api/course";
+import CourseCards from "../courseCards/CourseCards";
 
 interface Props {
   onCourseClick: (courseUUID: string) => void;
@@ -96,8 +97,10 @@ const getIcon = (option: String) => {
   else return <SettingsIcon />;
 };
 
-const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
-  const [courses, setCourses] = useState<Course[]>([]);
+const Home = ({ onOptionsClick }: Props) => {
+  const [instructorCourses, setInstructorCourses] = useState<Course[]>([]);
+  const [assistantCourses, setAssistantCourses] = useState<Course[]>([]);
+  const [studentCourses, setStudentCourses] = useState<Course[]>([]);
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
@@ -106,7 +109,10 @@ const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
   useEffect(() => {
     getCourses()
       .then((res) => {
-        setCourses(res.instructorCourses);
+        console.log(res);
+        setInstructorCourses(res.instructorCourses);
+        setAssistantCourses(res.assistantCourses);
+        setStudentCourses(res.studentCourses);
         setCoursesLoadedSuccessfully(true);
       })
       .catch((err) => {
@@ -148,7 +154,10 @@ const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
         </List>
       </Box>
       <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        {coursesLoadedSuccessfully && courses.length > 0 ? (
+        {coursesLoadedSuccessfully &&
+        (instructorCourses.length > 0 ||
+          assistantCourses.length > 0 ||
+          studentCourses.length > 0) ? (
           <Typography
             sx={{
               fontSize: "35px",
@@ -161,7 +170,11 @@ const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
             My courses
           </Typography>
         ) : null}
-        {coursesLoadedSuccessfully && courses.length == 0 ? (
+        {coursesLoadedSuccessfully &&
+        instructorCourses.length +
+          assistantCourses.length +
+          studentCourses.length ==
+          0 ? (
           <Typography
             sx={{
               fontSize: "35px",
@@ -195,11 +208,20 @@ const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
         ) : null}
 
         <Grid sx={{ flexGrow: 1 }} container spacing={3}>
-          {getCourseCards(courses, onCourseClick)}
+          <CourseCards
+            courses={instructorCourses}
+            role="Instructor"
+          ></CourseCards>
+          <CourseCards
+            courses={assistantCourses}
+            role="Teaching Assistant"
+          ></CourseCards>
+          <CourseCards courses={studentCourses} role="Student"></CourseCards>
+          {/* {getCourseCards(courses, onCourseClick)} */}
         </Grid>
       </Box>
     </Grid>
   );
 };
 
-export default Instructor;
+export default Home;
