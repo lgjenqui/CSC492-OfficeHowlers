@@ -1,9 +1,11 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, 
-  HasOneSetAssociationMixin, ForeignKey} from 'sequelize';
+  HasOneSetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
+  HasManyAddAssociationMixin, NonAttribute } from 'sequelize';
   import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
   import SessionModel from "../../Models/session.model";
   import Course from "./course.model";
   import User from "./user.model"
+import { UUID } from 'crypto';
 //   import Ticket from "./ticket.model"
   
   class Session extends Model<InferAttributes<SessionModel>, InferCreationAttributes<SessionModel>> {
@@ -12,13 +14,14 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     declare endTime: Date;
     declare setUser: HasOneSetAssociationMixin<User, string>; 
 
-    // declare tickets?: NonAttribute<Ticket[]>;
+    declare courses?: NonAttribute<Course[]>;
   
-    // declare getTickets: HasManyGetAssociationsMixin<Ticket>; // Note the null assertions!
-    // declare addTicket: HasManyAddAssociationMixin<Ticket, number>;
+    declare getCourses: HasManyGetAssociationsMixin<Course>; // Note the null assertions!
+    declare addCourse: HasManyAddAssociationMixin<Course, string>;
   
     declare static associations: {
       user: Association<Session, User>;
+      courses: Association<Session, Course>;
     };
   }
   
@@ -47,6 +50,14 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
 
   Session.belongsTo(User);
   User.hasOne(Session);
+
+  Course.belongsToMany(Session, 
+    {through: "SessionCourse", as: "sessions"}
+  );
+  
+  Session.belongsToMany(Course, 
+    {through: "SessionCourse", as: "courses"}
+  );
   
   export default Session;
   

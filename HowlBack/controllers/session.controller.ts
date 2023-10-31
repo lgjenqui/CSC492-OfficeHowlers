@@ -4,6 +4,7 @@ import User from '../models/user.model';
 import Session from '../models/session.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidUserForCourse } from '../services/course.service';
+import { UUID } from 'crypto';
 
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,7 +12,11 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
     const createdSession = await Session.create();
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
     if(instructorUser) {
-      createdSession.setUser(instructorUser);
+      await createdSession.setUser(instructorUser);
+      await Promise.all(req.body.courseIDs.map(async (id: UUID) => {
+        const course = await Course.findByPk(id);
+        return createdSession.addCourse(course);
+      }));
       res.status(201).json(createdSession);
     }
     else {
