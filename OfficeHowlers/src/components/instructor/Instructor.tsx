@@ -29,7 +29,7 @@ interface Props {
 
 const instructorOptions = [
   "Create course",
-  "Edit course roster",
+  "Create help ticket",
   "Start help session",
   "Course analytics",
   "Settings",

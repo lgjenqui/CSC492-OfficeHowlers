@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses, startSession } from "../../services/api/session";
+import {startSession } from "../../services/api/session";
 
 
 const CreateHelpTicket = () => {
@@ -139,15 +139,15 @@ const CreateHelpTicket = () => {
 
   // Grab the courses for this instructor
   // NOTE - this is grabbing ALL system courses for now
-  useEffect(() => {
-    let res = getCourses();
-    res.then((value) => {
-      setCourses(value);
-    });
-    res.catch((error) => {
-      console.error(error);
-    });
-  }, []);
+  // useEffect(() => {
+  //   let res = getCourses();
+  //   res.then((value) => {
+  //     setCourses(value);
+  //   });
+  //   res.catch((error) => {
+  //     console.error(error);
+  //   });
+  // }, []);
 
   return (
     <Box
