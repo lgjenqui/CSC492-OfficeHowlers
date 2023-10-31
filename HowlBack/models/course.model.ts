@@ -3,6 +3,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
+import Session from "./session.model";
 import { UUID } from 'crypto';
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
@@ -27,6 +28,8 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare setInstructors: HasManySetAssociationsMixin<User, number>;
   declare setAssistants: HasManySetAssociationsMixin<User, number>;
   declare setStudents: HasManySetAssociationsMixin<User, number>;
+
+  declare getSessions: HasManyGetAssociationsMixin<Session>;
 
   declare static associations: {
     instructors: Association<Course, User>;
