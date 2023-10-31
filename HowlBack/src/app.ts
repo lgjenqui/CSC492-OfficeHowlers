@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import courseRouter from "../routes/course.routes";
+import sessionRouter from "../routes/session.routes";
 import userRouter from "../routes/user.routes";
 import { findOrCreateUser } from "../services/user.service";
 
@@ -26,6 +27,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/course", courseRouter);
+
+app.use("/session", sessionRouter);
 
 app.get('/test', cors(corsOptions), (req, res) => {
 
