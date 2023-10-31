@@ -1,10 +1,6 @@
 import { Box, Button, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
-import Course from "../../../../Models/course.model";
-import { getCourses} from "../../services/api/session";
-import DeleteIcon from '@mui/icons-material/Delete'
-import { DataGrid, GridActionsCellItem, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -177,7 +173,7 @@ const EditRoster = () => {
             multiline
             rows={4}
             defaultValue=""
-            sx={{ mr: "10px"}}
+            sx={{ mr: "10px" }}
             onChange={(e) => {
               setStudents(e.target.value);
               setStudentError(false);
