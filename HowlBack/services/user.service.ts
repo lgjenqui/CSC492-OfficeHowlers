@@ -4,11 +4,11 @@ export async function retrieveUser(email: string) {
     return User.findByPk(email);
 }
 
-export async function findOrCreateUser(email: string) {
+export async function findOrCreateUser(email: string, firstName: string) {
     let user = await retrieveUser(email);
     if (!user) {
       user = await User.create({
-        name: "Unset name",
+        firstName: firstName,
         email: email,
       });
     }

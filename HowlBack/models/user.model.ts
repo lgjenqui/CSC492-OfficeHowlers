@@ -9,7 +9,7 @@ import Ticket from "./ticket.model";
 import Course from "./course.model";
 
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
-  declare name: string;
+  declare firstName: string;
   declare email: string;
   declare instructorCourses?: NonAttribute<Course[]>;
   declare assistantCourses?: NonAttribute<Course[]>;
@@ -41,7 +41,7 @@ class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<Use
 
 User.init(
   {
-    name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
