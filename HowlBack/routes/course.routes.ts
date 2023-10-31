@@ -2,7 +2,9 @@ import express, { Application, Request, Response, Router } from 'express';
 import { createCourse, getCourse, deleteCourse, getAllMyCourses, 
     joinCourse, getCourseInstructors, getCourseAssistants,
     getCourseStudents, addStudentsByEmail, addAssistantsByEmail,
-    addInstructorsByEmail} from '../controllers/course.controller';
+    addInstructorsByEmail,
+    getCourseQueue,
+    getCourseSessions} from '../controllers/course.controller';
 import cors from "cors";
 
 const courseRouter: Router = express.Router();
@@ -28,6 +30,10 @@ courseRouter.get('/manage/roster/get', getCourseStudents);
 courseRouter.delete('/', cors(), deleteCourse );
 
 courseRouter.get('/manage/roster/join', cors(), joinCourse );
+
+courseRouter.get('/queue', cors(), getCourseQueue );
+
+courseRouter.get('/sessions', cors(), getCourseSessions );
 
 export default courseRouter;
 

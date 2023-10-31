@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Course from '../models/course.model';
 import User from '../models/user.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
-import { isValidInstructorForCourse, isValidUserForCourse } from '../services/course.service';
+import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
 
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -160,5 +160,33 @@ export const joinCourse = async (req: Request, res: Response): Promise<void> => 
     res.status(201).json({ success: true });
   } catch (error) {
     res.status(500).json({ message: 'Error adding the course', error: error.message });
+  }
+};
+
+export const getCourseSessions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidUserForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const sessions = await course.getSessions();
+      res.status(200).json({ sessions: sessions });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course sessions" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving course sessions', error: error.message });
+  }
+};
+
+export const getCourseQueue = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorOrAssistantForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const tickets = await course.getTickets();
+      res.status(200).json({ tickets: tickets });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course queue" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving course queue', error: error.message });
   }
 };
