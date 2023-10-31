@@ -10,7 +10,6 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     declare id: number;
     declare startTime: Date;
     declare endTime: Date;
-    declare courseId: ForeignKey<Course['id']>;
     declare setUser: HasOneSetAssociationMixin<User, string>; 
 
     // declare tickets?: NonAttribute<Ticket[]>;
