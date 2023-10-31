@@ -7,8 +7,7 @@ import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/banner/Banner";
 import CreateCourse from "./components/createCourse/CreateCourse";
 import StartSession from "./components/startSession/StartSession";
-import Instructor from "./components/instructor/Instructor";
-import Login from "./components/login/Login";
+import Home from "./components/home/Home";
 import NotFound from "./components/notFound/NotFound";
 import { getUser } from "./services/api/user";
 import EditRoster from "./components/editRoster/EditRoster";
@@ -16,28 +15,21 @@ import { useEffect, useState } from "react";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/createHelpTicket/CreateHelpTicket";
 
-const systemRoles = ["Instructor", "TA", "Student"];
-
 function App() {
   const navigate = useNavigate();
 
-  const onLogin = (role: string) => {
-    navigate("/" + role.toLowerCase());
-  };
-
   const onCourseClick = (courseUUID: string) => {
     console.log(courseUUID);
-    navigate("/instructor/course?id=" + courseUUID);
+    navigate("/course?id=" + courseUUID);
   };
 
   const [user, setUser] = useState<User | null>(null);
 
-  const onInstructorOptionsClick = (option: string) => {
-    if (option == "Create course") navigate("/instructor/createCourse");
-    else if (option == "Start help session")
-      navigate("/instructor/startSession");
-    else if (option == "Create help ticket") navigate("/instructor/createHelpTicket");
-    else navigate("/instructor/deadend");
+  const onOptionsClick = (option: string) => {
+    if (option == "Create course") navigate("/createCourse");
+    else if (option == "Start help session") navigate("/startSession");
+    else if (option == "Create help ticket") navigate("/createHelpTicket");
+    else navigate("/deadend");
   };
 
   const onReturnHome = () => {
@@ -80,28 +72,23 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Login systemRoles={systemRoles} onLogin={onLogin} />}
-          />
-
-          <Route
-            path="/instructor"
             element={
-              <Instructor
+              <Home
                 onCourseClick={onCourseClick}
-                onInstructorOptionsClick={onInstructorOptionsClick}
+                onOptionsClick={onOptionsClick}
               />
             }
           />
 
-          <Route path="/instructor/course" element={<EditRoster />} />
+          <Route path="/course" element={<EditRoster />} />
 
-          <Route path="/instructor/createCourse" element={<CreateCourse />} />
+          <Route path="/createCourse" element={<CreateCourse />} />
 
-          <Route path="/instructor/startSession" element={<StartSession />} />
+          <Route path="/startSession" element={<StartSession />} />
 
-          <Route path="/instructor/editRoster" element={<EditRoster />} />
+          <Route path="/editRoster" element={<EditRoster />} />
 
-          <Route path="/instructor/createHelpTicket" element={<CreateHelpTicket/>}/>
+          <Route path="/createHelpTicket" element={<CreateHelpTicket />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

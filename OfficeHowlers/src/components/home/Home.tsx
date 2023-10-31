@@ -24,7 +24,7 @@ import { getCourses } from "../../services/api/course";
 
 interface Props {
   onCourseClick: (courseUUID: string) => void;
-  onInstructorOptionsClick: (options: string) => void;
+  onOptionsClick: (options: string) => void;
 }
 
 const instructorOptions = [
@@ -88,15 +88,15 @@ function getCourseCards(
   ));
 }
 
-const getIcon = (index: number) => {
-  if (index == 0) return <AddIcon />;
-  else if (index == 1) return <PersonAddAltIcon />;
-  else if (index == 2) return <StartIcon />;
-  else if (index == 3) return <AssessmentIcon />;
+const getIcon = (option: String) => {
+  if (option == "Create course") return <AddIcon />;
+  else if (option == "Create help ticket") return <PersonAddAltIcon />;
+  else if (option == "Start help session") return <StartIcon />;
+  else if (option == "Course analytics") return <AssessmentIcon />;
   else return <SettingsIcon />;
 };
 
-const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
+const Instructor = ({ onCourseClick, onOptionsClick }: Props) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
@@ -131,12 +131,12 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
         <List>
           {instructorOptions.map((option, index) => (
             <ListItem
-              onClick={() => onInstructorOptionsClick(option)}
+              onClick={() => onOptionsClick(option)}
               key={index}
               disablePadding
             >
               <ListItemButton>
-                <ListItemIcon>{getIcon(index)}</ListItemIcon>
+                <ListItemIcon>{getIcon(option)}</ListItemIcon>
                 <ListItemText
                   sx={{ fontSize: "25px" }}
                   disableTypography

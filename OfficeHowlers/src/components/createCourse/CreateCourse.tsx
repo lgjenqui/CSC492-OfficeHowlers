@@ -115,7 +115,7 @@ const CreateCourse = () => {
 
             // Sleep for 2 seconds then redirect the user to their home page
             await sleep(2000);
-            navigate("/instructor");
+            navigate("/");
           }
         })
         .catch((error) => {
