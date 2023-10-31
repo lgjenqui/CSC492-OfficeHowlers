@@ -1,10 +1,55 @@
-import { Box, Button, Divider, Grid, TextField } from "@mui/material";
+import { Box, Button, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
 import { getCourses} from "../../services/api/session";
+import DeleteIcon from '@mui/icons-material/Delete'
+import { DataGrid, GridActionsCellItem, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
+
+  var deleteIcon =
+  (<IconButton>
+    <DeleteIcon color="secondary" />
+  </IconButton>
+  );
+
+
+const columns: GridColDef[] = [
+  { field: 'Name', headerName: 'Name', width: 100 },
+  { field: 'Email', headerName: 'Email', width: 80 },
+  {field: 'actions',
+        type: 'actions',
+        width: 1,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+          />,],
+        }
+];
+const rows = [
+  { 
+    id: 1,
+    Name: 'Christopher Kastritis',
+    Email: 'crkastri@ncsu.edu' 
+    },
+    { 
+      id: 2,
+      Name: 'Christopher Kastritis',
+      Email: 'crkastri@ncsu.edu' 
+      },
+      { 
+        id: 3,
+        Name: 'Christopher Kastritis',
+        Email: 'crkastri@ncsu.edu' 
+        },
+        { 
+          id: 4,
+          Name: 'Christopher Kastritis',
+          Email: 'crkastri@ncsu.edu' 
+          },
+];
 const EditRoster = () => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -82,6 +127,13 @@ const EditRoster = () => {
   }, []);
 
   return (
+    <Box sx={{
+      width: "80%",
+      maxWidth: "1200px",
+      m: "auto",
+      mt: "20px",
+      alignContent: "center",
+    }}>
     <Box
       sx={{
         width: "60%",
@@ -117,7 +169,7 @@ const EditRoster = () => {
             multiline
             rows={4}
             defaultValue=""
-            sx={{ mr: "10px" }}
+            sx={{ mr: "10px", mb:"2px"}}
             onChange={(e) => {
               setStudents(e.target.value);
               setStudentError(false);
@@ -153,10 +205,17 @@ const EditRoster = () => {
             }}
             error={Error || professorError}
           />
+          <br></br>
+         {/* <DataGrid
+         sx={{width:"32%"}}
+          rows={rows}
+          columns={columns}
+          /> */}
         </Grid>
         <Grid item>
         </Grid>
       </Grid>
+
       <Box
         sx={{
           width: "50%",
@@ -202,6 +261,94 @@ const EditRoster = () => {
           );
         })}
       </Box>
+      
+    </Box>
+    <Grid container direction = "row" spacing = {3} alignItems="center" width={"100%"}>
+      <Grid item xs = {4}>
+      <h3>Enrolled Students</h3>
+      <Box sx={{overflowY:"scroll", maxHeight:"300px", maxWidth:"100%"}}>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5}>
+          Name 
+        </Grid>
+        <Grid item xs = {4}>
+          Email
+        </Grid>
+        <Grid item xs = {3}>
+          Delete
+        </Grid>
+      </Grid>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5} sx={{textOverflow:"ellipsis", overflow:"hidden", whiteSpace:"nowrap"}}>
+          Christopher Kastritis
+        </Grid>
+        <Grid item xs = {4}>
+          crkastri@ncsu.edu
+        </Grid>
+        <Grid item xs = {3}>
+          <IconButton><DeleteIcon/></IconButton>
+        </Grid>
+        </Grid>
+        
+      </Box>
+      </Grid>
+      <Grid item xs = {4}>
+      <h3>Enrolled Teaching Assistants</h3>
+      <Box sx={{overflowY:"scroll", maxHeight:"300px", maxWidth:"100%"}}>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5}>
+          Name 
+        </Grid>
+        <Grid item xs = {4}>
+          Email
+        </Grid>
+        <Grid item xs = {3}>
+          Delete
+        </Grid>
+      </Grid>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5} sx={{textOverflow:"ellipsis", overflow:"hidden", whiteSpace:"nowrap"}}>
+          Christopher Kastritis
+        </Grid>
+        <Grid item xs = {4}>
+          crkastri@ncsu.edu
+        </Grid>
+        <Grid item xs = {3}>
+          <IconButton><DeleteIcon/></IconButton>
+        </Grid>
+        </Grid>
+      </Box>
+      </Grid>
+      <Grid item xs = {4}>
+      <h3>Enrolled Professors</h3>
+      <Box sx={{overflowY:"scroll", maxHeight:"300px", maxWidth:"100%"}}>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5}>
+          Name 
+        </Grid>
+        <Grid item xs = {4}>
+          Email
+        </Grid>
+        <Grid item xs = {3}>
+          Delete
+        </Grid>
+      </Grid>
+      <Grid container direction="row" alignItems="center" spacing={3}>
+        <Grid item xs = {5} sx={{textOverflow:"ellipsis", overflow:"hidden", whiteSpace:"nowrap"}}>
+          Christopher Kastritis
+        </Grid>
+        <Grid item xs = {4}>
+          crkastri@ncsu.edu
+        </Grid>
+        <Grid item xs = {2}>
+          <IconButton><DeleteIcon/></IconButton>
+        </Grid>
+        </Grid>
+      </Box>
+      </Grid>
+      </Grid>
+      
+      
     </Box>
   );
 };
