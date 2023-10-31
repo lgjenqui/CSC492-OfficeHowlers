@@ -1,6 +1,7 @@
 import { Box, Button, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from '@mui/icons-material/Delete'
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -12,48 +13,9 @@ import {
   getStudents,
 } from "../../services/api/course";
 
-  var deleteIcon =
-  (<IconButton>
-    <DeleteIcon color="secondary" />
-  </IconButton>
-  );
 
 
-const columns: GridColDef[] = [
-  { field: 'Name', headerName: 'Name', width: 100 },
-  { field: 'Email', headerName: 'Email', width: 80 },
-  {field: 'actions',
-        type: 'actions',
-        width: 1,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-          />,],
-        }
-];
-const rows = [
-  { 
-    id: 1,
-    Name: 'Christopher Kastritis',
-    Email: 'crkastri@ncsu.edu' 
-    },
-    { 
-      id: 2,
-      Name: 'Christopher Kastritis',
-      Email: 'crkastri@ncsu.edu' 
-      },
-      { 
-        id: 3,
-        Name: 'Christopher Kastritis',
-        Email: 'crkastri@ncsu.edu' 
-        },
-        { 
-          id: 4,
-          Name: 'Christopher Kastritis',
-          Email: 'crkastri@ncsu.edu' 
-          },
-];
+
 const EditRoster = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
