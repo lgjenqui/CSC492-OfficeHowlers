@@ -6,7 +6,7 @@ interface Props {
   subtitle: ReactNode;
   greeting: ReactNode;
   onReturnHome: () => void;
-};
+}
 
 const Banner = ({ title, subtitle, greeting, onReturnHome }: Props) => {
   return (
@@ -43,16 +43,15 @@ const Banner = ({ title, subtitle, greeting, onReturnHome }: Props) => {
       </Box>
 
       <Box
-        sx={{   
+        sx={{
           position: "absolute",
-          right: "15px",
+          right: "25px",
           top: "50px",
-          fontSize: "25px"
+          fontSize: "25px",
         }}
       >
         {greeting}
       </Box>
-
     </Box>
   );
 };
