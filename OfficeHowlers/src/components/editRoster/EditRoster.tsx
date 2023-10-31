@@ -1,6 +1,14 @@
-import { Box, Button, Divider, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -113,122 +121,266 @@ const EditRoster = () => {
   return (
     <Box
       sx={{
-        width: "60%",
+        width: "80%",
         maxWidth: "1200px",
         m: "auto",
         mt: "20px",
         alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Edit Roster</Typography>
-      <Divider
-        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
-      />
-      <Grid
-        sx={{
-          width: "100%",
-          flexGrow: 1,
-          justifyContent: "center",
-        }}
-        container
-        spacing={3}
-      >
-        <Grid item>
-          <Typography sx={{ fontSize: 20 }}>
-            Manually enter student, TA, and instructor emails
-          </Typography>
-          <Typography sx={{ fontSize: 14, mb: "15px" }}>
-            One on each line in this format: <i>johndoe@org.edu</i>
-          </Typography>
-          <TextField
-            id="outlined-multiline-static"
-            label="Student Emails"
-            multiline
-            rows={4}
-            sx={{ mr: "10px" }}
-            value={students}
-            onChange={(e) => {
-              setStudents(e.target.value);
-              setStudentError(false);
-              setError(false);
-            }}
-            error={error || studentError}
-          />
-          <TextField
-            id="outlined-multiline-static"
-            label="TA Emails"
-            multiline
-            rows={4}
-            sx={{ mr: "10px" }}
-            value={teachingAssistants}
-            onChange={(e) => {
-              setTeachingAssistants(e.target.value);
-              setTeachingAssistantError(false);
-              setError(false);
-            }}
-            error={error || teachingAssistantError}
-          />
-          <TextField
-            id="outlined-multiline-static"
-            label="Instructor Emails"
-            multiline
-            rows={4}
-            value={instructors}
-            onChange={(e) => {
-              setInstructors(e.target.value);
-              setInstructorError(false);
-              setError(false);
-            }}
-            error={error || instructorError}
-          />
-        </Grid>
-        <Grid item></Grid>
-      </Grid>
       <Box
         sx={{
-          width: "50%",
+          width: "60%",
+          maxWidth: "1200px",
+          m: "auto",
+          mt: "20px",
           alignContent: "center",
-          m: "auto",
-          mt: "25px",
-          textAlign: "center",
         }}
       >
-        <Button
+        <Typography sx={{ fontSize: 42, mb: "5px" }}>
+          Edit Course Roster
+        </Typography>
+        <Divider
+          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        />
+        <Grid
           sx={{
-            fontSize: 20,
-            backgroundColor: "#CC0000",
-            ":hover": {
-              backgroundColor: "#9e0000",
-            },
+            width: "100%",
+            flexGrow: 1,
+            justifyContent: "center",
           }}
-          variant="contained"
-          onClick={() => onSubmit()}
+          container
+          spacing={3}
         >
-          Edit Roster
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          textAlign: "center",
-          m: "auto",
-        }}
-      >
-        {errorMessages.map(function (msg) {
-          return (
-            <Alert
-              key={msg}
-              severity="error"
-              sx={{
-                mt: "15px",
-                borderRadius: "20px",
-                width: "fit-content",
+          <Grid item>
+            <Typography sx={{ fontSize: 20 }}>
+              Manually enter student, TA, and instructor emails
+            </Typography>
+            <Typography sx={{ fontSize: 14, mb: "15px" }}>
+              One on each line in this format: <i>johndoe@org.edu</i>
+            </Typography>
+            <TextField
+              id="outlined-multiline-static"
+              label="Student Emails"
+              multiline
+              rows={4}
+              sx={{ mr: "10px" }}
+              value={students}
+              onChange={(e) => {
+                setStudents(e.target.value);
+                setStudentError(false);
+                setError(false);
               }}
-            >
-              {msg}
-            </Alert>
-          );
-        })}
+              error={error || studentError}
+            />
+            <TextField
+              id="outlined-multiline-static"
+              label="TA Emails"
+              multiline
+              rows={4}
+              sx={{ mr: "10px" }}
+              value={teachingAssistants}
+              onChange={(e) => {
+                setTeachingAssistants(e.target.value);
+                setTeachingAssistantError(false);
+                setError(false);
+              }}
+              error={error || teachingAssistantError}
+            />
+            <TextField
+              id="outlined-multiline-static"
+              label="Instructor Emails"
+              multiline
+              rows={4}
+              value={instructors}
+              onChange={(e) => {
+                setInstructors(e.target.value);
+                setInstructorError(false);
+                setError(false);
+              }}
+              error={error || instructorError}
+            />
+            <br></br>
+            {/* <DataGrid
+         sx={{width:"32%"}}
+          rows={rows}
+          columns={columns}
+          /> */}
+          </Grid>
+          <Grid item></Grid>
+        </Grid>
+
+        <Box
+          sx={{
+            width: "50%",
+            alignContent: "center",
+            m: "auto",
+            mt: "25px",
+            textAlign: "center",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: 20,
+              backgroundColor: "#CC0000",
+              ":hover": {
+                backgroundColor: "#9e0000",
+              },
+            }}
+            variant="contained"
+            onClick={() => onSubmit()}
+          >
+            Edit Roster
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            textAlign: "center",
+            m: "auto",
+          }}
+        >
+          {errorMessages.map(function (msg) {
+            return (
+              <Alert
+                key={msg}
+                severity="error"
+                sx={{
+                  mt: "15px",
+                  borderRadius: "20px",
+                  width: "fit-content",
+                }}
+              >
+                {msg}
+              </Alert>
+            );
+          })}
+        </Box>
       </Box>
+      <Grid
+        container
+        direction="row"
+        spacing={3}
+        alignItems="center"
+        width={"100%"}
+      >
+        <Grid item xs={4}>
+          <h3>Enrolled Students</h3>
+          <Box
+            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
+          >
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={5}>
+                Name
+              </Grid>
+              <Grid item xs={4}>
+                Email
+              </Grid>
+              <Grid item xs={3}>
+                Delete
+              </Grid>
+            </Grid>
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid
+                item
+                xs={5}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Christopher Kastritis
+              </Grid>
+              <Grid item xs={4}>
+                crkastri@ncsu.edu
+              </Grid>
+              <Grid item xs={3}>
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <h3>Enrolled Teaching Assistants</h3>
+          <Box
+            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
+          >
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={5}>
+                Name
+              </Grid>
+              <Grid item xs={4}>
+                Email
+              </Grid>
+              <Grid item xs={3}>
+                Delete
+              </Grid>
+            </Grid>
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid
+                item
+                xs={5}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Christopher Kastritis
+              </Grid>
+              <Grid item xs={4}>
+                crkastri@ncsu.edu
+              </Grid>
+              <Grid item xs={3}>
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <h3>Enrolled Professors</h3>
+          <Box
+            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
+          >
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={5}>
+                Name
+              </Grid>
+              <Grid item xs={4}>
+                Email
+              </Grid>
+              <Grid item xs={3}>
+                Delete
+              </Grid>
+            </Grid>
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid
+                item
+                xs={5}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Christopher Kastritis
+              </Grid>
+              <Grid item xs={4}>
+                crkastri@ncsu.edu
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

@@ -14,6 +14,7 @@ import { getUser } from "./services/api/user";
 import EditRoster from "./components/editRoster/EditRoster";
 import { useEffect, useState } from "react";
 import User from "../../Models/user.model";
+import CreateHelpTicket from "./components/createHelpTicket/CreateHelpTicket";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -35,7 +36,7 @@ function App() {
     if (option == "Create course") navigate("/instructor/createCourse");
     else if (option == "Start help session")
       navigate("/instructor/startSession");
-    else if (option == "Edit course roster") navigate("/instructor/editRoster");
+    else if (option == "Create help ticket") navigate("/instructor/createHelpTicket");
     else navigate("/instructor/deadend");
   };
 
@@ -99,6 +100,8 @@ function App() {
           <Route path="/instructor/startSession" element={<StartSession />} />
 
           <Route path="/instructor/editRoster" element={<EditRoster />} />
+
+          <Route path="/instructor/createHelpTicket" element={<CreateHelpTicket/>}/>
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

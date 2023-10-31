@@ -1,7 +1,8 @@
+import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
 import User from "../../../../Models/user.model";
 
-export async function createCourse(name: string, desc: string, startDate: Date, endDate: Date): Promise<any> {
+export async function createCourse(name: string, desc: string, startDate: Dayjs, endDate: Dayjs): Promise<any> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
