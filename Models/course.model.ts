@@ -1,7 +1,10 @@
 import { Model } from 'sequelize';
+import { UUID } from 'crypto';
 
 export default interface CourseModel extends Model {
-    id: number;
+    id: UUID;
     name: string;
     description: string;
+    startDate: Date;
+    endDate: Date;
 }

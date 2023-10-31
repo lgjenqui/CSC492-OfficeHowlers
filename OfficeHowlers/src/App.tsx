@@ -10,7 +10,10 @@ import StartSession from "./components/startSession/StartSession";
 import Instructor from "./components/instructor/Instructor";
 import Login from "./components/login/Login";
 import NotFound from "./components/notFound/NotFound";
+import { getUser } from "./services/api/user";
 import EditRoster from "./components/editRoster/EditRoster";
+import { useEffect, useState } from "react";
+import User from "../../Models/user.model";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -21,23 +24,42 @@ function App() {
     navigate("/" + role.toLowerCase());
   };
 
-  const onCourseClick = (course: string) => {
-    console.log(course);
-    navigate("/instructor/course/" + course);
+  const onCourseClick = (courseUUID: string) => {
+    console.log(courseUUID);
+    navigate("/instructor/course?id=" + courseUUID);
   };
+
+  const [user, setUser] = useState<User | null>(null);
 
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
     else if (option == "Start help session")
       navigate("/instructor/startSession");
-    else if (option == "Edit course roster")
-      navigate("/instructor/editRoster")
+    else if (option == "Edit course roster") navigate("/instructor/editRoster");
     else navigate("/instructor/deadend");
   };
 
   const onReturnHome = () => {
     navigate("/");
   };
+
+  function getGreeting() {
+    if (user) {
+      return "Hello, " + user.firstName;
+    }
+    return "";
+  }
+
+  useEffect(() => {
+    getUser()
+      .then((res) => {
+        console.log(res);
+        setUser(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -50,6 +72,7 @@ function App() {
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
+          greeting={getGreeting()}
           onReturnHome={onReturnHome}
         ></Banner>
 
@@ -69,13 +92,13 @@ function App() {
             }
           />
 
-          <Route path="/instructor/course/:course" element={<EditRoster />} />
+          <Route path="/instructor/course" element={<EditRoster />} />
 
           <Route path="/instructor/createCourse" element={<CreateCourse />} />
 
           <Route path="/instructor/startSession" element={<StartSession />} />
 
-          <Route path="/instructor/editRoster" element={<EditRoster/>}/>
+          <Route path="/instructor/editRoster" element={<EditRoster />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

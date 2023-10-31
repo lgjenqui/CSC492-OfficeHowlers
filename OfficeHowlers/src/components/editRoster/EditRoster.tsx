@@ -55,24 +55,21 @@ const rows = [
           },
 ];
 const EditRoster = () => {
-  const [open, setOpen] = React.useState(false);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [Error, setError] =
-    useState<boolean>(false);
-  const [studentError, setStudentError] =
-    useState<boolean>(false);
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const courseUUID = urlParams.get("id") || "invalid";
+  const [error, setError] = useState<boolean>(false);
+  const [studentError, setStudentError] = useState<boolean>(false);
   const [teachingAssistantError, setTeachingAssistantError] =
     useState<boolean>(false);
-  const [professorError, setProfessorError] =
-    useState<boolean>(false);
+  const [instructorError, setInstructorError] = useState<boolean>(false);
   const [students, setStudents] = useState("");
   const [teachingAssistants, setTeachingAssistants] = useState("");
-  const [professors, setProfessors] = useState("");
+  const [instructors, setInstructors] = useState("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   // Resets all error values so the fields don't display with red outlines and such
-  function resetErrorValues(): void {
-  }
+  function resetErrorValues(): void {}
 
   // Checks if the provided input is valid
   function inputIsValid(): boolean {
@@ -81,26 +78,26 @@ const EditRoster = () => {
 
     let newErrorMessages: string[] = [];
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
-    if (!students && !professors && !teachingAssistants) {
+    if (!students && !instructors && !teachingAssistants) {
       newErrorMessages.push("Please provide a value for at least one box");
       setError(true);
     }
-    
-    var regex = new RegExp('^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$')
+
+    var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$");
     var testStudents = regex.exec(students);
     var testTeachingAssitants = regex.exec(teachingAssistants);
-    var testProfessors = regex.exec(professors);
-    if(students.length > 0 && testStudents == null){
+    var testInstructors = regex.exec(instructors);
+    if (students.length > 0 && testStudents == null) {
       newErrorMessages.push("Incorrect format in student input");
       setStudentError(true);
     }
-    if(teachingAssistants.length > 0 && testTeachingAssitants== null){
+    if (teachingAssistants.length > 0 && testTeachingAssitants == null) {
       newErrorMessages.push("Incorrect format in TA input");
       setTeachingAssistantError(true);
     }
-    if(professors.length > 0 && testProfessors== null){
-      newErrorMessages.push("Incorrect format in professor input");
-      setProfessorError(true);
+    if (instructors.length > 0 && testInstructors == null) {
+      newErrorMessages.push("Incorrect format in instructor input");
+      setInstructorError(true);
     }
 
     setErrorMessages(newErrorMessages);
@@ -113,21 +110,46 @@ const EditRoster = () => {
 
   // Starts a session
   function onSubmit() {
-    if(inputIsValid()){
-      console.log("submitted")
+    if (inputIsValid()) {
+      addInstructors(instructors.split("\n"), courseUUID).then(() => {
+        addAssistants(teachingAssistants.split("\n"), courseUUID).then(() => {
+          addStudents(students.split("\n"), courseUUID).then(() => {
+            fetchAllCourseEmails();
+          });
+        });
+      });
+      console.log("submitted");
     }
+  }
+
+  function fetchAllCourseEmails() {
+    getInstructors(courseUUID)
+      .then((instructorEmails) => {
+        setInstructors(instructorEmails.instructors.join("\n"));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    getAssistants(courseUUID)
+      .then((assistantEmails) => {
+        setTeachingAssistants(assistantEmails.assistants.join("\n"));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    getStudents(courseUUID)
+      .then((studentEmails) => {
+        setStudents(studentEmails.students.join("\n"));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   // Grab the courses for this instructor
   // NOTE - this is grabbing ALL system courses for now
   useEffect(() => {
-    let res = getCourses();
-    res.then((value) => {
-      setCourses(value);
-    });
-    res.catch((error) => {
-      console.error(error);
-    });
+    fetchAllCourseEmails();
   }, []);
 
   return (
@@ -160,9 +182,9 @@ const EditRoster = () => {
         container
         spacing={3}
       >
-         <Grid item>
+        <Grid item>
           <Typography sx={{ fontSize: 20 }}>
-            Manually enter student, TA, and professor emails
+            Manually enter student, TA, and instructor emails
           </Typography>
           <Typography sx={{ fontSize: 14, mb: "15px" }}>
             One on each line in this format: <i>johndoe@org.edu</i>
@@ -172,42 +194,41 @@ const EditRoster = () => {
             label="Student Emails"
             multiline
             rows={4}
-            defaultValue=""
             sx={{ mr: "10px" }}
+            value={students}
             onChange={(e) => {
               setStudents(e.target.value);
               setStudentError(false);
               setError(false);
             }}
-            error={Error || studentError}
+            error={error || studentError}
           />
           <TextField
             id="outlined-multiline-static"
             label="TA Emails"
             multiline
             rows={4}
-            defaultValue=""
             sx={{ mr: "10px" }}
+            value={teachingAssistants}
             onChange={(e) => {
               setTeachingAssistants(e.target.value);
               setTeachingAssistantError(false);
               setError(false);
             }}
-            error={Error || teachingAssistantError}
+            error={error || teachingAssistantError}
           />
           <TextField
-
             id="outlined-multiline-static"
-            label="Professor Emails"
+            label="Instructor Emails"
             multiline
             rows={4}
-            defaultValue=""
+            value={instructors}
             onChange={(e) => {
-              setProfessors(e.target.value);
-              setProfessorError(false);
+              setInstructors(e.target.value);
+              setInstructorError(false);
               setError(false);
             }}
-            error={Error || professorError}
+            error={error || instructorError}
           />
           <br></br>
          {/* <DataGrid
@@ -216,8 +237,7 @@ const EditRoster = () => {
           columns={columns}
           /> */}
         </Grid>
-        <Grid item>
-        </Grid>
+        <Grid item></Grid>
       </Grid>
 
       <Box

@@ -16,8 +16,10 @@ import { TimePicker, heIL } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses, startSession } from "../../services/api/session";
+import { getCourses } from "../../services/api/course";
+import { startSession } from "../../services/api/session";
 import { getTimeDiffStr } from "../../services/util/misc";
+import { useNavigate } from 'react-router-dom';
 
 const StartSession = () => {
   const [open, setOpen] = React.useState(false);
@@ -46,6 +48,8 @@ const StartSession = () => {
     useState<boolean>(false);
   const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
     useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {
@@ -153,7 +157,7 @@ const StartSession = () => {
   useEffect(() => {
     let res = getCourses();
     res.then((value) => {
-      setCourses(value);
+      setCourses(value.instructorCourses);
     });
     res.catch((error) => {
       console.error(error);
