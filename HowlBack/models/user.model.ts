@@ -51,6 +51,10 @@ User.init(
       primaryKey: true,
       unique: true
     },
+    primaryRole: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   },
   {
     sequelize, // Providing the Sequelize instance here
