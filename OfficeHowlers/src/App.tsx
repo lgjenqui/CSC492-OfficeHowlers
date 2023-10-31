@@ -13,6 +13,7 @@ import NotFound from "./components/notFound/NotFound";
 import { getUser } from "./services/api/user";
 import EditRoster from "./components/editRoster/EditRoster";
 import { useEffect, useState } from "react";
+import User from "../../Models/user.model";
 
 const systemRoles = ["Instructor", "TA", "Student"];
 
@@ -28,15 +29,13 @@ function App() {
     navigate("/instructor/course?id=" + courseUUID);
   };
 
-  const [user, setUser] = useState<string>("");
-
+  const [user, setUser] = useState<User>("");
 
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
     else if (option == "Start help session")
       navigate("/instructor/startSession");
-    else if (option == "Edit course roster")
-      navigate("/instructor/editRoster")
+    else if (option == "Edit course roster") navigate("/instructor/editRoster");
     else navigate("/instructor/deadend");
   };
 
@@ -47,8 +46,8 @@ function App() {
   useEffect(() => {
     getUser()
       .then((res) => {
-        setUser(res);
         console.log(res);
+        setUser(res);
       })
       .catch((err) => {
         console.error(err);
@@ -66,7 +65,7 @@ function App() {
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
-          greeting = {"Hello, " + user }
+          greeting={"Hello, " + user.name}
           onReturnHome={onReturnHome}
         ></Banner>
 
@@ -92,7 +91,7 @@ function App() {
 
           <Route path="/instructor/startSession" element={<StartSession />} />
 
-          <Route path="/instructor/editRoster" element={<EditRoster/>}/>
+          <Route path="/instructor/editRoster" element={<EditRoster />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

@@ -38,7 +38,7 @@ app.get('/test', cors(corsOptions), (req, res) => {
   res.send(status)
 });
 
-app.use("/username", userRouter);
+app.use("/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
