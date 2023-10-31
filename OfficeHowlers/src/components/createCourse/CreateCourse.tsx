@@ -101,7 +101,7 @@ const CreateCourse = () => {
     setCourseCreationSuccessful(false);
 
     // Create the course if there were no errors
-    if (inputIsValid()) {
+    if (inputIsValid() && startDate != null && endDate != null) {
       createCourse(courseName, courseDesc, startDate, endDate)
         .then(async (res) => {
           if (res.status == 201) {
@@ -177,7 +177,7 @@ const CreateCourse = () => {
           <TextField
             required
             label="Course Name"
-            id='course-name-field'
+            id="course-name-field"
             value={courseName}
             sx={{ mr: "20px" }}
             onChange={(e) => {
@@ -194,7 +194,7 @@ const CreateCourse = () => {
           <TextField
             required
             label="Course Description"
-            id='course-description'
+            id="course-description"
             value={courseDesc}
             sx={{ mr: "20px" }}
             onChange={(e) => {
@@ -218,7 +218,7 @@ const CreateCourse = () => {
               slotProps={{
                 textField: {
                   error: startDateError,
-                  id:'start-date-field',
+                  id: "start-date-field",
                 },
               }}
             />
@@ -238,46 +238,12 @@ const CreateCourse = () => {
               slotProps={{
                 textField: {
                   error: endDateError,
-                  id:'end-date-field',
+                  id: "end-date-field",
                 },
               }}
             />
           </LocalizationProvider>
         </Grid>
-        {/* <Grid item>
-          <Typography sx={{ fontSize: 20 }}>
-            Manually enter student and TA emails
-          </Typography>
-          <Typography sx={{ fontSize: 14, mb: "15px" }}>
-            One on each line in this format: <i>johndoe@org.edu</i>
-          </Typography>
-          <TextField
-            id="outlined-multiline-static"
-            label="Student Emails"
-            multiline
-            rows={4}
-            defaultValue=""
-            sx={{ mr: "10px" }}
-          />
-          <TextField
-            id="outlined-multiline-static"
-            label="TA Emails"
-            multiline
-            rows={4}
-            defaultValue=""
-          />
-        </Grid>
-        <Grid item>
-          <Typography sx={{ fontSize: 25, mr: "15px", ml: "25px" }}>
-            <u>or</u>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            Upload course roster as a CSV
-          </Typography>
-          <input accept="*.csv" type="file" />
-        </Grid> */}
       </Grid>
       <Box
         sx={{
@@ -309,6 +275,7 @@ const CreateCourse = () => {
           m: "auto",
         }}
       >
+        {requestStatusMsg}
         {errorMessages.map(function (msg) {
           return (
             <Alert
