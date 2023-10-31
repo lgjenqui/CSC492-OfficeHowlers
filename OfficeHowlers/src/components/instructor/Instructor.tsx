@@ -62,7 +62,10 @@ const card = (course: string, courseDescription: string) => {
   );
 };
 
-function getCourseCards(courses: Course[], onCourseClick: (courseUUID:string) => void) {
+function getCourseCards(
+  courses: Course[],
+  onCourseClick: (courseUUID: string) => void
+) {
   if (!courses) {
     return <h1>Still loading courses...</h1>;
   }
@@ -77,7 +80,7 @@ function getCourseCards(courses: Course[], onCourseClick: (courseUUID:string) =>
           color: "white",
           borderRadius: "15px",
         }}
-        onClick={()=> onCourseClick(course.id)}
+        onClick={() => onCourseClick(course.id)}
       >
         {card(course.name, course.description)}
       </Card>
@@ -171,7 +174,7 @@ const Instructor = ({ onCourseClick, onInstructorOptionsClick }: Props) => {
             the left to create one.
           </Typography>
         ) : null}
-        {!coursesLoadedSuccessfully ? (
+        {coursesLoadedSuccessfully == false ? (
           <Alert
             sx={{
               fontSize: "35px",
