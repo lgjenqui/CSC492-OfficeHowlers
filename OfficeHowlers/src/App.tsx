@@ -29,7 +29,7 @@ function App() {
     navigate("/instructor/course?id=" + courseUUID);
   };
 
-  const [user, setUser] = useState<User>("");
+  const [user, setUser] = useState<User | null>(null);
 
   const onInstructorOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/instructor/createCourse");
@@ -42,6 +42,13 @@ function App() {
   const onReturnHome = () => {
     navigate("/");
   };
+
+  function getGreeting() {
+    if (user) {
+      return "Hello, " + user.firstName;
+    }
+    return "";
+  }
 
   useEffect(() => {
     getUser()
@@ -65,7 +72,7 @@ function App() {
         <Banner
           title={"OfficeHowlers"}
           subtitle="Think and Do"
-          greeting={"Hello, " + user.name}
+          greeting={getGreeting()}
           onReturnHome={onReturnHome}
         ></Banner>
 

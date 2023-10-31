@@ -58,7 +58,7 @@ export const addInstructorsByEmail = async (req: Request, res: Response): Promis
     const instructorEmail = (req.headers['x-shib_mail']) as string;
     if (await isValidInstructorForCourse(instructorEmail, course)) {
       const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email);
+        return findOrCreateUser(email, "Unset firstname");
       }));
       await course.addInstructors(instructors);
       res.status(200).json({success:true});
@@ -92,7 +92,7 @@ export const addAssistantsByEmail = async (req: Request, res: Response): Promise
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email);
+        return findOrCreateUser(email, "Unset firstname");
       }));
       await course.addAssistants(assistants);
       res.status(200).json({ success: true });
@@ -124,7 +124,7 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email);
+        return findOrCreateUser(email, "Unset firstname");
       }));
       await course.addStudents(students);
       res.status(200).json({ success: true });

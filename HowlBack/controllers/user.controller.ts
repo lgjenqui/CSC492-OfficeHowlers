@@ -4,7 +4,6 @@ import {retrieveUser} from '../services/user.service';
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("awaiting user!");
     const user = await retrieveUser(req.headers['x-shib_mail'] as string) as User;
     res.status(200).json(user);
   }
