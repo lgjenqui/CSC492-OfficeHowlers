@@ -11,7 +11,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     declare startTime: Date;
     declare endTime: Date;
     declare courseId: ForeignKey<Course['id']>;
-    declare setInstructor: HasOneSetAssociationMixin<User, User['email']>; 
+    declare setUser: HasOneSetAssociationMixin<User, string>; 
 
     // declare tickets?: NonAttribute<Ticket[]>;
   
@@ -46,8 +46,8 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
   // Session.belongsTo(Course, { targetKey: 'id' });
   // Course.hasOne(Session, { sourceKey: 'id' });
 
-  Session.belongsTo(User, { targetKey: 'id' });
-  User.hasOne(User, { sourceKey: 'id' });
+  Session.belongsTo(User);
+  User.hasOne(Session);
   
   export default Session;
   

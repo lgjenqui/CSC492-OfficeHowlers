@@ -8,10 +8,15 @@ import { isValidInstructorForCourse, isValidUserForCourse } from '../services/co
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
     // Create a course in the database
+    console.log("before session");
     const createdSession = await Session.create(req.body);
+    console.log("After session");
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
+    console.log("after retrieve User");
     if(instructorUser) {
-      createdSession.setInstructor(instructorUser);
+      console.log("before set instructor");
+      createdSession.setUser(instructorUser);
+      console.log("After set instructor");
       res.status(201).json(createdSession);
     }
     else {
