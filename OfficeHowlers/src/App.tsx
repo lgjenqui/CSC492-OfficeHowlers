@@ -72,12 +72,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <Home
-                onCourseClick={onCourseClick}
-                onOptionsClick={onOptionsClick}
-              />
-            }
+            element={<Home user={user} onOptionsClick={onOptionsClick} />}
           />
 
           <Route path="/course" element={<EditRoster />} />

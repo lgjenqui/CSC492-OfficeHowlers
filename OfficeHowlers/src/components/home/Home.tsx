@@ -5,9 +5,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import {
   Box,
-  Card,
-  CardContent,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -22,72 +19,21 @@ import { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
 import { getCourses } from "../../services/api/course";
 import CourseCards from "../courseCards/CourseCards";
+import UserModel from "../../../../Models/user.model";
 
 interface Props {
-  onCourseClick: (courseUUID: string) => void;
+  user: UserModel | null;
   onOptionsClick: (options: string) => void;
 }
 
 const instructorOptions = [
   "Create course",
-  "Create help ticket",
   "Start help session",
   "Course analytics",
   "Settings",
 ];
 
-const card = (course: string, courseDescription: string) => {
-  return (
-    <Box
-      sx={{
-        width: "550px",
-        ":hover": {
-          cursor: "pointer",
-        },
-        ":active": {
-          backgroundColor: "#9e0000",
-        },
-      }}
-    >
-      <CardContent>
-        <Typography sx={{ fontSize: 42, mb: "0" }}>{course}</Typography>
-        <Typography sx={{ fontSize: 23 }}>{courseDescription}</Typography>
-        <Divider
-          sx={{ borderTop: "1px solid white", width: "80%", mb: "10px" }}
-        />
-        <Typography sx={{ fontSize: 20 }} variant="body2">
-          Enrolled as Instructor
-        </Typography>
-      </CardContent>
-    </Box>
-  );
-};
-
-function getCourseCards(
-  courses: Course[],
-  onCourseClick: (courseUUID: string) => void
-) {
-  if (!courses) {
-    return <h1>Still loading courses...</h1>;
-  }
-
-  return courses.map((course, index) => (
-    <Grid item key={index}>
-      <Card
-        sx={{
-          mt: "20px",
-          backgroundColor: "#CC0000",
-          backgroundClip: "padding-box",
-          color: "white",
-          borderRadius: "15px",
-        }}
-        onClick={() => onCourseClick(course.id)}
-      >
-        {card(course.name, course.description)}
-      </Card>
-    </Grid>
-  ));
-}
+const studentOptions = ["Create help ticket", "Settings"];
 
 const getIcon = (option: String) => {
   if (option == "Create course") return <AddIcon />;
@@ -97,13 +43,36 @@ const getIcon = (option: String) => {
   else return <SettingsIcon />;
 };
 
-const Home = ({ onOptionsClick }: Props) => {
+const Home = ({ user, onOptionsClick }: Props) => {
   const [instructorCourses, setInstructorCourses] = useState<Course[]>([]);
   const [assistantCourses, setAssistantCourses] = useState<Course[]>([]);
   const [studentCourses, setStudentCourses] = useState<Course[]>([]);
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
+
+  function getMenuOptions(user: UserModel | null) {
+    if (!user) {
+      return instructorOptions;
+    }
+
+    if (studentCourses.length > 0) {
+      if (assistantCourses.length > 0) {
+        return instructorOptions;
+      }
+      return studentOptions;
+    }
+
+    if (instructorCourses.length > 0 || assistantCourses.length > 0) {
+      return instructorOptions;
+    }
+
+    // If the user belongs to no courses yet, use their primary role to determine their view
+    if (user.primaryRole == "student") {
+      return studentOptions;
+    }
+    return instructorOptions;
+  }
 
   // Check if new courses have been created when the component is reloaded
   useEffect(() => {
@@ -135,7 +104,7 @@ const Home = ({ onOptionsClick }: Props) => {
         }}
       >
         <List>
-          {instructorOptions.map((option, index) => (
+          {getMenuOptions(user).map((option, index) => (
             <ListItem
               onClick={() => onOptionsClick(option)}
               key={index}
