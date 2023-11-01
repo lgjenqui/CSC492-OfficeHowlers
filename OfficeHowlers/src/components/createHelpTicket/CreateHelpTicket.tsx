@@ -12,9 +12,9 @@ const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
-  const [modes, setModes] = useState<string[]>([]);
-  const [virtualLocation, setVirtualLocation] = useState<string>("");
-  const [inPersonLocation, setInPersonLocation] = useState<string>("");
+  const [group, setGroup] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [tried, setTried] = useState<string>("");
   const [startTime, setStartTime] = React.useState<Dayjs | null>(
     dayjs().add(0, "hour")
   );
@@ -26,10 +26,10 @@ const CreateHelpTicket = () => {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [selectedCoursesError, setSelectedCoursesError] =
     useState<boolean>(false);
-  const [modesError, setModesError] = useState<boolean>(false);
-  const [startTimeError, setStartTimeError] = useState<boolean>(false);
-  const [endTimeError, setEndTimeError] = useState<boolean>(false);
-  const [virtualLocationError, setVirtualLocationError] =
+  const [courseError, setCourseError] = useState<boolean>(false);
+  const [groupError, setGroupError] = useState<boolean>(false);
+  const [descriptionError, setDescriptionError] = useState<boolean>(false);
+  const [triedError, setTriedError] =
     useState<boolean>(false);
   const [inPersonLocationError, setInPersonLocationError] =
     useState<boolean>(false);
@@ -38,13 +38,10 @@ const CreateHelpTicket = () => {
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {
-    setSelectedCoursesError(false);
-    setModesError(false);
-    setStartTimeError(false);
-    setEndTimeError(false);
-    setVirtualLocationError(false);
-    setInPersonLocationError(false);
-    setVirtualLocationDisplayError(false);
+    setCourseError(false);
+    setGroupError(false);
+    setDescriptionError(false);
+    setTriedError(false);
   }
 
   // Checks if the provided input is valid
@@ -56,72 +53,33 @@ const CreateHelpTicket = () => {
     let newErrorMessages: string[] = [];
     // Check if at least one course was selected
     if (selectedCourses.length <= 0) {
-      newErrorMessages.push("Please select 1 or more courses for this session");
-      setSelectedCoursesError(true);
+      newErrorMessages.push("Please select a courses for this help ticket");
+      setCourseError(true);
+    }
+    var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu,? ?)+$");
+    var testStudents = regex.exec(group);
+    // Check if at least one mode of delivery was selected
+    if (group.length > 0 && testStudents == null) {
+      newErrorMessages.push("Incorrect format for group request");
+      setGroupError(true);
     }
 
-    // Check if at least one mode of delivery was selected
-    if (modes.length <= 0) {
-      newErrorMessages.push("Please select 1 or more modes of delivery");
-      setModesError(true);
+    if(tried.length <= 0){
+      newErrorMessages.push("Please describe what you have tried so far");
+      setTriedError(true);
+    }
+
+    if(description.length <= 0){
+      newErrorMessages.push("Please describe the problem you have");
+      setDescriptionError(true);
     }
 
     // Check if one or both of the start and end times was not provided
-    if (!startTime) {
-      newErrorMessages.push("Please provide a session start time");
-      setStartTimeError(true);
-    }
-
-    if (!endTime) {
-      newErrorMessages.push("Please provide a session end time");
-      setEndTimeError(true);
-    }
 
     // Check a start and end time were provided
-    if (startTime && endTime) {
-      // The end time must be after the start time
-      if (
-        startTime.isAfter(endTime, "minute") ||
-        startTime.isSame(endTime, "minute")
-      ) {
-        newErrorMessages.push(
-          "The session end time must be after the session start time"
-        );
-        setEndTimeError(true);
-      }
-
-      // The start and end times must not have already passed
-      if (startTime.isBefore(dayjs(), "minute")) {
-        newErrorMessages.push(
-          "The session start time must be the current time or later"
-        );
-        setStartTimeError(true);
-      }
-      if (endTime.isBefore(dayjs(), "minute")) {
-        newErrorMessages.push(
-          "The session end time must be the current time or later"
-        );
-        setEndTimeError(true);
-      }
-
-      // If the user specified virtual or In-Person delivery, they must provide the information
-      if (modes.includes("Virtual") && !virtualLocation) {
-        newErrorMessages.push(
-          "Please provide a virtual location (meeting link/info)"
-        );
-        setVirtualLocationError(true);
-      }
-      if (modes.includes("In-Person") && !inPersonLocation) {
-        newErrorMessages.push("Please provide an in-person location");
-        setInPersonLocationError(true);
-      }
-    }
 
     // Check if a virtual location display option is chosen if there's a virtual location
-    if (modes.includes("Virtual") && virtualLocationDisplay.length == 0) {
-      newErrorMessages.push("Please choose a virtual location display option");
-      setVirtualLocationDisplayError(true);
-    }
+    
 
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
     setErrorMessages(newErrorMessages);
@@ -134,7 +92,9 @@ const CreateHelpTicket = () => {
 
   // Starts a session
   function onSubmit() {
-    console.log("submitting!");
+    if (inputIsValid()) {
+      console.log("submitting!");
+    }
   }
 
   // Grab the courses for this instructor
@@ -171,7 +131,7 @@ const CreateHelpTicket = () => {
         container
         spacing={3}
       >
-        <Grid sx={{ width: "25%" }} item>
+        <Grid sx={{ width: "30%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Select your Course
           </Typography>
@@ -186,11 +146,12 @@ const CreateHelpTicket = () => {
             //value={selectedCourses}
             onChange={(event, newValue) => {
               setSelectedCourses(newValue);
+              setCourseError(false);
             }}
             renderInput={(params) => (
               <TextField
                 required
-                error={selectedCoursesError}
+                error={courseError}
                 {...params}
                 variant="standard"
                 label="Select a course"
@@ -198,90 +159,58 @@ const CreateHelpTicket = () => {
             )}
           />
         </Grid>
-        <Grid sx={{ width: "40%" }}item>
+        <Grid sx={{ width: "70%" }}item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Group Request
           </Typography>
-          <Autocomplete
-            sx={{ width: "90%" }}
-            multiple
-            id="tags-standard"
-            options={["Chris", "Cam", "Bagya", "Luke", "Nolan"]}
-            //value={modes}
-            onChange={(event, newValue) => {
-              //setModes(newValue);
-              //if (newValue.includes("Virtual")) {
-               // setVirtualLocationError(false);
-              //}
-              //if (newValue.includes("In-Person")) {
-               // setInPersonLocationError(false);
-              //}
+          <TextField
+            required
+            label="Enter emails seperated by commas of who you are working with"
+            id='course-name-field'
+            sx={{ mr: "20px", width:"100%" }}
+            value={group}
+            onChange={(e) => {
+              setGroup(e.target.value);
+              setGroupError(false);
             }}
-            renderInput={(params) => (
-              <TextField
-                //error={modesError}
-                {...params}
-                variant="standard"
-                label="Select students you are working with"
-              />
-            )}
+
+            error={groupError}
           />
           
         
-        </Grid>
-        <Grid sx={{ width: "35%" }} item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            What are you working on?
-          </Typography>
-          <Autocomplete
-            sx={{ width: "90%" }}
-            id="tags-standard"
-            options={["Project", "Exam", "Homework","Other"]}
-            //value={modes}
-            onChange={(event, newValue) => {
-              //setModes(newValue);
-              //if (newValue.includes("Virtual")) {
-               // setVirtualLocationError(false);
-              //}
-              //if (newValue.includes("In-Person")) {
-               // setInPersonLocationError(false);
-              //}
-            }}
-            renderInput={(params) => (
-              <TextField
-                //error={modesError}
-                {...params}
-                variant="standard"
-                label="Select what you need help with"
-              />
-            )}
-          />
         </Grid>
         <Grid sx={{ width: "50%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>What is the problem?</Typography>
           <TextField
             required
+            multiline={true}
+            rows={3}
             label="Description of problem"
             id='course-name-field'
             sx={{ mr: "20px", width:"100%" }}
+            value={description}
             onChange={(e) => {
-              
+              setDescription(e.target.value);
+              setDescriptionError(false);
             }}
-           //error={courseNameError}
+           error={descriptionError}
           />
         </Grid>
         <Grid sx={{ width: "50%" }}item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>What have you tried?</Typography>
           <TextField 
             required
-            
+            multiline={true}
+            rows={3}
             label="Description of attempts to solve the problem"
             id='course-name-field'
             sx={{ mr: "20px", width:"100%"}}
+            value={tried}
             onChange={(e) => {
-              
+              setTried(e.target.value);
+              setTriedError(false);
             }}
-           //error={courseNameError}
+           error={triedError}
           />
         </Grid>
       </Grid>
@@ -307,6 +236,7 @@ const CreateHelpTicket = () => {
             if (inputIsValid()) {
               setOpen(true);
             }
+            onSubmit();
           }}
         >
           Create Help Ticket
