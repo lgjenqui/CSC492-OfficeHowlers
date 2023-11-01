@@ -154,22 +154,17 @@ const Home = ({ onOptionsClick }: Props) => {
         </List>
       </Box>
       <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        {coursesLoadedSuccessfully &&
-        (instructorCourses.length > 0 ||
-          assistantCourses.length > 0 ||
-          studentCourses.length > 0) ? (
-          <Typography
-            sx={{
-              fontSize: "35px",
-              fontWeight: "bold",
-              mt: "20px",
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
-            My courses
-          </Typography>
-        ) : null}
+        <Typography
+          sx={{
+            fontSize: "35px",
+            fontWeight: "bold",
+            mt: "20px",
+            display: "inline-block",
+            width: "100%",
+          }}
+        >
+          My courses
+        </Typography>
         {coursesLoadedSuccessfully &&
         instructorCourses.length +
           assistantCourses.length +
