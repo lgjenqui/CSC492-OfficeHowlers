@@ -10,20 +10,23 @@ import StartSession from "./components/startSession/StartSession";
 import Home from "./components/home/Home";
 import NotFound from "./components/notFound/NotFound";
 import { getUser } from "./services/api/user";
+import { getCourses } from "./services/api/course";
 import EditRoster from "./components/editRoster/EditRoster";
 import { useEffect, useState } from "react";
+import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/createHelpTicket/CreateHelpTicket";
 
 function App() {
   const navigate = useNavigate();
 
-  const onCourseClick = (courseUUID: string) => {
-    console.log(courseUUID);
-    navigate("/course?id=" + courseUUID);
-  };
-
   const [user, setUser] = useState<User | null>(null);
+  const [instructorCourses, setInstructorCourses] = useState<CourseModel[]>([]);
+  const [assistantCourses, setAssistantCourses] = useState<CourseModel[]>([]);
+  const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
+  const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
+    boolean | null
+  >(null);
 
   const onOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/createCourse");
@@ -48,9 +51,17 @@ function App() {
       .then((res) => {
         console.log(res);
         setUser(res);
+        return getCourses();
+      })
+      .then((courses) => {
+        setInstructorCourses(courses.instructorCourses);
+        setAssistantCourses(courses.assistantCourses);
+        setStudentCourses(courses.studentCourses);
+        setCoursesLoadedSuccessfully(true);
       })
       .catch((err) => {
         console.error(err);
+        setCoursesLoadedSuccessfully(false);
       });
   }, []);
 
@@ -72,7 +83,16 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Home user={user} onOptionsClick={onOptionsClick} />}
+            element={
+              <Home
+                user={user}
+                instructorCourses={instructorCourses}
+                assistantCourses={assistantCourses}
+                studentCourses={studentCourses}
+                coursesLoadedSuccessfully={coursesLoadedSuccessfully}
+                onOptionsClick={onOptionsClick}
+              />
+            }
           />
 
           <Route path="/course" element={<EditRoster />} />

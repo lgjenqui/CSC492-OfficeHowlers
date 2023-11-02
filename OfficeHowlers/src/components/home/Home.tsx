@@ -15,14 +15,16 @@ import {
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import { getCourses } from "../../services/api/course";
 import CourseCards from "../courseCards/CourseCards";
 import UserModel from "../../../../Models/user.model";
 
 interface Props {
   user: UserModel | null;
+  instructorCourses: Course[];
+  assistantCourses: Course[];
+  studentCourses: Course[];
+  coursesLoadedSuccessfully: boolean | null;
   onOptionsClick: (options: string) => void;
 }
 
@@ -43,14 +45,14 @@ const getIcon = (option: String) => {
   else return <SettingsIcon />;
 };
 
-const Home = ({ user, onOptionsClick }: Props) => {
-  const [instructorCourses, setInstructorCourses] = useState<Course[]>([]);
-  const [assistantCourses, setAssistantCourses] = useState<Course[]>([]);
-  const [studentCourses, setStudentCourses] = useState<Course[]>([]);
-  const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
-    boolean | null
-  >(null);
-
+const Home = ({
+  user,
+  instructorCourses,
+  assistantCourses,
+  studentCourses,
+  coursesLoadedSuccessfully,
+  onOptionsClick,
+}: Props) => {
   function getMenuOptions(user: UserModel | null) {
     if (!user) {
       return instructorOptions;
@@ -75,20 +77,20 @@ const Home = ({ user, onOptionsClick }: Props) => {
   }
 
   // Check if new courses have been created when the component is reloaded
-  useEffect(() => {
-    getCourses()
-      .then((res) => {
-        console.log(res);
-        setInstructorCourses(res.instructorCourses);
-        setAssistantCourses(res.assistantCourses);
-        setStudentCourses(res.studentCourses);
-        setCoursesLoadedSuccessfully(true);
-      })
-      .catch((err) => {
-        setCoursesLoadedSuccessfully(false);
-        console.error(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getCourses()
+  //     .then((res) => {
+  //       console.log(res);
+  // setInstructorCourses(res.instructorCourses);
+  // setAssistantCourses(res.assistantCourses);
+  // setStudentCourses(res.studentCourses);
+  //       setCoursesLoadedSuccessfully(true);
+  //     })
+  //     .catch((err) => {
+  //       setCoursesLoadedSuccessfully(false);
+  //       console.error(err);
+  //     });
+  // }, []);
 
   return (
     <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
