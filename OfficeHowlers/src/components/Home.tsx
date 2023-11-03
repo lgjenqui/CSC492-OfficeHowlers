@@ -176,7 +176,7 @@ const Home = ({
                   fontSize: "35px",
                   fontWeight: "bold",
                   mt: "20px",
-                  mb: "20px",
+                  ml: 0,
                   display: "inline-block",
                   width: "100%",
                 }}
@@ -232,7 +232,7 @@ const Home = ({
                   fontSize: "35px",
                   fontWeight: "bold",
                   mt: "20px",
-                  mb: "20px",
+                  ml: 0,
                   display: "inline-block",
                   width: "100%",
                 }}

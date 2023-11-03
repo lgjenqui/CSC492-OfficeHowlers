@@ -29,7 +29,7 @@ function App() {
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const onOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/createCourse");
