@@ -16,9 +16,11 @@ import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/CreateHelpTicket";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState<User | null>(null);
   const [instructorCourses, setInstructorCourses] = useState<CourseModel[]>([]);
@@ -27,6 +29,7 @@ function App() {
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onOptionsClick = (option: string) => {
     if (option == "Create course") navigate("/createCourse");
@@ -39,6 +42,10 @@ function App() {
     navigate("/");
   };
 
+  const handleLoading = (loading: boolean) => {
+    setIsLoading(loading);
+  };
+
   function getGreeting() {
     if (user) {
       return "Hello, " + user.firstName;
@@ -47,23 +54,42 @@ function App() {
   }
 
   useEffect(() => {
-    getUser()
-      .then((res) => {
+    setCoursesLoadedSuccessfully(null);
+    setIsLoading(true);
+
+    // Set up a timeout of 2.5 seconds so the user doesn't sit on a blank page too long!
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      console.log("Aborting fetch due to timeout");
+      controller.abort();
+    }, 5500);
+
+    const fetchData = async () => {
+      try {
+        const res = await getUser();
         console.log(res);
         setUser(res);
-        return getCourses();
-      })
-      .then((courses) => {
+        const courses = await getCourses();
         setInstructorCourses(courses.instructorCourses);
         setAssistantCourses(courses.assistantCourses);
         setStudentCourses(courses.studentCourses);
         setCoursesLoadedSuccessfully(true);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err);
         setCoursesLoadedSuccessfully(false);
-      });
-  }, []);
+      } finally {
+        setTimeout(() => setIsLoading(false), 0);
+      }
+    };
+
+    fetchData();
+
+    // Cleanup function to clear the timeout and abort the fetch if the component unmounts
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [location]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -91,13 +117,17 @@ function App() {
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
                 onOptionsClick={onOptionsClick}
+                isLoading={isLoading}
               />
             }
           />
 
           <Route path="/course" element={<EditRoster />} />
 
-          <Route path="/createCourse" element={<CreateCourse />} />
+          <Route
+            path="/createCourse"
+            element={<CreateCourse onLoading={handleLoading} />}
+          />
 
           <Route path="/startSession" element={<StartSession />} />
 

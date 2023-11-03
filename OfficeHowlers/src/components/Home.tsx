@@ -28,6 +28,7 @@ interface Props {
   studentCourses: Course[];
   coursesLoadedSuccessfully: boolean | null;
   onOptionsClick: (options: string) => void;
+  isLoading: boolean;
 }
 
 const instructorOptions = [
@@ -37,7 +38,12 @@ const instructorOptions = [
   "Settings",
 ];
 
-const studentOptions = ["Join a course", "Create help ticket", "Settings"];
+const studentOptions = [
+  "Join a course",
+  "Create help ticket",
+  "Settings",
+  "Create course",
+];
 
 const getIcon = (option: String) => {
   if (option == "Create course") return <AddIcon />;
@@ -55,6 +61,7 @@ const Home = ({
   studentCourses,
   coursesLoadedSuccessfully,
   onOptionsClick,
+  isLoading,
 }: Props) => {
   function getMenuOptions(user: UserModel | null) {
     if (!user) {
@@ -80,154 +87,184 @@ const Home = ({
   }
 
   // Don't render the page until the user has been retrieved and passed in from the parent component (App.tsx)
-  if (!user) {
-    if (coursesLoadedSuccessfully == null) {
-      return (
-        <Box
-          sx={{
-            textAlign: "center",
-            m: "auto",
-            mt: "50px",
-          }}
-        >
-          <CircularProgress color="success" size="120px" />
-        </Box>
-      );
-    }
-    // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
-    if (coursesLoadedSuccessfully == false) {
-      return (
-        <Box sx={{ m: "auto" }}>
-          <Typography
-            sx={{
-              fontSize: 45,
-              fontWeight: "bold",
-              mt: "50px",
-              textAlign: "center",
-            }}
-          >
-            Uh-oh...
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: 30,
-              mt: "20px",
-              textAlign: "center",
-            }}
-          >
-            There was a problem fetching your information. Please refresh the
-            page to try again.
-          </Typography>
-        </Box>
-      );
-    }
-    return null;
-  }
-
-  return (
-    <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
+  if (isLoading === true) {
+    return (
       <Box
         sx={{
-          width: "20%",
-          height: "min-height: 1000px",
+          textAlign: "center",
           m: "auto",
-          ml: "50px",
           mt: "50px",
-          userSelect: "none",
-          borderRight: "1px solid black",
         }}
       >
-        <List>
-          {getMenuOptions(user).map((option, index) => (
-            <ListItem
-              onClick={() => onOptionsClick(option)}
-              key={index}
-              disablePadding
-            >
-              <ListItemButton>
-                <ListItemIcon>{getIcon(option)}</ListItemIcon>
-                <ListItemText
-                  sx={{ fontSize: "25px" }}
-                  disableTypography
-                  primary={option}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <CircularProgress color="success" size="120px" />
       </Box>
-      <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        {coursesLoadedSuccessfully &&
-        instructorCourses.length +
-          assistantCourses.length +
-          studentCourses.length ==
-          0 ? (
-          <Box>
-            <Typography
-              sx={{
-                fontSize: "35px",
-                fontWeight: "bold",
-                mt: "20px",
-                mb: "20px",
-                display: "inline-block",
-                width: "100%",
-              }}
-            >
-              My courses
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "35px",
-                display: "inline-block",
-                width: "100%",
-              }}
-            >
-              It looks like you have no courses. Use the{" "}
-              <b>
-                {user.primaryRole == "student"
-                  ? "'Join a course' "
-                  : "'Create course' "}
-              </b>
-              option to the left to{" "}
-              {user.primaryRole == "student" ? "join" : "create"} one.
-            </Typography>
-          </Box>
-        ) : null}
-        {coursesLoadedSuccessfully == false ? (
-          <Alert
-            sx={{
-              fontSize: "35px",
-              width: "60%",
-              borderRadius: "15px",
-              "& .MuiAlert-icon": {
-                fontSize: 40,
-              },
-            }}
-            severity="error"
-          >
-            <AlertTitle sx={{ fontWeight: "bold", fontSize: "35px" }}>
-              Error
-            </AlertTitle>
-            There was an unexpected problem while fetching your courses. <br />
-            <br /> Please <strong>reload the page</strong> to try again.
-          </Alert>
-        ) : null}
+    );
+  }
 
-        <Grid sx={{ flexGrow: 1 }} container spacing={3}>
-          <CourseCards
-            courses={instructorCourses}
-            role="Instructor"
-          ></CourseCards>
-          <CourseCards
-            courses={assistantCourses}
-            role="Teaching Assistant"
-          ></CourseCards>
-          <CourseCards courses={studentCourses} role="Student"></CourseCards>
-          {/* {getCourseCards(courses, onCourseClick)} */}
-        </Grid>
-      </Box>
-    </Grid>
-  );
+  // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
+  // if (coursesLoadedSuccessfully == false) {
+  //   return (
+  //     <Box sx={{ m: "auto" }}>
+  //       <Typography
+  //         sx={{
+  //           fontSize: 45,
+  //           fontWeight: "bold",
+  //           mt: "50px",
+  //           textAlign: "center",
+  //         }}
+  //       >
+  //         Uh-oh...
+  //       </Typography>
+  //       <Typography
+  //         sx={{
+  //           fontSize: 30,
+  //           mt: "20px",
+  //           textAlign: "center",
+  //         }}
+  //       >
+  //         There was a problem fetching your information. Please refresh the page
+  //         to try again.
+  //       </Typography>
+  //     </Box>
+  //   );
+  // }
+
+  if (user && isLoading == false) {
+    return (
+      <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
+        <Box
+          sx={{
+            width: "20%",
+            height: "min-height: 1000px",
+            m: "auto",
+            ml: "50px",
+            mt: "50px",
+            userSelect: "none",
+            borderRight: "1px solid black",
+          }}
+        >
+          <List>
+            {getMenuOptions(user).map((option, index) => (
+              <ListItem
+                onClick={() => onOptionsClick(option)}
+                key={index}
+                disablePadding
+              >
+                <ListItemButton>
+                  <ListItemIcon>{getIcon(option)}</ListItemIcon>
+                  <ListItemText
+                    sx={{ fontSize: "25px" }}
+                    disableTypography
+                    primary={option}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        <Box
+          sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}
+        >
+          {coursesLoadedSuccessfully &&
+          instructorCourses.length +
+            assistantCourses.length +
+            studentCourses.length ===
+            0 ? (
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "35px",
+                  fontWeight: "bold",
+                  mt: "20px",
+                  mb: "20px",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                My courses
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "35px",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                It looks like you have no courses. Use the{" "}
+                <b>
+                  {user.primaryRole == "student"
+                    ? "'Join a course' "
+                    : "'Create course' "}
+                </b>
+                option to the left to{" "}
+                {user.primaryRole == "student" ? "join" : "create"} one.
+              </Typography>
+            </Box>
+          ) : null}
+          {coursesLoadedSuccessfully == false ? (
+            <Alert
+              sx={{
+                fontSize: "35px",
+                width: "60%",
+                borderRadius: "15px",
+                "& .MuiAlert-icon": {
+                  fontSize: 40,
+                },
+              }}
+              severity="error"
+            >
+              <AlertTitle sx={{ fontWeight: "bold", fontSize: "35px" }}>
+                Error
+              </AlertTitle>
+              There was an unexpected problem while fetching your information.
+              <br />
+              <br /> Please <strong>reload the page</strong> to try again.
+            </Alert>
+          ) : null}
+
+          {instructorCourses.length +
+            assistantCourses.length +
+            studentCourses.length >
+          0 ? (
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "35px",
+                  fontWeight: "bold",
+                  mt: "20px",
+                  mb: "20px",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                My courses
+              </Typography>
+              {instructorCourses.length > 0 ? (
+                <CourseCards
+                  courses={instructorCourses}
+                  role="Instructor"
+                ></CourseCards>
+              ) : null}
+
+              {assistantCourses.length > 0 ? (
+                <CourseCards
+                  courses={assistantCourses}
+                  role="Instructor"
+                ></CourseCards>
+              ) : null}
+
+              {studentCourses.length > 0 ? (
+                <CourseCards
+                  courses={studentCourses}
+                  role="Instructor"
+                ></CourseCards>
+              ) : null}
+            </Box>
+          ) : null}
+        </Box>
+      </Grid>
+    );
+  }
 };
 
 export default Home;

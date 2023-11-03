@@ -2,10 +2,6 @@ import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
 import User from "../../../../Models/user.model";
 
-// Set up a timeout of 2.5 seconds so the user doesn't sit on a blank page too long!
-const controller = new AbortController()
-setTimeout(() => controller.abort(), 2500)
-
 export async function createCourse(name: string, desc: string, startDate: Dayjs, endDate: Dayjs): Promise<any> {
     const requestOptions = {
       method: "POST",
@@ -25,7 +21,7 @@ export async function createCourse(name: string, desc: string, startDate: Dayjs,
 export async function getCourses(): Promise<{instructorCourses: Course[], assistantCourses: Course[], studentCourses: Course[]}> {
   const requestOptions = {
     method: "GET",
-    signal: controller.signal
+    // signal: signal
   };
   
   return (await fetch(window.location.origin + "/api/course/all", requestOptions)).json();

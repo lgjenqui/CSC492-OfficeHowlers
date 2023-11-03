@@ -11,7 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { createCourse } from "../services/api/course";
 import { sleep } from "../services/util/sleep";
 
-const CreateCourse = () => {
+interface Props {
+  onLoading: (isLoading: boolean) => void;
+}
+
+const CreateCourse = ({ onLoading }: Props) => {
   const [courseName, setCourseName] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -112,6 +116,9 @@ const CreateCourse = () => {
             setCourseDesc("");
             setStartDate(null);
             setEndDate(null);
+
+            // Set isLoading to true before navigating away
+            onLoading(true);
 
             // Sleep for 2 seconds then redirect the user to their home page
             await sleep(2000);

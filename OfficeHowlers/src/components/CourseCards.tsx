@@ -14,26 +14,30 @@ const CourseCards = ({ courses, role }: Props) => {
   if (!courses) {
     return null;
   }
-  return courses.map((course, index) => (
-    <Grid item key={index}>
-      <Card
-        sx={{
-          mt: "20px",
-          backgroundColor: "#CC0000",
-          backgroundClip: "padding-box",
-          color: "white",
-          borderRadius: "15px",
-        }}
-        onClick={() => navigate("/course?id=" + course.id)}
-      >
-        <CourseCard
-          courseName={course.name}
-          courseDescription={course.description}
-          role={role}
-        ></CourseCard>
-      </Card>
+  return (
+    <Grid sx={{ flexGrow: 1 }} container spacing={3}>
+      {courses.map((course, index) => (
+        <Grid item key={index}>
+          <Card
+            sx={{
+              mt: "20px",
+              backgroundColor: "#CC0000",
+              backgroundClip: "padding-box",
+              color: "white",
+              borderRadius: "15px",
+            }}
+            onClick={() => navigate("/course?id=" + course.id)}
+          >
+            <CourseCard
+              courseName={course.name}
+              courseDescription={course.description}
+              role={role}
+            ></CourseCard>
+          </Card>
+        </Grid>
+      ))}
     </Grid>
-  ));
+  );
 };
 
 export default CourseCards;
