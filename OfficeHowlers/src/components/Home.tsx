@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import Course from "../../../Models/course.model";
 import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface Props {
   user: UserModel | null;
@@ -78,6 +79,19 @@ const Home = ({
 
   // Don't render the page until the user has been retrieved and passed in from the parent component (App.tsx)
   if (!user) {
+    if (coursesLoadedSuccessfully == null) {
+      return (
+        <Box
+          sx={{
+            textAlign: "center",
+            m: "auto",
+            mt: "50px",
+          }}
+        >
+          <CircularProgress color="success" size="120px" />
+        </Box>
+      );
+    }
     // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
     if (coursesLoadedSuccessfully == false) {
       return (
@@ -141,33 +155,35 @@ const Home = ({
         </List>
       </Box>
       <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
-        <Typography
-          sx={{
-            fontSize: "35px",
-            fontWeight: "bold",
-            mt: "20px",
-            display: "inline-block",
-            width: "100%",
-          }}
-        >
-          My courses
-        </Typography>
         {coursesLoadedSuccessfully &&
         instructorCourses.length +
           assistantCourses.length +
           studentCourses.length ==
           0 ? (
-          <Typography
-            sx={{
-              fontSize: "35px",
-              mt: "20px",
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
-            It looks like you have no courses. Use the 'Create course' menu to
-            the left to create one.
-          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "35px",
+                fontWeight: "bold",
+                mt: "20px",
+                mb: "20px",
+                display: "inline-block",
+                width: "100%",
+              }}
+            >
+              My courses
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "35px",
+                display: "inline-block",
+                width: "100%",
+              }}
+            >
+              It looks like you have no courses. Use the 'Create course' menu to
+              the left to create one.
+            </Typography>
+          </Box>
         ) : null}
         {coursesLoadedSuccessfully == false ? (
           <Alert
