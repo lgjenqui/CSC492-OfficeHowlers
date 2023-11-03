@@ -35,15 +35,11 @@ const instructorOptions = [
   "Create course",
   "Start help session",
   "Course analytics",
-  "Settings",
 ];
 
-const studentOptions = [
-  "Join a course",
-  "Create help ticket",
-  "Settings",
-  "Create course",
-];
+const assistantOptions = ["Start help session"];
+
+const studentOptions = ["Join a course", "Create help ticket"];
 
 const getIcon = (option: String) => {
   if (option == "Create course") return <AddIcon />;
@@ -63,27 +59,39 @@ const Home = ({
   onOptionsClick,
   isLoading,
 }: Props) => {
-  function getMenuOptions(user: UserModel | null) {
+  function getMenuOptions(user: UserModel | null): string[] {
+    let options: string[] = [];
     if (!user) {
-      return instructorOptions;
+      return [];
+    }
+
+    if (instructorCourses.length > 0) {
+      options.concat(instructorOptions);
     }
 
     if (studentCourses.length > 0) {
-      if (assistantCourses.length > 0) {
-        return instructorOptions;
-      }
-      return studentOptions;
-    }
-
-    if (instructorCourses.length > 0 || assistantCourses.length > 0) {
-      return instructorOptions;
+      options.concat(studentOptions);
     }
 
     // If the user belongs to no courses yet, use their primary role to determine their view
-    if (user.primaryRole == "student") {
-      return studentOptions;
+    if (
+      instructorCourses.length +
+        assistantCourses.length +
+        studentCourses.length ==
+      0
+    ) {
+      if (user.primaryRole == "faculty") {
+        options.concat(instructorOptions);
+      } else {
+        // Until a TA is added to a course as a TA, give them the student options
+        options.concat(studentOptions);
+      }
     }
-    return instructorOptions;
+
+    // Every user can change their settings!
+    options.push("Settings");
+
+    return options;
   }
 
   // Don't render the page until the user has been retrieved and passed in from the parent component (App.tsx)
