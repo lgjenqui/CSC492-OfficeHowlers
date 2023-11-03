@@ -76,21 +76,37 @@ const Home = ({
     return instructorOptions;
   }
 
-  // Check if new courses have been created when the component is reloaded
-  // useEffect(() => {
-  //   getCourses()
-  //     .then((res) => {
-  //       console.log(res);
-  // setInstructorCourses(res.instructorCourses);
-  // setAssistantCourses(res.assistantCourses);
-  // setStudentCourses(res.studentCourses);
-  //       setCoursesLoadedSuccessfully(true);
-  //     })
-  //     .catch((err) => {
-  //       setCoursesLoadedSuccessfully(false);
-  //       console.error(err);
-  //     });
-  // }, []);
+  // Don't render the page until the user has been retrieved and passed in from the parent component (App.tsx)
+  if (!user) {
+    // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
+    if (coursesLoadedSuccessfully == false) {
+      return (
+        <Box sx={{ m: "auto" }}>
+          <Typography
+            sx={{
+              fontSize: 45,
+              fontWeight: "bold",
+              mt: "50px",
+              textAlign: "center",
+            }}
+          >
+            Uh-oh...
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: 30,
+              mt: "20px",
+              textAlign: "center",
+            }}
+          >
+            There was a problem fetching your information. Please refresh the
+            page to try again.
+          </Typography>
+        </Box>
+      );
+    }
+    return null;
+  }
 
   return (
     <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
