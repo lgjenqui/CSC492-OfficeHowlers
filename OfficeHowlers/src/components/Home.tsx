@@ -3,6 +3,7 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
+import QueueIcon from "@mui/icons-material/Queue";
 import {
   Box,
   Grid,
@@ -36,13 +37,14 @@ const instructorOptions = [
   "Settings",
 ];
 
-const studentOptions = ["Create help ticket", "Settings"];
+const studentOptions = ["Join a course", "Create help ticket", "Settings"];
 
 const getIcon = (option: String) => {
   if (option == "Create course") return <AddIcon />;
   else if (option == "Create help ticket") return <PersonAddAltIcon />;
   else if (option == "Start help session") return <StartIcon />;
   else if (option == "Course analytics") return <AssessmentIcon />;
+  else if (option == "Join a course") return <QueueIcon />;
   else return <SettingsIcon />;
 };
 
@@ -180,8 +182,14 @@ const Home = ({
                 width: "100%",
               }}
             >
-              It looks like you have no courses. Use the 'Create course' menu to
-              the left to create one.
+              It looks like you have no courses. Use the{" "}
+              <b>
+                {user.primaryRole == "student"
+                  ? "'Join a course' "
+                  : "'Create course' "}
+              </b>
+              option to the left to{" "}
+              {user.primaryRole == "student" ? "join" : "create"} one.
             </Typography>
           </Box>
         ) : null}
