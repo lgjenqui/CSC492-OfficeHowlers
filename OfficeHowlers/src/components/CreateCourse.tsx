@@ -8,8 +8,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createCourse } from "../../services/api/course";
-import { sleep } from "../../services/util/sleep";
+import { createCourse } from "../services/api/course";
+import { sleep } from "../services/util/sleep";
 
 const CreateCourse = () => {
   const [courseName, setCourseName] = useState("");

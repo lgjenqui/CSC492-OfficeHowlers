@@ -1,4 +1,4 @@
-import Course from "../../../../Models/course.model";
+import Course from "../../../Models/course.model";
 import CourseCard from "./CourseCard";
 import { Grid, Card } from "@mui/material";
 import { useNavigate } from "react-router-dom";

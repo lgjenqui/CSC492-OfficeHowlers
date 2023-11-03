@@ -15,11 +15,11 @@ import Typography from "@mui/material/Typography";
 import { TimePicker, heIL } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
-import Course from "../../../../Models/course.model";
-import { getCourses } from "../../services/api/course";
-import { startSession } from "../../services/api/session";
-import { getTimeDiffStr } from "../../services/util/misc";
-import { useNavigate } from 'react-router-dom';
+import Course from "../../../Models/course.model";
+import { getCourses } from "../services/api/course";
+import { startSession } from "../services/api/session";
+import { getTimeDiffStr } from "../services/util/misc";
+import { useNavigate } from "react-router-dom";
 
 const StartSession = () => {
   const [open, setOpen] = React.useState(false);

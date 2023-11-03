@@ -15,9 +15,9 @@ import {
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Typography from "@mui/material/Typography";
-import Course from "../../../../Models/course.model";
-import CourseCards from "../courseCards/CourseCards";
-import UserModel from "../../../../Models/user.model";
+import Course from "../../../Models/course.model";
+import CourseCards from "./CourseCards";
+import UserModel from "../../../Models/user.model";
 
 interface Props {
   user: UserModel | null;

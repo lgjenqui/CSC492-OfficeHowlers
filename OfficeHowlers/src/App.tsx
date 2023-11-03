@@ -4,18 +4,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
-import Banner from "./components/banner/Banner";
-import CreateCourse from "./components/createCourse/CreateCourse";
-import StartSession from "./components/startSession/StartSession";
-import Home from "./components/home/Home";
-import NotFound from "./components/notFound/NotFound";
+import Banner from "./components/Banner";
+import CreateCourse from "./components/CreateCourse";
+import StartSession from "./components/StartSession";
+import Home from "./components/Home";
+import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
 import { getCourses } from "./services/api/course";
-import EditRoster from "./components/editRoster/EditRoster";
+import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
-import CreateHelpTicket from "./components/createHelpTicket/CreateHelpTicket";
+import CreateHelpTicket from "./components/CreateHelpTicket";
 
 function App() {
   const navigate = useNavigate();

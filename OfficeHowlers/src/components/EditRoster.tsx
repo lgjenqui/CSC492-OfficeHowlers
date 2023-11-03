@@ -18,7 +18,7 @@ import {
   getAssistants,
   getInstructors,
   getStudents,
-} from "../../services/api/course";
+} from "../services/api/course";
 
 const EditRoster = () => {
   const location = useLocation();
