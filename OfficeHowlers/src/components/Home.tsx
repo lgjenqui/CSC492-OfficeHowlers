@@ -16,16 +16,16 @@ import {
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Typography from "@mui/material/Typography";
-import Course from "../../../Models/course.model";
+import CourseModel from "../../../Models/course.model";
 import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
 
 interface Props {
   user: UserModel | null;
-  instructorCourses: Course[];
-  assistantCourses: Course[];
-  studentCourses: Course[];
+  instructorCourses: CourseModel[];
+  assistantCourses: CourseModel[];
+  studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
   onOptionsClick: (options: string) => void;
   isLoading: boolean;
@@ -66,11 +66,15 @@ const Home = ({
     }
 
     if (instructorCourses.length > 0) {
-      options.concat(instructorOptions);
+      options = options.concat(instructorOptions);
+    }
+
+    if (assistantCourses.length > 0 && instructorCourses.length == 0) {
+      options = options.concat(assistantOptions);
     }
 
     if (studentCourses.length > 0) {
-      options.concat(studentOptions);
+      options = options.concat(studentOptions);
     }
 
     // If the user belongs to no courses yet, use their primary role to determine their view
@@ -80,11 +84,11 @@ const Home = ({
         studentCourses.length ==
       0
     ) {
-      if (user.primaryRole == "faculty") {
-        options.concat(instructorOptions);
+      if (user.primaryRole === "faculty") {
+        options = options.concat(instructorOptions);
       } else {
         // Until a TA is added to a course as a TA, give them the student options
-        options.concat(studentOptions);
+        options = options.concat(studentOptions);
       }
     }
 
@@ -257,14 +261,14 @@ const Home = ({
               {assistantCourses.length > 0 ? (
                 <CourseCards
                   courses={assistantCourses}
-                  role="Instructor"
+                  role="Assistant"
                 ></CourseCards>
               ) : null}
 
               {studentCourses.length > 0 ? (
                 <CourseCards
                   courses={studentCourses}
-                  role="Instructor"
+                  role="Student"
                 ></CourseCards>
               ) : null}
             </Box>
