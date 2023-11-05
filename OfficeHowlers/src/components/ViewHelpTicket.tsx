@@ -2,7 +2,7 @@ import { Box, Divider } from "@mui/material/";
 import Typography from "@mui/material/Typography";
 import TicketModel from "../../../Models/ticket.model";
 import CourseModel from "../../../Models/course.model";
-import HelpTicket from "./HelpTicket";
+import StudentHelpTicket from "./StudentHelpTicket";
 
 interface Props {
   studentHelpTicket: TicketModel | null;
@@ -31,8 +31,8 @@ const ViewHelpTicket = ({
         <Divider
           sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
         />
-        <HelpTicket
-          helpTicket={studentHelpTicket}
+        <StudentHelpTicket
+          ticket={studentHelpTicket}
           course={studentHelpTicketCourse}
         />
       </Box>

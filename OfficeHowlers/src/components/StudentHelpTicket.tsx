@@ -4,12 +4,12 @@ import TicketModel from "../../../Models/ticket.model";
 import CourseModel from "../../../Models/course.model";
 
 interface Props {
-  helpTicket: TicketModel | null;
+  ticket: TicketModel | null;
   course: CourseModel | null;
 }
 
-const HelpTicket = ({ helpTicket, course }: Props) => {
-  if (!helpTicket || !course) {
+const StudentHelpTicket = ({ ticket, course }: Props) => {
+  if (!ticket || !course) {
     return null;
   }
 
@@ -45,7 +45,7 @@ const HelpTicket = ({ helpTicket, course }: Props) => {
           </Typography>
           <Typography sx={{ fontSize: 23 }}>
             <b>Problem description: </b>
-            {helpTicket.problemDescription}
+            {ticket.problemDescription}
           </Typography>
           <Box
             sx={{
@@ -89,4 +89,4 @@ const HelpTicket = ({ helpTicket, course }: Props) => {
   );
 };
 
-export default HelpTicket;
+export default StudentHelpTicket;
