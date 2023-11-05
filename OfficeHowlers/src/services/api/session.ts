@@ -1,12 +1,13 @@
 import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
-export async function startSession(courses: Course[], modes: string[] | null , startTime: Dayjs | null, endTime: Dayjs | null) {
+export async function startSession(courses: Course[], inPerson: Boolean, online: Boolean, startTime: Dayjs | null, endTime: Dayjs | null) {
     var names:string[] = new Array(courses.length);
     for(var i = 0; i < courses.length; i++){
         names[i] = courses[i].name;
     }
     console.log(names);
-    console.log(modes);
+    console.log(inPerson);
+    console.log(online);
     console.log(startTime);
     console.log(endTime);
     /**const requestOptions = {

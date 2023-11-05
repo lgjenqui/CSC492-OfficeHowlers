@@ -13,6 +13,7 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
     if(instructorUser ) {
       await createdSession.setUser(instructorUser);
+      // await createdSession.online=req.body.online;
       await Promise.all(req.body.courseIDs.map(async (id: UUID) => {
         const course = await Course.findByPk(id);
         if ( await isValidInstructorOrAssistantForCourse(instructorUser.email, course)) {

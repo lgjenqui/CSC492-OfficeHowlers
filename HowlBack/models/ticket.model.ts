@@ -8,8 +8,8 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     
     class Ticket extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
       declare id: number;
-      declare name: string;
-      declare description: string;
+      declare problemDescription: string;
+      declare solutionAttempt: string;
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
     
@@ -25,10 +25,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
           autoIncrement: true,
           primaryKey: true,
         },
-        name: {
+        problemDescription: {
           type: DataTypes.STRING
         },
-        description: {
+        solutionAttempt: {
           type: DataTypes.STRING
         },
       },

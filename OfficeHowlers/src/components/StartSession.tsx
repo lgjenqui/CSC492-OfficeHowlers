@@ -149,6 +149,9 @@ const StartSession = () => {
 
   // Starts a session
   function onSubmit() {
+    const online = modes.includes("Virtual");
+    const inPerson = modes.includes("In-Person");
+    startSession(selectedCourses, inPerson, online, startTime, endTime);
     console.log("submitting!");
   }
 
