@@ -1,20 +1,22 @@
 import Box from "@mui/material/Box";
-
-interface Props {}
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 const ViewHelpTickets = () => {
   return (
     <Box
       sx={{
-        bgcolor: "#CC0000",
-        width: "100%",
-        height: "150px",
-        m: 0,
-        color: "white",
-        userSelect: "none",
+        width: "60%",
+        maxWidth: "1200px",
+        m: "auto",
+        mt: "20px",
+        alignContent: "center",
       }}
     >
-      test
+      <Typography sx={{ fontSize: 42, mb: "5px" }}>My help tickets</Typography>
+      <Divider
+        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+      />
     </Box>
   );
 };
