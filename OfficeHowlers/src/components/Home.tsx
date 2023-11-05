@@ -174,7 +174,7 @@ const Home = ({
       );
     }
     if (currentView == "helpSession") {
-      return <ViewHelpSession />;
+      return <ViewHelpSession tickets={facultyHelpTickets} />;
     }
   }
 

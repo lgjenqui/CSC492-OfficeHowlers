@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box, Divider } from "@mui/material/";
 import Typography from "@mui/material/Typography";
 import TicketModel from "../../../Models/ticket.model";
 import CourseModel from "../../../Models/course.model";
@@ -28,6 +28,9 @@ const ViewHelpTicket = ({
         >
           My help ticket
         </Typography>
+        <Divider
+          sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
+        />
         <HelpTicket
           helpTicket={studentHelpTicket}
           course={studentHelpTicketCourse}

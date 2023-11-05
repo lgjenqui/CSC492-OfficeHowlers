@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Typography from "@mui/material/Typography";
@@ -42,6 +42,9 @@ const ViewCourses = ({
           >
             My courses
           </Typography>
+          <Divider
+            sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
+          />
           <Typography
             sx={{
               fontSize: "35px",
@@ -98,6 +101,9 @@ const ViewCourses = ({
           >
             My courses
           </Typography>
+          <Divider
+            sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
+          />
           {instructorCourses.length > 0 ? (
             <CourseCards
               courses={instructorCourses}
