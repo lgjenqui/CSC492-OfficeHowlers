@@ -15,11 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import Typography from "@mui/material/Typography";
 import CourseModel from "../../../Models/course.model";
-import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";

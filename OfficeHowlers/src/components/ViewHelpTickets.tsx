@@ -1,7 +1,10 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
 
 const ViewHelpTickets = () => {
+  useEffect(() => {});
+
   return (
     <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
       <Box>
