@@ -25,6 +25,8 @@ services:
     build: 
       context: .
       dockerfile: ./OfficeHowlers/Dockerfile
+    volumes:
+      - ./OfficeHowlers/src:/usr/src/app/frontend/src
     restart: always
     container_name: officeHowlers
 
@@ -44,5 +46,4 @@ services:
       - BACKEND_PROTOCOL=http
       - LOGIN_PATH=/
       - SERVER_NAME=localhost
-
 
