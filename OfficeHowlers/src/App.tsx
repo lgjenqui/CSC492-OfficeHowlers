@@ -60,7 +60,6 @@ function App() {
     // Set up a timeout of 2.5 seconds so the user doesn't sit on a blank page too long!
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
-      console.log("Aborting fetch due to timeout");
       controller.abort();
     }, 5500);
 
