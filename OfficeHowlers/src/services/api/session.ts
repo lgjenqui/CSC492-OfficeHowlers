@@ -21,9 +21,6 @@ export async function startSession(courses: Course[], inPerson: Boolean, online:
         endTime: endTime
       }),
     };
-    
 
-    return Promise.all(courses.map( async (course) => {
-      (await fetch(window.location.origin + "/api/session/create")).json()
-    }));
+    return (await fetch(window.location.origin + "/api/session/create", requestOptions));
 }
