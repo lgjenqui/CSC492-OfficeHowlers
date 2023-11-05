@@ -122,7 +122,7 @@ const CreateHelpTicket = () => {
 
             // Sleep for 2 seconds then redirect the user to the help tickets page
             await sleep(2000);
-            navigate("/ticket");
+            navigate("/helpTickets");
           } else {
             setTicketCreationSuccessful(false);
             setErrorMessages([

@@ -17,6 +17,7 @@ import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
+import ViewHelpTickets from "./components/ViewHelpTickets";
 
 function App() {
   const navigate = useNavigate();
@@ -30,13 +31,6 @@ function App() {
     boolean | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const onOptionsClick = (option: string) => {
-    if (option == "Create course") navigate("/createCourse");
-    else if (option == "Start help session") navigate("/startSession");
-    else if (option == "Create help ticket") navigate("/createHelpTicket");
-    else navigate("/deadend");
-  };
 
   const onReturnHome = () => {
     navigate("/");
@@ -116,7 +110,6 @@ function App() {
                 assistantCourses={assistantCourses}
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
-                onOptionsClick={onOptionsClick}
                 isLoading={isLoading}
               />
             }
@@ -133,7 +126,9 @@ function App() {
 
           <Route path="/editRoster" element={<EditRoster />} />
 
-          <Route path="/createHelpTicket" element={<CreateHelpTicket />} />
+          <Route path="/helpTickets" element={<ViewHelpTickets />} />
+
+          <Route path="/helpTickets/create" element={<CreateHelpTicket />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

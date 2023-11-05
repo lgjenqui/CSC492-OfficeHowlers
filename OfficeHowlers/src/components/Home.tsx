@@ -4,6 +4,7 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import QueueIcon from "@mui/icons-material/Queue";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import {
   Box,
   Grid,
@@ -20,6 +21,7 @@ import CourseModel from "../../../Models/course.model";
 import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   user: UserModel | null;
@@ -27,7 +29,6 @@ interface Props {
   assistantCourses: CourseModel[];
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
-  onOptionsClick: (options: string) => void;
   isLoading: boolean;
 }
 
@@ -47,6 +48,7 @@ const getIcon = (option: String) => {
   else if (option == "Start help session") return <StartIcon />;
   else if (option == "Course analytics") return <AssessmentIcon />;
   else if (option == "Join a course") return <QueueIcon />;
+  else if (option == "My help tickets") return <ReceiptLongIcon />;
   else return <SettingsIcon />;
 };
 
@@ -56,9 +58,18 @@ const Home = ({
   assistantCourses,
   studentCourses,
   coursesLoadedSuccessfully,
-  onOptionsClick,
   isLoading,
 }: Props) => {
+  var navigate = useNavigate();
+
+  function onOptionsClick(option: string) {
+    if (option == "Create course") navigate("/createCourse");
+    else if (option == "Start help session") navigate("/startSession");
+    else if (option == "Create help ticket") navigate("/helpTickets/create");
+    else if (option == "My help tickets") navigate("/helpTickets");
+    else navigate("/deadend");
+  }
+
   function getMenuOptions(user: UserModel | null): string[] {
     let options: string[] = [];
     if (!user) {
@@ -92,7 +103,8 @@ const Home = ({
       }
     }
 
-    // Every user can change their settings!
+    // Every user can change their settings and check their help tickets
+    options.push("My help tickets");
     options.push("Settings");
 
     return options;
