@@ -78,7 +78,6 @@ function App() {
         // Grab the student's help ticket if they have one
         if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
-          console.log(helpTicket);
           setStudentHelpTicket(helpTicket);
 
           // Grab the name of the course associated with the ticket

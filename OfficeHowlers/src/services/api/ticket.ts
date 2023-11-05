@@ -27,5 +27,5 @@ export async function getTicket(): Promise<any> {
   };
 
   // Create the new course
-  return (await fetch(window.location.origin + "/api/ticket/", requestOptions)).json();
+  return (await fetch(window.location.origin + "/api/ticket", requestOptions)).json();
 }

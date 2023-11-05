@@ -35,5 +35,5 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
 export const getMyTicket = async (req: Request, res: Response): Promise<void> => {
   const user = await retrieveUser((req.headers['x-shib_mail']) as string);
   const ticket = await user.getTicket();
-  res.status(200).send(ticket);
+  res.status(200).json(ticket);
 }
