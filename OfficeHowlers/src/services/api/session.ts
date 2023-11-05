@@ -24,3 +24,13 @@ export async function startSession(courses: Course[], inPerson: Boolean, online:
 
     return (await fetch(window.location.origin + "/api/session/create", requestOptions));
 }
+
+export async function getMySession(): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  // Create the new course
+  return (await fetch(window.location.origin + "/api/session/all", requestOptions)).json();
+}

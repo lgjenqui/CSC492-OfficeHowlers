@@ -31,3 +31,9 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ message: 'Error creating the course', error: error.message });
   }
 };
+
+export const getMySession = async (req: Request, res: Response): Promise<void> => {
+  const user = await retrieveUser((req.headers['x-shib_mail']) as string);
+  // const sessions = await user.getSession();
+  res.status(200).send();
+};

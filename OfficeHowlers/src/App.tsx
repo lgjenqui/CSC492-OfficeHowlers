@@ -19,6 +19,7 @@ import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import TicketModel from "../../Models/ticket.model";
+import { getMySession } from "./services/api/session";
 
 function App() {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ function App() {
     const fetchData = async () => {
       try {
         const user = await getUser();
+        console.log(user);
         setUser(user);
 
         const courses = await getCourses();
@@ -74,8 +76,13 @@ function App() {
         setStudentCourses(courses.studentCourses);
         setCoursesLoadedSuccessfully(true);
 
-        // Grab the student's help ticket if they have one
+        // Grab the user's help sessions if they are faculty
         if (user && user.primaryRole != "faculty") {
+          const userSessions = await getMySession();
+          console.log(userSessions);
+        }
+        // Grab the user's help ticket if they are a student
+        else if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
           setStudentHelpTicket(helpTicket);
 
