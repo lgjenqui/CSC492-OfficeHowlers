@@ -78,7 +78,7 @@ export const getCourseInstructors = async (req: Request, res: Response): Promise
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const instructors = await course.getInstructors();
       const instructorEmails = instructors.map((instructor) => instructor.email);
-      res.status(200).json({ instructors: instructorEmails });
+      res.status(200).json({ instructors: instructors });
     } else {
       res.status(403).json({ success: false, error: "Unauthorized to view course instructors" });
     }
@@ -110,7 +110,7 @@ export const getCourseAssistants = async (req: Request, res: Response): Promise<
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await course.getAssistants();
       const assistantEmails = assistants.map((assistant) => assistant.email);
-      res.status(200).json({ assistants: assistantEmails });
+      res.status(200).json({ assistants: assistants });
     } else {
       res.status(403).json({ success: false, error: "Unauthorized to view course assistants" });
     }
@@ -142,7 +142,7 @@ export const getCourseStudents = async (req: Request, res: Response): Promise<vo
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await course.getStudents();
       const studentEmails = students.map((student) => student.email);
-      res.status(200).json({ students: studentEmails });
+      res.status(200).json({ students: students });
     } else {
       res.status(403).json({ success: false, error: "Unauthorized to view course roster" });
     }

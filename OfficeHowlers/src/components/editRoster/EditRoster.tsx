@@ -19,6 +19,7 @@ import {
   getInstructors,
   getStudents,
 } from "../../services/api/course";
+import UserModel from "../../../../Models/user.model";
 
 const EditRoster = () => {
   const location = useLocation();
@@ -32,6 +33,9 @@ const EditRoster = () => {
   const [students, setStudents] = useState("");
   const [teachingAssistants, setTeachingAssistants] = useState("");
   const [instructors, setInstructors] = useState("");
+  const [instructorsEnrolled, setInstructorsEnrolled] = useState<UserModel[]>([]);
+  const [teachingAssitantsEnrolled, setTeachingAssistantsEnrolled] = useState<UserModel[]>([]);
+  const [studentsEnrolled, setStudentsEnrolled] = useState<UserModel[]>([]);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   // Resets all error values so the fields don't display with red outlines and such
@@ -84,32 +88,48 @@ const EditRoster = () => {
           });
         });
       });
+
       console.log("submitted");
+      setInstructors("");
+      setTeachingAssistants("");
+      setStudents("");
     }
   }
 
   function fetchAllCourseEmails() {
     getInstructors(courseUUID)
       .then((instructorEmails) => {
-        setInstructors(instructorEmails.instructors.join("\n"));
+          setInstructorsEnrolled(instructorEmails.instructors);
+          console.log(instructorsEnrolled);
       })
       .catch((error) => {
         console.error(error);
       });
     getAssistants(courseUUID)
       .then((assistantEmails) => {
-        setTeachingAssistants(assistantEmails.assistants.join("\n"));
+        setTeachingAssistantsEnrolled(assistantEmails.assistants);
       })
       .catch((error) => {
         console.error(error);
       });
     getStudents(courseUUID)
       .then((studentEmails) => {
-        setStudents(studentEmails.students.join("\n"));
+        setStudentsEnrolled(studentEmails.students);
+        console.log(studentsEnrolled);
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  function deleteInstructor(instructorEmail: string){
+    console.log(instructorEmail);
+  }
+  function deleteStudent(studentEmail: string){
+    console.log(studentEmail);
+  }
+  function deleteTeachingAssistant(teachingAssistantEmail: string){
+    console.log(teachingAssistantEmail);
   }
 
   // Grab the courses for this instructor
@@ -279,7 +299,9 @@ const EditRoster = () => {
                 Delete
               </Grid>
             </Grid>
-            <Grid container direction="row" alignItems="center" spacing={3}>
+            {studentsEnrolled.map(students => {
+              return(
+                <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid
                 item
                 xs={5}
@@ -289,17 +311,20 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                Christopher Kastritis
+                {students.firstName}
               </Grid>
               <Grid item xs={4}>
-                crkastri@ncsu.edu
+                {students.email}
               </Grid>
-              <Grid item xs={3}>
-                <IconButton>
+              <Grid item xs={2}>
+                <IconButton
+                onClick={(e)=> deleteStudent(students.email)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
             </Grid>
+              );
+            })}
           </Box>
         </Grid>
         <Grid item xs={4}>
@@ -318,7 +343,9 @@ const EditRoster = () => {
                 Delete
               </Grid>
             </Grid>
-            <Grid container direction="row" alignItems="center" spacing={3}>
+            {teachingAssitantsEnrolled.map(teachingAssistant => {
+              return(
+                <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid
                 item
                 xs={5}
@@ -328,17 +355,20 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                Christopher Kastritis
+                {teachingAssistant.firstName}
               </Grid>
               <Grid item xs={4}>
-                crkastri@ncsu.edu
+                {teachingAssistant.email}
               </Grid>
-              <Grid item xs={3}>
-                <IconButton>
+              <Grid item xs={2}>
+                <IconButton
+                onClick={(e)=> deleteTeachingAssistant(teachingAssistant.email)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
             </Grid>
+              );
+            })}
           </Box>
         </Grid>
         <Grid item xs={4}>
@@ -357,7 +387,9 @@ const EditRoster = () => {
                 Delete
               </Grid>
             </Grid>
-            <Grid container direction="row" alignItems="center" spacing={3}>
+            {instructorsEnrolled.map(instructor => {
+              return(
+                <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid
                 item
                 xs={5}
@@ -367,17 +399,22 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                Christopher Kastritis
+                {instructor.firstName}
               </Grid>
               <Grid item xs={4}>
-                crkastri@ncsu.edu
+                {instructor.email}
               </Grid>
               <Grid item xs={2}>
-                <IconButton>
+                <IconButton
+                onClick={(e)=> deleteInstructor(instructor.email)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
             </Grid>
+              );
+            })}
+            
+            
           </Box>
         </Grid>
       </Grid>
