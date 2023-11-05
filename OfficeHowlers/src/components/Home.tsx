@@ -20,8 +20,9 @@ import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ViewHelpTickets from "./ViewHelpTickets";
+import ViewHelpTickets from "./ViewHelpTicket";
 import ViewCourses from "./ViewCourses";
+import TicketModel from "../../../Models/ticket.model";
 
 interface Props {
   user: UserModel | null;
@@ -32,6 +33,8 @@ interface Props {
   isLoading: boolean;
   viewMyCourses: boolean;
   setViewMyCourses: (val: boolean) => void;
+  studentHelpTicket: TicketModel | null;
+  studentHelpTicketCourse: CourseModel | null;
 }
 
 const instructorOptions = [
@@ -50,7 +53,7 @@ const getIcon = (option: String) => {
   else if (option == "Start help session") return <StartIcon />;
   else if (option == "Course analytics") return <AssessmentIcon />;
   else if (option == "Join a course") return <QueueIcon />;
-  else if (option == "My help tickets") return <ReceiptLongIcon />;
+  else if (option == "My help ticket") return <ReceiptLongIcon />;
   else if (option == "My courses") return <SchoolIcon />;
   else return <SettingsIcon />;
 };
@@ -64,6 +67,8 @@ const Home = ({
   isLoading,
   viewMyCourses,
   setViewMyCourses,
+  studentHelpTicket,
+  studentHelpTicketCourse,
 }: Props) => {
   var navigate = useNavigate();
 
@@ -71,7 +76,7 @@ const Home = ({
     if (option == "Create course") navigate("/createCourse");
     else if (option == "Start help session") navigate("/startSession");
     else if (option == "Create help ticket") navigate("/helpTickets/create");
-    else if (option == "My help tickets") setViewMyCourses(false);
+    else if (option == "My help ticket") setViewMyCourses(false);
     else if (option == "My courses") setViewMyCourses(true);
     else navigate("/deadend");
   }
@@ -82,9 +87,13 @@ const Home = ({
       return [];
     }
 
-    // Every user can view their courses and tickets
+    // Every user can view their courses
     options.push("My courses");
-    options.push("My help tickets");
+
+    // Users with a student help ticket open can view it
+    if (studentHelpTicket) {
+      options.push("My help ticket");
+    }
 
     if (instructorCourses.length > 0) {
       options = options.concat(instructorOptions);
@@ -176,7 +185,10 @@ const Home = ({
             coursesLoadedSuccessfully={coursesLoadedSuccessfully}
           />
         ) : (
-          <ViewHelpTickets />
+          <ViewHelpTickets
+            studentHelpTicket={studentHelpTicket}
+            studentHelpTicketCourse={studentHelpTicketCourse}
+          />
         )}
       </Grid>
     );

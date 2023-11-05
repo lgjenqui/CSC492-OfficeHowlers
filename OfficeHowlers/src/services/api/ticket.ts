@@ -20,4 +20,12 @@ export async function createTicket(courseId: string, problemDescription: string,
     return (await fetch(window.location.origin + "/api/ticket/create?id=" + courseId, requestOptions));
 }
 
+export async function getTicket(): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
 
+  // Create the new course
+  return (await fetch(window.location.origin + "/api/ticket/", requestOptions)).json();
+}

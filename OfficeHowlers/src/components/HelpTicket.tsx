@@ -1,15 +1,17 @@
-import { Box, CardContent, Divider, Card } from "@mui/material";
+import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
-import Course from "../../../Models/course.model";
+import TicketModel from "../../../Models/ticket.model";
+import CourseModel from "../../../Models/course.model";
 
 interface Props {
-  course: Course;
-  role: string;
+  helpTicket: TicketModel | null;
+  course: CourseModel | null;
 }
 
-const HelpTicket = ({ course, role }: Props) => {
-  const navigate = useNavigate();
+const HelpTicket = ({ helpTicket, course }: Props) => {
+  if (!helpTicket || !course) {
+    return null;
+  }
 
   return (
     <Box
@@ -19,7 +21,7 @@ const HelpTicket = ({ course, role }: Props) => {
           cursor: "pointer",
         },
         ":active": {
-          backgroundColor: "#9e0000",
+          backgroundColor: "#D9D9D9",
         },
       }}
     >
@@ -31,17 +33,56 @@ const HelpTicket = ({ course, role }: Props) => {
           color: "white",
           borderRadius: "15px",
         }}
-        onClick={() => navigate("/course?id=" + course.id)}
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0" }}>{course.name}</Typography>
-          <Typography sx={{ fontSize: 23 }}>{course.description}</Typography>
           <Divider
             sx={{ borderTop: "1px solid white", width: "80%", mb: "10px" }}
           />
-          <Typography sx={{ fontSize: 20 }} variant="body2">
-            Enrolled as {role}
+          <Typography sx={{ fontSize: 23 }}>
+            <b>Position in queue: </b>
+            3rd
           </Typography>
+          <Typography sx={{ fontSize: 23 }}>
+            <b>Problem description: </b>
+            {helpTicket.problemDescription}
+          </Typography>
+          <Box
+            sx={{
+              textAlign: "center",
+              mt: "35px",
+            }}
+          >
+            <Button
+              sx={{
+                fontSize: 20,
+                color: "#CC0000",
+                backgroundColor: "white",
+                ":hover": {
+                  backgroundColor: "#D9D9D9",
+                },
+                mr: "20px",
+              }}
+              variant="contained"
+              onClick={() => {}}
+            >
+              Edit help ticket
+            </Button>
+            <Button
+              sx={{
+                fontSize: 20,
+                color: "#CC0000",
+                backgroundColor: "white",
+                ":hover": {
+                  backgroundColor: "#D9D9D9",
+                },
+              }}
+              variant="contained"
+              onClick={() => {}}
+            >
+              Cancel help ticket
+            </Button>
+          </Box>
         </CardContent>
       </Card>
     </Box>

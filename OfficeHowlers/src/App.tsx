@@ -10,14 +10,15 @@ import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
-import { getCourses } from "./services/api/course";
+import { getCourses, getCourseFromUUID } from "./services/api/course";
 import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
-import ViewHelpTickets from "./components/ViewHelpTickets";
+import { getTicket } from "./services/api/ticket";
+import TicketModel from "../../Models/ticket.model";
 
 function App() {
   const navigate = useNavigate();
@@ -27,6 +28,10 @@ function App() {
   const [instructorCourses, setInstructorCourses] = useState<CourseModel[]>([]);
   const [assistantCourses, setAssistantCourses] = useState<CourseModel[]>([]);
   const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
+  const [studentHelpTicket, setStudentHelpTicket] =
+    useState<TicketModel | null>(null);
+  const [studentHelpTicketCourse, setStudentHelpTicketCourse] =
+    useState<CourseModel | null>(null);
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
@@ -61,14 +66,29 @@ function App() {
 
     const fetchData = async () => {
       try {
-        const res = await getUser();
-        console.log(res);
-        setUser(res);
+        const user = await getUser();
+        setUser(user);
+
         const courses = await getCourses();
         setInstructorCourses(courses.instructorCourses);
         setAssistantCourses(courses.assistantCourses);
         setStudentCourses(courses.studentCourses);
         setCoursesLoadedSuccessfully(true);
+
+        // Grab the student's help ticket if they have one
+        if (user && user.primaryRole != "faculty") {
+          const helpTicket = await getTicket();
+          console.log(helpTicket);
+          setStudentHelpTicket(helpTicket);
+
+          // Grab the name of the course associated with the ticket
+          if (helpTicket) {
+            const helpTicketCourse = await getCourseFromUUID(
+              helpTicket.CourseId
+            );
+            setStudentHelpTicketCourse(helpTicketCourse);
+          }
+        }
       } catch (err) {
         console.error(err);
         setCoursesLoadedSuccessfully(false);
@@ -114,6 +134,8 @@ function App() {
                 isLoading={isLoading}
                 viewMyCourses={viewMyCourses}
                 setViewMyCourses={setViewMyCourses}
+                studentHelpTicket={studentHelpTicket}
+                studentHelpTicketCourse={studentHelpTicketCourse}
               />
             }
           />
@@ -128,8 +150,6 @@ function App() {
           <Route path="/startSession" element={<StartSession />} />
 
           <Route path="/editRoster" element={<EditRoster />} />
-
-          <Route path="/helpTickets" element={<ViewHelpTickets />} />
 
           <Route
             path="/helpTickets/create"
