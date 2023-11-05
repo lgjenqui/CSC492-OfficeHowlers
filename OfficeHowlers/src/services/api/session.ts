@@ -10,17 +10,20 @@ export async function startSession(courses: Course[], inPerson: Boolean, online:
     console.log(online);
     console.log(startTime);
     console.log(endTime);
-    /**const requestOptions = {
+    const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        sessionCourses: names,
-        sessionMode: mode,
+        courseIDs: courses.map((course) => course.id),
+        inPerson: inPerson,
+        online: online,
         startTime: startTime,
         endTime: endTime
       }),
     };
-    */
-    // Create the new course
-    //await fetch("http://localhost:8080/api/course/create", requestOptions);
+    
+
+    return Promise.all(courses.map( async (course) => {
+      (await fetch(window.location.origin + "/api/session/create")).json()
+    }));
 }
