@@ -5,6 +5,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import QueueIcon from "@mui/icons-material/Queue";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import SchoolIcon from "@mui/icons-material/School";
 import {
   Box,
   Grid,
@@ -22,6 +23,9 @@ import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ViewHelpTickets from "./ViewHelpTickets";
+import ViewCourses from "./ViewCourses";
 
 interface Props {
   user: UserModel | null;
@@ -49,6 +53,7 @@ const getIcon = (option: String) => {
   else if (option == "Course analytics") return <AssessmentIcon />;
   else if (option == "Join a course") return <QueueIcon />;
   else if (option == "My help tickets") return <ReceiptLongIcon />;
+  else if (option == "My courses") return <SchoolIcon />;
   else return <SettingsIcon />;
 };
 
@@ -60,13 +65,16 @@ const Home = ({
   coursesLoadedSuccessfully,
   isLoading,
 }: Props) => {
+  const [viewMyCourses, setViewMyCourses] = useState<boolean>(true);
+
   var navigate = useNavigate();
 
   function onOptionsClick(option: string) {
     if (option == "Create course") navigate("/createCourse");
     else if (option == "Start help session") navigate("/startSession");
     else if (option == "Create help ticket") navigate("/helpTickets/create");
-    else if (option == "My help tickets") navigate("/helpTickets");
+    else if (option == "My help tickets") setViewMyCourses(false);
+    else if (option == "My courses") setViewMyCourses(true);
     else navigate("/deadend");
   }
 
@@ -75,6 +83,10 @@ const Home = ({
     if (!user) {
       return [];
     }
+
+    // Every user can view their courses and tickets
+    options.push("My courses");
+    options.push("My help tickets");
 
     if (instructorCourses.length > 0) {
       options = options.concat(instructorOptions);
@@ -103,8 +115,7 @@ const Home = ({
       }
     }
 
-    // Every user can change their settings and check their help tickets
-    options.push("My help tickets");
+    // Every user can change their settings
     options.push("Settings");
 
     return options;
@@ -124,34 +135,6 @@ const Home = ({
       </Box>
     );
   }
-
-  // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
-  // if (coursesLoadedSuccessfully == false) {
-  //   return (
-  //     <Box sx={{ m: "auto" }}>
-  //       <Typography
-  //         sx={{
-  //           fontSize: 45,
-  //           fontWeight: "bold",
-  //           mt: "50px",
-  //           textAlign: "center",
-  //         }}
-  //       >
-  //         Uh-oh...
-  //       </Typography>
-  //       <Typography
-  //         sx={{
-  //           fontSize: 30,
-  //           mt: "20px",
-  //           textAlign: "center",
-  //         }}
-  //       >
-  //         There was a problem fetching your information. Please refresh the page
-  //         to try again.
-  //       </Typography>
-  //     </Box>
-  //   );
-  // }
 
   if (user && isLoading == false) {
     return (
@@ -186,106 +169,17 @@ const Home = ({
             ))}
           </List>
         </Box>
-        <Box
-          sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}
-        >
-          {coursesLoadedSuccessfully &&
-          instructorCourses.length +
-            assistantCourses.length +
-            studentCourses.length ===
-            0 ? (
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  fontWeight: "bold",
-                  mt: "20px",
-                  ml: 0,
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                My courses
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                It looks like you have no courses. Use the{" "}
-                <b>
-                  {user.primaryRole == "student"
-                    ? "'Join a course' "
-                    : "'Create course' "}
-                </b>
-                option to the left to{" "}
-                {user.primaryRole == "student" ? "join" : "create"} one.
-              </Typography>
-            </Box>
-          ) : null}
-          {coursesLoadedSuccessfully == false ? (
-            <Alert
-              sx={{
-                fontSize: "35px",
-                width: "60%",
-                borderRadius: "15px",
-                "& .MuiAlert-icon": {
-                  fontSize: 40,
-                },
-              }}
-              severity="error"
-            >
-              <AlertTitle sx={{ fontWeight: "bold", fontSize: "35px" }}>
-                Error
-              </AlertTitle>
-              There was an unexpected problem while fetching your information.
-              <br />
-              <br /> Please <strong>reload the page</strong> to try again.
-            </Alert>
-          ) : null}
-
-          {instructorCourses.length +
-            assistantCourses.length +
-            studentCourses.length >
-          0 ? (
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  fontWeight: "bold",
-                  mt: "20px",
-                  ml: 0,
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                My courses
-              </Typography>
-              {instructorCourses.length > 0 ? (
-                <CourseCards
-                  courses={instructorCourses}
-                  role="Instructor"
-                ></CourseCards>
-              ) : null}
-
-              {assistantCourses.length > 0 ? (
-                <CourseCards
-                  courses={assistantCourses}
-                  role="Assistant"
-                ></CourseCards>
-              ) : null}
-
-              {studentCourses.length > 0 ? (
-                <CourseCards
-                  courses={studentCourses}
-                  role="Student"
-                ></CourseCards>
-              ) : null}
-            </Box>
-          ) : null}
-        </Box>
+        {viewMyCourses ? (
+          <ViewCourses
+            user={user}
+            instructorCourses={instructorCourses}
+            assistantCourses={assistantCourses}
+            studentCourses={studentCourses}
+            coursesLoadedSuccessfully={coursesLoadedSuccessfully}
+          />
+        ) : (
+          <ViewHelpTickets />
+        )}
       </Grid>
     );
   }
