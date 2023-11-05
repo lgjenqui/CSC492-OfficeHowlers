@@ -91,17 +91,24 @@ const CreateHelpTicket = () => {
   // Starts a ticket
   function onSubmit() {
     if (inputIsValid()) {
-      createTicket(selectedCourses.id, description, tried, group.split(/\s*,\s*/));
+      createTicket(
+        selectedCourses.id,
+        description,
+        tried,
+        group.split(/\s*,\s*/)
+      );
       console.log("submitting!");
     }
   }
 
   useEffect(() => {
-    getCourses().then((value: any) => {
-      setCourses(value.studentCourses);
-    }).catch((error: any) => {
-      console.error(error);
-    });
+    getCourses()
+      .then((value: any) => {
+        setCourses(value.studentCourses);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
   }, []);
 
   return (
@@ -160,7 +167,6 @@ const CreateHelpTicket = () => {
             Group Request
           </Typography>
           <TextField
-            required
             label="Enter emails seperated by commas of who you are working with"
             id="course-name-field"
             sx={{ mr: "20px", width: "100%" }}
