@@ -9,7 +9,7 @@ import { UUID } from 'crypto';
 
 export const createTicket = async (req: Request, res: Response): Promise<void> => {
   try {
-    const createdTicket = await Ticket.create(req.body);
+    const createdTicket = await Ticket.create(req.body.ticket);
     const student = await retrieveUser(req.headers['x-shib_mail'] as string);
     if( student ) {
       await createdTicket.setUser(student);

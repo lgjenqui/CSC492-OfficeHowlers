@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../Models/course.model";
-import { startSession } from "../services/api/session";
+import { createTicket } from "../services/api/ticket";
 
 const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);
@@ -87,24 +87,13 @@ const CreateHelpTicket = () => {
     return true;
   }
 
-  // Starts a session
+  // Starts a ticket
   function onSubmit() {
     if (inputIsValid()) {
+      createTicket(description, tried, group.split(/\s*, \s*/));
       console.log("submitting!");
     }
   }
-
-  // Grab the courses for this instructor
-  // NOTE - this is grabbing ALL system courses for now
-  // useEffect(() => {
-  //   let res = getCourses();
-  //   res.then((value) => {
-  //     setCourses(value);
-  //   });
-  //   res.catch((error) => {
-  //     console.error(error);
-  //   });
-  // }, []);
 
   return (
     <Box
