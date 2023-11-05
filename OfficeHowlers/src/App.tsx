@@ -31,6 +31,7 @@ function App() {
     boolean | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMyCourses, setViewMyCourses] = useState(true);
 
   const onReturnHome = () => {
     navigate("/");
@@ -111,6 +112,8 @@ function App() {
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
                 isLoading={isLoading}
+                viewMyCourses={viewMyCourses}
+                setViewMyCourses={setViewMyCourses}
               />
             }
           />
@@ -128,7 +131,10 @@ function App() {
 
           <Route path="/helpTickets" element={<ViewHelpTickets />} />
 
-          <Route path="/helpTickets/create" element={<CreateHelpTicket />} />
+          <Route
+            path="/helpTickets/create"
+            element={<CreateHelpTicket setViewMyCourses={setViewMyCourses} />}
+          />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

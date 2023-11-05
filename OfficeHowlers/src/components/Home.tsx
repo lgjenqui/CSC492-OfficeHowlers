@@ -30,6 +30,8 @@ interface Props {
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
   isLoading: boolean;
+  viewMyCourses: boolean;
+  setViewMyCourses: (val: boolean) => void;
 }
 
 const instructorOptions = [
@@ -60,9 +62,9 @@ const Home = ({
   studentCourses,
   coursesLoadedSuccessfully,
   isLoading,
+  viewMyCourses,
+  setViewMyCourses,
 }: Props) => {
-  const [viewMyCourses, setViewMyCourses] = useState<boolean>(true);
-
   var navigate = useNavigate();
 
   function onOptionsClick(option: string) {
