@@ -5,8 +5,7 @@ import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../../Models/course.model";
-import {startSession } from "../../services/api/session";
-
+import { startSession } from "../../services/api/session";
 
 const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);
@@ -29,8 +28,7 @@ const CreateHelpTicket = () => {
   const [courseError, setCourseError] = useState<boolean>(false);
   const [groupError, setGroupError] = useState<boolean>(false);
   const [descriptionError, setDescriptionError] = useState<boolean>(false);
-  const [triedError, setTriedError] =
-    useState<boolean>(false);
+  const [triedError, setTriedError] = useState<boolean>(false);
   const [inPersonLocationError, setInPersonLocationError] =
     useState<boolean>(false);
   const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
@@ -53,7 +51,7 @@ const CreateHelpTicket = () => {
     let newErrorMessages: string[] = [];
     // Check if at least one course was selected
     if (selectedCourses.length <= 0) {
-      newErrorMessages.push("Please select a courses for this help ticket");
+      newErrorMessages.push("Please select a course for this help ticket");
       setCourseError(true);
     }
     var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu,? ?)+$");
@@ -64,12 +62,12 @@ const CreateHelpTicket = () => {
       setGroupError(true);
     }
 
-    if(tried.length <= 0){
+    if (tried.length <= 0) {
       newErrorMessages.push("Please describe what you have tried so far");
       setTriedError(true);
     }
 
-    if(description.length <= 0){
+    if (description.length <= 0) {
       newErrorMessages.push("Please describe the problem you have");
       setDescriptionError(true);
     }
@@ -79,7 +77,6 @@ const CreateHelpTicket = () => {
     // Check a start and end time were provided
 
     // Check if a virtual location display option is chosen if there's a virtual location
-    
 
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
     setErrorMessages(newErrorMessages);
@@ -119,7 +116,9 @@ const CreateHelpTicket = () => {
         alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Create help ticket</Typography>
+      <Typography sx={{ fontSize: 42, mb: "5px" }}>
+        Create help ticket
+      </Typography>
       <Divider
         sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
       />
@@ -159,58 +158,59 @@ const CreateHelpTicket = () => {
             )}
           />
         </Grid>
-        <Grid sx={{ width: "70%" }}item>
+        <Grid sx={{ width: "70%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Group Request
           </Typography>
           <TextField
             required
             label="Enter emails seperated by commas of who you are working with"
-            id='course-name-field'
-            sx={{ mr: "20px", width:"100%" }}
+            id="course-name-field"
+            sx={{ mr: "20px", width: "100%" }}
             value={group}
             onChange={(e) => {
               setGroup(e.target.value);
               setGroupError(false);
             }}
-
             error={groupError}
           />
-          
-        
         </Grid>
         <Grid sx={{ width: "50%" }} item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>What is the problem?</Typography>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
+            What is the problem?
+          </Typography>
           <TextField
             required
             multiline={true}
             rows={3}
             label="Description of problem"
-            id='course-name-field'
-            sx={{ mr: "20px", width:"100%" }}
+            id="course-name-field"
+            sx={{ mr: "20px", width: "100%" }}
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
               setDescriptionError(false);
             }}
-           error={descriptionError}
+            error={descriptionError}
           />
         </Grid>
-        <Grid sx={{ width: "50%" }}item>
-          <Typography sx={{ fontSize: 20, mb: "5px" }}>What have you tried?</Typography>
-          <TextField 
+        <Grid sx={{ width: "50%" }} item>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
+            What have you tried?
+          </Typography>
+          <TextField
             required
             multiline={true}
             rows={3}
             label="Description of attempts to solve the problem"
-            id='course-name-field'
-            sx={{ mr: "20px", width:"100%"}}
+            id="course-name-field"
+            sx={{ mr: "20px", width: "100%" }}
             value={tried}
             onChange={(e) => {
               setTried(e.target.value);
               setTriedError(false);
             }}
-           error={triedError}
+            error={triedError}
           />
         </Grid>
       </Grid>
