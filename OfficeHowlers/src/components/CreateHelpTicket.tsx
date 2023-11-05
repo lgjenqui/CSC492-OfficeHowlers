@@ -1,12 +1,15 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Course from "../../../Models/course.model";
-import { createTicket } from "../services/api/ticket";
 import { getCourses } from "../services/api/course";
+import { createTicket } from "../services/api/ticket";
+import { sleep } from "../services/util/sleep";
 
 const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);
@@ -34,6 +37,9 @@ const CreateHelpTicket = () => {
     useState<boolean>(false);
   const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
     useState<boolean>(false);
+  const [ticketCreationSuccessful, setTicketCreationSuccessful] = useState<
+    boolean | null
+  >(null);
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {
@@ -63,6 +69,11 @@ const CreateHelpTicket = () => {
       setGroupError(true);
     }
 
+    if (selectedCourses.length == 0) {
+      newErrorMessages.push("Please select a course");
+      setSelectedCoursesError(true);
+    }
+
     if (tried.length <= 0) {
       newErrorMessages.push("Please describe what you have tried so far");
       setTriedError(true);
@@ -88,6 +99,8 @@ const CreateHelpTicket = () => {
     return true;
   }
 
+  const navigate = useNavigate();
+
   // Starts a ticket
   function onSubmit() {
     if (inputIsValid()) {
@@ -96,9 +109,55 @@ const CreateHelpTicket = () => {
         description,
         tried,
         group.split(/\s*,\s*/)
-      );
-      console.log("submitting!");
+      )
+        .then(async (res) => {
+          if (res.status == 201) {
+            setTicketCreationSuccessful(true);
+
+            // Clear the form input
+            setSelectedCourses([]);
+            setGroup("");
+            setDescription("");
+            setTried("");
+
+            // Sleep for 2 seconds then redirect the user to the help tickets page
+            await sleep(2000);
+            navigate("/ticket");
+          } else {
+            setTicketCreationSuccessful(false);
+            setErrorMessages([
+              "There was an unexpected problem while creating your help ticket. Please try again.",
+            ]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setTicketCreationSuccessful(false);
+          setErrorMessages([
+            "There was an unexpected problem while creating your help ticket. Please try again.",
+          ]);
+        });
     }
+  }
+
+  // Create a message to display if course creation was successful or unsuccessful
+  let requestStatusMsg = null;
+  if (ticketCreationSuccessful == true) {
+    requestStatusMsg = (
+      <>
+        <Alert
+          severity="success"
+          sx={{
+            mt: "15px",
+            borderRadius: "20px",
+            width: "fit-content",
+          }}
+        >
+          Success! Your help ticket has been created. Redirecting you now...
+        </Alert>
+        <CircularProgress color="success" sx={{ mt: "15px" }} />
+      </>
+    );
   }
 
   useEffect(() => {
@@ -154,7 +213,7 @@ const CreateHelpTicket = () => {
             renderInput={(params) => (
               <TextField
                 required
-                error={courseError}
+                error={selectedCoursesError}
                 {...params}
                 variant="standard"
                 label="Select a course"
@@ -251,6 +310,7 @@ const CreateHelpTicket = () => {
           m: "auto",
         }}
       >
+        {requestStatusMsg}
         {errorMessages.map(function (msg) {
           return (
             <Alert
