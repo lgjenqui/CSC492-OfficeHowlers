@@ -2,7 +2,7 @@ import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
 import Ticket from "../../../../Models/ticket.model";
 
-export async function createTicket(problemDescription: string, solutionAttempt: string, group: string[]): Promise<any> {
+export async function createTicket(courseId: string, problemDescription: string, solutionAttempt: string, group: string[]): Promise<any> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -17,7 +17,7 @@ export async function createTicket(problemDescription: string, solutionAttempt: 
     };
   
     // Create the new course
-    return (await fetch(window.location.origin + "/api/ticket/create", requestOptions));
+    return (await fetch(window.location.origin + "/api/ticket/create?id=" + courseId, requestOptions));
 }
 
 

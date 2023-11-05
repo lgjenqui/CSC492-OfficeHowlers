@@ -6,6 +6,7 @@ import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../Models/course.model";
 import { createTicket } from "../services/api/ticket";
+import { getCourses } from "../services/api/course";
 
 const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);
@@ -50,10 +51,10 @@ const CreateHelpTicket = () => {
 
     let newErrorMessages: string[] = [];
     // Check if at least one course was selected
-    if (selectedCourses.length <= 0) {
-      newErrorMessages.push("Please select a course for this help ticket");
-      setCourseError(true);
-    }
+    // if (selectedCourses.length <= 0) {
+    //   newErrorMessages.push("Please select a course for this help ticket");
+    //   setCourseError(true);
+    // }
     var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu,? ?)+$");
     var testStudents = regex.exec(group);
     // Check if at least one mode of delivery was selected
@@ -90,10 +91,18 @@ const CreateHelpTicket = () => {
   // Starts a ticket
   function onSubmit() {
     if (inputIsValid()) {
-      createTicket(description, tried, group.split(/\s*, \s*/));
+      createTicket(selectedCourses.id, description, tried, group.split(/\s*,\s*/));
       console.log("submitting!");
     }
   }
+
+  useEffect(() => {
+    getCourses().then((value: any) => {
+      setCourses(value.studentCourses);
+    }).catch((error: any) => {
+      console.error(error);
+    });
+  }, []);
 
   return (
     <Box
@@ -131,10 +140,9 @@ const CreateHelpTicket = () => {
               return option?.name;
             }}
             isOptionEqualToValue={(option, value) => option.name === value.name}
-            //value={selectedCourses}
+            // value={selectedCourses}
             onChange={(event, newValue) => {
               setSelectedCourses(newValue);
-              setCourseError(false);
             }}
             renderInput={(params) => (
               <TextField
