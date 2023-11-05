@@ -2,7 +2,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, NonAttribut
   HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyAddAssociationsMixin,
   HasManySetAssociationsMixin, HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, 
   HasManyHasAssociationMixin, HasManyHasAssociationsMixin, HasManyCountAssociationsMixin, 
-  HasManyCreateAssociationMixin, HasOneSetAssociationMixin } from 'sequelize';
+  HasManyCreateAssociationMixin, HasOneSetAssociationMixin, HasOneGetAssociationMixin } from 'sequelize';
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import UserModel from "../../Models/user.model";
 import Ticket from "./ticket.model";
@@ -31,6 +31,7 @@ class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<Use
   // declare countCourses: HasManyCountAssociationsMixin;
   // declare createCourse: HasManyCreateAssociationMixin<Course, "userId">;
 
+  declare getTicket: HasOneGetAssociationMixin<Ticket>;
   declare setTicket: HasOneSetAssociationMixin<Ticket, number>; 
 
   declare static associations: {
