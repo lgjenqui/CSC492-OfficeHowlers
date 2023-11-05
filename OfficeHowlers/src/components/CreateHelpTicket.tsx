@@ -12,10 +12,10 @@ import { createTicket } from "../services/api/ticket";
 import { sleep } from "../services/util/sleep";
 
 interface Props {
-  setViewMyCourses: (val: boolean) => void;
+  setCurrentView: (val: string) => void;
 }
 
-const CreateHelpTicket = ({ setViewMyCourses }: Props) => {
+const CreateHelpTicket = ({ setCurrentView }: Props) => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
@@ -125,7 +125,7 @@ const CreateHelpTicket = ({ setViewMyCourses }: Props) => {
             setTried("");
 
             // Sleep for 2 seconds then redirect the user to the home page set to the tickets view
-            setViewMyCourses(false);
+            setCurrentView("studentTicket");
             await sleep(2000);
             navigate("/");
           } else {

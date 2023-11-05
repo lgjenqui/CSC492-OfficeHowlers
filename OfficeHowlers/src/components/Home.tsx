@@ -5,6 +5,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import QueueIcon from "@mui/icons-material/Queue";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import BackHandIcon from "@mui/icons-material/BackHand";
 import SchoolIcon from "@mui/icons-material/School";
 import {
   Box,
@@ -19,10 +20,10 @@ import CourseModel from "../../../Models/course.model";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import ViewHelpTickets from "./ViewHelpTicket";
 import ViewCourses from "./ViewCourses";
 import TicketModel from "../../../Models/ticket.model";
+import ViewHelpSession from "./ViewHelpSession";
 
 interface Props {
   user: UserModel | null;
@@ -31,10 +32,11 @@ interface Props {
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
   isLoading: boolean;
-  viewMyCourses: boolean;
-  setViewMyCourses: (val: boolean) => void;
+  currentView: string;
+  setCurrentView: (val: string) => void;
   studentHelpTicket: TicketModel | null;
   studentHelpTicketCourse: CourseModel | null;
+  facultyHelpTickets: TicketModel[];
 }
 
 const instructorOptions = [
@@ -54,6 +56,7 @@ const getIcon = (option: String) => {
   else if (option == "Course analytics") return <AssessmentIcon />;
   else if (option == "Join a course") return <QueueIcon />;
   else if (option == "My help ticket") return <ReceiptLongIcon />;
+  else if (option == "My help session") return <BackHandIcon />;
   else if (option == "My courses") return <SchoolIcon />;
   else return <SettingsIcon />;
 };
@@ -65,10 +68,11 @@ const Home = ({
   studentCourses,
   coursesLoadedSuccessfully,
   isLoading,
-  viewMyCourses,
-  setViewMyCourses,
+  currentView,
+  setCurrentView,
   studentHelpTicket,
   studentHelpTicketCourse,
+  facultyHelpTickets,
 }: Props) => {
   var navigate = useNavigate();
 
@@ -76,8 +80,9 @@ const Home = ({
     if (option == "Create course") navigate("/createCourse");
     else if (option == "Start help session") navigate("/startSession");
     else if (option == "Create help ticket") navigate("/helpTickets/create");
-    else if (option == "My help ticket") setViewMyCourses(false);
-    else if (option == "My courses") setViewMyCourses(true);
+    else if (option == "My help ticket") setCurrentView("studentTicket");
+    else if (option == "My help session") setCurrentView("helpSession");
+    else if (option == "My courses") setCurrentView("myCourses");
     else navigate("/deadend");
   }
 
@@ -93,6 +98,11 @@ const Home = ({
     // Users with a student help ticket open can view it
     if (studentHelpTicket) {
       options.push("My help ticket");
+    }
+
+    // Users with faculty help tickets can view them through their active session
+    if (facultyHelpTickets.length >= 0) {
+      options.push("My help session");
     }
 
     if (instructorCourses.length > 0) {
@@ -143,6 +153,31 @@ const Home = ({
     );
   }
 
+  function getCurrentView() {
+    if (currentView == "myCourses") {
+      return (
+        <ViewCourses
+          user={user}
+          instructorCourses={instructorCourses}
+          assistantCourses={assistantCourses}
+          studentCourses={studentCourses}
+          coursesLoadedSuccessfully={coursesLoadedSuccessfully}
+        />
+      );
+    }
+    if (currentView == "studentTicket") {
+      return (
+        <ViewHelpTickets
+          studentHelpTicket={studentHelpTicket}
+          studentHelpTicketCourse={studentHelpTicketCourse}
+        />
+      );
+    }
+    if (currentView == "helpSession") {
+      return <ViewHelpSession />;
+    }
+  }
+
   if (user && isLoading == false) {
     return (
       <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
@@ -176,20 +211,7 @@ const Home = ({
             ))}
           </List>
         </Box>
-        {viewMyCourses ? (
-          <ViewCourses
-            user={user}
-            instructorCourses={instructorCourses}
-            assistantCourses={assistantCourses}
-            studentCourses={studentCourses}
-            coursesLoadedSuccessfully={coursesLoadedSuccessfully}
-          />
-        ) : (
-          <ViewHelpTickets
-            studentHelpTicket={studentHelpTicket}
-            studentHelpTicketCourse={studentHelpTicketCourse}
-          />
-        )}
+        {getCurrentView()}
       </Grid>
     );
   }

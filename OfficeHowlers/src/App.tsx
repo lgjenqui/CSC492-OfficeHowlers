@@ -33,11 +33,14 @@ function App() {
     useState<TicketModel | null>(null);
   const [studentHelpTicketCourse, setStudentHelpTicketCourse] =
     useState<CourseModel | null>(null);
+  const [facultyHelpTickets, setFacultyHelpTickets] = useState<TicketModel[]>(
+    []
+  );
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMyCourses, setViewMyCourses] = useState(true);
+  const [currentView, setCurrentView] = useState<string>("myCourses");
 
   const onReturnHome = () => {
     navigate("/");
@@ -77,12 +80,12 @@ function App() {
         setCoursesLoadedSuccessfully(true);
 
         // Grab the user's help sessions if they are faculty
-        if (user && user.primaryRole != "faculty") {
-          const userSessions = await getMySession();
-          console.log(userSessions);
-        }
+        // if (user && user.primaryRole != "faculty") {
+        //   const userSessions = await getMySession();
+        //   console.log(userSessions);
+        // }
         // Grab the user's help ticket if they are a student
-        else if (user && user.primaryRole != "faculty") {
+        if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
           setStudentHelpTicket(helpTicket);
 
@@ -137,10 +140,11 @@ function App() {
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
                 isLoading={isLoading}
-                viewMyCourses={viewMyCourses}
-                setViewMyCourses={setViewMyCourses}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
                 studentHelpTicketCourse={studentHelpTicketCourse}
+                facultyHelpTickets={facultyHelpTickets}
               />
             }
           />
@@ -158,7 +162,7 @@ function App() {
 
           <Route
             path="/helpTickets/create"
-            element={<CreateHelpTicket setViewMyCourses={setViewMyCourses} />}
+            element={<CreateHelpTicket setCurrentView={setCurrentView} />}
           />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
