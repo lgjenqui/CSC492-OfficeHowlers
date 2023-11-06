@@ -77,12 +77,12 @@ function App() {
         setCoursesLoadedSuccessfully(true);
 
         // Grab the user's help session tickets if they are faculty
-        // TODO: CHANGE THIS TO user.primaryRole == "faculty"
-        if (user && user.primaryRole != "faculty") {
+        if (user && user.primaryRole == "faculty") {
           const sessionTickets = await getSessionTickets();
           console.log(sessionTickets);
           setSessionTickets(sessionTickets);
         }
+
         // Grab the user's help ticket if they are a student
         if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
