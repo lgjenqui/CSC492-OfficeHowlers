@@ -8,10 +8,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createCourse } from "../../services/api/course";
-import { sleep } from "../../services/util/sleep";
+import { createCourse } from "../services/api/course";
+import { sleep } from "../services/util/sleep";
 
-const CreateCourse = () => {
+interface Props {
+  onLoading: (isLoading: boolean) => void;
+}
+
+const CreateCourse = ({ onLoading }: Props) => {
   const [courseName, setCourseName] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -113,9 +117,12 @@ const CreateCourse = () => {
             setStartDate(null);
             setEndDate(null);
 
+            // Set isLoading to true before navigating away
+            onLoading(true);
+
             // Sleep for 2 seconds then redirect the user to their home page
             await sleep(2000);
-            navigate("/instructor");
+            navigate("/");
           }
         })
         .catch((error) => {

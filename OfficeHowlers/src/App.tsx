@@ -4,44 +4,46 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
-import Banner from "./components/banner/Banner";
-import CreateCourse from "./components/createCourse/CreateCourse";
-import StartSession from "./components/startSession/StartSession";
-import Instructor from "./components/instructor/Instructor";
-import Login from "./components/login/Login";
-import NotFound from "./components/notFound/NotFound";
+import Banner from "./components/Banner";
+import CreateCourse from "./components/CreateCourse";
+import StartSession from "./components/StartSession";
+import Home from "./components/Home";
+import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
-import EditRoster from "./components/editRoster/EditRoster";
+import { getCourses } from "./services/api/course";
+import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
+import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
-import CreateHelpTicket from "./components/createHelpTicket/CreateHelpTicket";
-
-const systemRoles = ["Instructor", "TA", "Student"];
+import CreateHelpTicket from "./components/CreateHelpTicket";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
-
-  const onLogin = (role: string) => {
-    navigate("/" + role.toLowerCase());
-  };
-
-  const onCourseClick = (courseUUID: string) => {
-    console.log(courseUUID);
-    navigate("/instructor/course?id=" + courseUUID);
-  };
+  const location = useLocation();
 
   const [user, setUser] = useState<User | null>(null);
+  const [instructorCourses, setInstructorCourses] = useState<CourseModel[]>([]);
+  const [assistantCourses, setAssistantCourses] = useState<CourseModel[]>([]);
+  const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
+  const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
+    boolean | null
+  >(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const onInstructorOptionsClick = (option: string) => {
-    if (option == "Create course") navigate("/instructor/createCourse");
-    else if (option == "Start help session")
-      navigate("/instructor/startSession");
-    else if (option == "Create help ticket") navigate("/instructor/createHelpTicket");
-    else navigate("/instructor/deadend");
+  const onOptionsClick = (option: string) => {
+    if (option == "Create course") navigate("/createCourse");
+    else if (option == "Start help session") navigate("/startSession");
+    else if (option == "Create help ticket") navigate("/createHelpTicket");
+    else navigate("/deadend");
   };
 
   const onReturnHome = () => {
     navigate("/");
+  };
+
+  const handleLoading = (loading: boolean) => {
+    setIsLoading(loading);
   };
 
   function getGreeting() {
@@ -52,15 +54,42 @@ function App() {
   }
 
   useEffect(() => {
-    getUser()
-      .then((res) => {
+    setCoursesLoadedSuccessfully(null);
+    setIsLoading(true);
+
+    // Set up a timeout of 2.5 seconds so the user doesn't sit on a blank page too long!
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      console.log("Aborting fetch due to timeout");
+      controller.abort();
+    }, 5500);
+
+    const fetchData = async () => {
+      try {
+        const res = await getUser();
         console.log(res);
         setUser(res);
-      })
-      .catch((err) => {
+        const courses = await getCourses();
+        setInstructorCourses(courses.instructorCourses);
+        setAssistantCourses(courses.assistantCourses);
+        setStudentCourses(courses.studentCourses);
+        setCoursesLoadedSuccessfully(true);
+      } catch (err) {
         console.error(err);
-      });
-  }, []);
+        setCoursesLoadedSuccessfully(false);
+      } finally {
+        setTimeout(() => setIsLoading(false), 0);
+      }
+    };
+
+    fetchData();
+
+    // Cleanup function to clear the timeout and abort the fetch if the component unmounts
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [location]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -80,28 +109,31 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Login systemRoles={systemRoles} onLogin={onLogin} />}
-          />
-
-          <Route
-            path="/instructor"
             element={
-              <Instructor
-                onCourseClick={onCourseClick}
-                onInstructorOptionsClick={onInstructorOptionsClick}
+              <Home
+                user={user}
+                instructorCourses={instructorCourses}
+                assistantCourses={assistantCourses}
+                studentCourses={studentCourses}
+                coursesLoadedSuccessfully={coursesLoadedSuccessfully}
+                onOptionsClick={onOptionsClick}
+                isLoading={isLoading}
               />
             }
           />
 
-          <Route path="/instructor/course" element={<EditRoster />} />
+          <Route path="/course" element={<EditRoster />} />
 
-          <Route path="/instructor/createCourse" element={<CreateCourse />} />
+          <Route
+            path="/createCourse"
+            element={<CreateCourse onLoading={handleLoading} />}
+          />
 
-          <Route path="/instructor/startSession" element={<StartSession />} />
+          <Route path="/startSession" element={<StartSession />} />
 
-          <Route path="/instructor/editRoster" element={<EditRoster />} />
+          <Route path="/editRoster" element={<EditRoster />} />
 
-          <Route path="/instructor/createHelpTicket" element={<CreateHelpTicket/>}/>
+          <Route path="/createHelpTicket" element={<CreateHelpTicket />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

@@ -4,8 +4,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
-import Course from "../../../../Models/course.model";
-import { startSession } from "../../services/api/session";
+import Course from "../../../Models/course.model";
+import { startSession } from "../services/api/session";
 
 const CreateHelpTicket = () => {
   const [open, setOpen] = React.useState(false);

@@ -19,8 +19,12 @@ export async function createCourse(name: string, desc: string, startDate: Dayjs,
 }
 
 export async function getCourses(): Promise<{instructorCourses: Course[], assistantCourses: Course[], studentCourses: Course[]}> {
-  // Update the existing list of courses in the system
-  return (await fetch(window.location.origin + "/api/course/all")).json();
+  const requestOptions = {
+    method: "GET",
+    // signal: signal
+  };
+  
+  return (await fetch(window.location.origin + "/api/course/all", requestOptions)).json();
 }
 
 export async function getInstructors(courseUUID: string): Promise<{ instructors: User[] }> {

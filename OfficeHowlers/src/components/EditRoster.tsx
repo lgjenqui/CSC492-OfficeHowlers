@@ -18,8 +18,9 @@ import {
   getAssistants,
   getInstructors,
   getStudents,
-} from "../../services/api/course";
-import UserModel from "../../../../Models/user.model";
+} from "../services/api/course";
+import UserModel from "../../../Models/user.model";
+
 
 const EditRoster = () => {
   const location = useLocation();
