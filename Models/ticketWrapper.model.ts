@@ -5,4 +5,8 @@ export default interface TicketWrapperModel extends TicketModel {
         name: string,
         description: string
     };
+    User: {
+        firstName: string,
+        lastName: string
+    }
 }

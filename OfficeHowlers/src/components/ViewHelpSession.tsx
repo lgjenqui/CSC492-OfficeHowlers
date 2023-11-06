@@ -26,8 +26,8 @@ const ViewHelpSession = ({ tickets }: Props) => {
         <Divider
           sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
         />
-        {tickets.map((ticket) => (
-          <FacultyHelpTicket ticket={ticket} />
+        {tickets.map((ticket, index) => (
+          <FacultyHelpTicket ticket={ticket} key={index} />
         ))}
       </Box>
     </Box>

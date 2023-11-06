@@ -53,7 +53,14 @@ export const getSessionTickets = async (req: Request, res: Response): Promise<vo
     // Now, for each course, fetch the tickets
     const ticketsPromises = courses.map(course => {
       return course.getTickets({
-        include: [{ model: Course, attributes: ['name', 'description'] }]
+        include: [{ 
+          model: Course, 
+          attributes: ['name', 'description'] 
+        }, 
+        {
+          model: User,
+          attributes: ['firstName', 'lastName'],
+        },]
       });
     });
 

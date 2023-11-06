@@ -34,11 +34,15 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
 
 export const getMyTicket = async (req: Request, res: Response): Promise<void> => {
   const user = await retrieveUser((req.headers['x-shib_mail']) as string);
-  const ticket = await user.getTicket({
-    include: [{
-      model: Course,
-      attributes: ['name', 'description'],
-    }]
-  });
-  res.status(200).json(ticket);
+  try {
+    const ticket = await user.getTicket({
+      include: [{
+        model: Course,
+        attributes: ['name', 'description'],
+      }]
+    });
+    res.status(200).json(ticket);
+  } catch {
+    res.status(200).json
+  }
 }

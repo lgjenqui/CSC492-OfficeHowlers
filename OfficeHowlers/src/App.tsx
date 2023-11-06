@@ -68,7 +68,6 @@ function App() {
     const fetchData = async () => {
       try {
         const user = await getUser();
-        console.log(user);
         setUser(user);
 
         const courses = await getCourses();
@@ -81,8 +80,8 @@ function App() {
         // TODO: CHANGE THIS TO user.primaryRole == "faculty"
         if (user && user.primaryRole != "faculty") {
           const sessionTickets = await getSessionTickets();
-          setSessionTickets(sessionTickets);
           console.log(sessionTickets);
+          setSessionTickets(sessionTickets);
         }
         // Grab the user's help ticket if they are a student
         if (user && user.primaryRole != "faculty") {
