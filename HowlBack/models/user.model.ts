@@ -11,6 +11,7 @@ import Session from './session.model';
 
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   declare firstName: string;
+  declare lastName: string;
   declare email: string;
   declare primaryRole: string;
   declare instructorCourses?: NonAttribute<Course[]>;
@@ -46,6 +47,10 @@ class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<Use
 User.init(
   {
     firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
