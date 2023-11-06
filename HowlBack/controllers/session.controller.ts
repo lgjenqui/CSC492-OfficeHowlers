@@ -5,6 +5,7 @@ import Session from '../models/session.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
 import { UUID } from 'crypto';
+import Ticket from '../models/ticket.model';
 
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -32,8 +33,39 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const getMySession = async (req: Request, res: Response): Promise<void> => {
-  const user = await retrieveUser((req.headers['x-shib_mail']) as string);
-  // const sessions = await user.getSession();
-  res.status(200).send();
+export const getSessionTickets = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await retrieveUser(req.headers['x-shib_mail'] as string);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const session = await user.getSession();
+    if (!session) {
+      res.status(404).json({ message: 'Session not found' });
+      return;
+    }
+
+    // Fetch all the courses
+    const courses = await session.getCourses();
+
+    // Now, for each course, fetch the tickets
+    const ticketsPromises = courses.map(course => {
+      return course.getTickets({
+        include: [{ model: Course, attributes: ['name', 'description'] }]
+      });
+    });
+
+    // Resolve all promises to get the tickets
+    const ticketsResults = await Promise.all(ticketsPromises);
+
+    // Flatten the array of ticket arrays
+    const tickets = ticketsResults.flat();
+
+    res.status(200).json(tickets);
+  } catch (error) {
+    console.error('Error fetching session tickets:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };

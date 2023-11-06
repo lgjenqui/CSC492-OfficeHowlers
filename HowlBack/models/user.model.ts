@@ -7,6 +7,7 @@ import sequelize from '../sequelize_db'; // Import path from module sequalize is
 import UserModel from "../../Models/user.model";
 import Ticket from "./ticket.model";
 import Course from "./course.model";
+import Session from './session.model';
 
 class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
   declare firstName: string;
@@ -33,6 +34,7 @@ class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<Use
 
   declare getTicket: HasOneGetAssociationMixin<Ticket>;
   declare setTicket: HasOneSetAssociationMixin<Ticket, number>; 
+  declare getSession: HasOneGetAssociationMixin<Session>;
 
   declare static associations: {
     instructorCourses: Association<User, Course>;

@@ -10,7 +10,7 @@ import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
-import { getCourses, getCourseFromUUID } from "./services/api/course";
+import { getCourses } from "./services/api/course";
 import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
@@ -18,8 +18,7 @@ import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
-import TicketModel from "../../Models/ticket.model";
-import { getMySession } from "./services/api/session";
+import { getSessionTickets } from "./services/api/session";
 import TicketWrapperModel from "../../Models/ticketWrapper.model";
 
 function App() {
@@ -32,9 +31,9 @@ function App() {
   const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
   const [studentHelpTicket, setStudentHelpTicket] =
     useState<TicketWrapperModel | null>(null);
-  const [facultyHelpTickets, setFacultyHelpTickets] = useState<
-    TicketWrapperModel[]
-  >([]);
+  const [sessionTickets, setSessionTickets] = useState<TicketWrapperModel[]>(
+    []
+  );
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
@@ -78,11 +77,13 @@ function App() {
         setStudentCourses(courses.studentCourses);
         setCoursesLoadedSuccessfully(true);
 
-        // Grab the user's help sessions if they are faculty
-        // if (user && user.primaryRole != "faculty") {
-        //   const userSessions = await getMySession();
-        //   console.log(userSessions);
-        // }
+        // Grab the user's help session tickets if they are faculty
+        // TODO: CHANGE THIS TO user.primaryRole == "faculty"
+        if (user && user.primaryRole != "faculty") {
+          const sessionTickets = await getSessionTickets();
+          setSessionTickets(sessionTickets);
+          console.log(sessionTickets);
+        }
         // Grab the user's help ticket if they are a student
         if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
@@ -135,7 +136,7 @@ function App() {
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
-                facultyHelpTickets={facultyHelpTickets}
+                facultyHelpTickets={sessionTickets}
               />
             }
           />
