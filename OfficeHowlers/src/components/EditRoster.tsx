@@ -35,7 +35,7 @@ const EditRoster = () => {
   const [teachingAssistants, setTeachingAssistants] = useState("");
   const [instructors, setInstructors] = useState("");
   const [instructorsEnrolled, setInstructorsEnrolled] = useState<UserModel[]>([]);
-  const [teachingAssitantsEnrolled, setTeachingAssistantsEnrolled] = useState<UserModel[]>([]);
+  const [teachingAssistantsEnrolled, setTeachingAssistantsEnrolled] = useState<UserModel[]>([]);
   const [studentsEnrolled, setStudentsEnrolled] = useState<UserModel[]>([]);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
@@ -300,7 +300,7 @@ const EditRoster = () => {
                 Delete
               </Grid>
             </Grid>
-            {studentsEnrolled.map(students => {
+            {studentsEnrolled.map(student => {
               return(
                 <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid
@@ -312,14 +312,14 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {students.firstName}
+                {student.firstName}
               </Grid>
               <Grid item xs={4}>
-                {students.email}
+                {student.email}
               </Grid>
               <Grid item xs={2}>
                 <IconButton
-                onClick={(e)=> deleteStudent(students.email)}>
+                onClick={(e)=> deleteStudent(student.email)}>
                   <DeleteIcon />
                 </IconButton>
               </Grid>
@@ -344,7 +344,7 @@ const EditRoster = () => {
                 Delete
               </Grid>
             </Grid>
-            {teachingAssitantsEnrolled.map(teachingAssistant => {
+            {teachingAssistantsEnrolled.map(teachingAssistant => {
               return(
                 <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid
