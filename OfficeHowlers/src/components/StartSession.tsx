@@ -152,7 +152,6 @@ const StartSession = () => {
     const online = modes.includes("Virtual");
     const inPerson = modes.includes("In-Person");
     startSession(selectedCourses, inPerson, online, startTime, endTime);
-    console.log("submitting!");
   }
 
   // Grab the courses for this instructor

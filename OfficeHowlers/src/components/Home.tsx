@@ -98,6 +98,9 @@ const Home = ({
       options.push("My help ticket");
     }
 
+    // TODO: REMOVE
+    options.push("Start help session");
+
     // Users with faculty help tickets can view them through their active session
     if (facultyHelpTickets.length >= 0) {
       options.push("My help session");

@@ -1,10 +1,10 @@
 import { Box, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import TicketModel from "../../../Models/ticket.model";
 import FacultyHelpTicket from "./FacultyHelpTicket";
+import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 
 interface Props {
-  tickets: TicketModel[];
+  tickets: TicketWrapperModel[];
 }
 
 const ViewHelpSession = ({ tickets }: Props) => {
@@ -26,8 +26,6 @@ const ViewHelpSession = ({ tickets }: Props) => {
         <Divider
           sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
         />
-        <FacultyHelpTicket ticket={null} />
-        <FacultyHelpTicket ticket={null} />
         {tickets.map((ticket) => (
           <FacultyHelpTicket ticket={ticket} />
         ))}

@@ -1,15 +1,15 @@
 import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import TicketModel from "../../../Models/ticket.model";
+import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 
 interface Props {
-  ticket: TicketModel | null;
+  ticket: TicketWrapperModel | null;
 }
 
 const FacultyHelpTicket = ({ ticket }: Props) => {
-  //   if (!ticket) {
-  //     return null;
-  //   }
+  if (!ticket) {
+    return null;
+  }
 
   return (
     <Box
@@ -40,7 +40,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0", textAlign: "center" }}>
-            John Doe
+            {/* {ticket.nam} */}
           </Typography>
           <Box sx={{ textAlign: "center", mt: "5px" }}>
             <Typography
