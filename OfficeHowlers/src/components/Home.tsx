@@ -99,7 +99,7 @@ const Home = ({
     }
 
     // Users with faculty help tickets can view them through their active session
-    if (facultyHelpTickets.length >= 0) {
+    if (facultyHelpTickets.length > 0) {
       options.push("My help session");
     }
 
