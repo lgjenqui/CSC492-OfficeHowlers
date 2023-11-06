@@ -12,7 +12,7 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Typography from "@mui/material/Typography";
-import { TimePicker, heIL } from "@mui/x-date-pickers";
+import { TimePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import Course from "../../../Models/course.model";
@@ -20,8 +20,14 @@ import { getCourses } from "../services/api/course";
 import { startSession } from "../services/api/session";
 import { getTimeDiffStr } from "../services/util/misc";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import { sleep } from "../services/util/sleep";
 
-const StartSession = () => {
+interface Props {
+  setCurrentView: (val: string) => void;
+}
+
+const StartSession = ({ setCurrentView }: Props) => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
@@ -47,6 +53,8 @@ const StartSession = () => {
   const [inPersonLocationError, setInPersonLocationError] =
     useState<boolean>(false);
   const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
+    useState<boolean>(false);
+  const [startSessionSuccessful, setStartSessionSuccessful] =
     useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -151,7 +159,53 @@ const StartSession = () => {
   function onSubmit() {
     const online = modes.includes("Virtual");
     const inPerson = modes.includes("In-Person");
-    startSession(selectedCourses, inPerson, online, startTime, endTime);
+    startSession(selectedCourses, inPerson, online, startTime, endTime)
+      .then(async (res) => {
+        if (res.status == 201) {
+          setStartSessionSuccessful(true);
+
+          // Clear the form input
+          setSelectedCourses([]);
+          setModes([]);
+          setVirtualLocation("");
+          setInPersonLocation("");
+          setStartTime(null);
+          setEndTime(null);
+          setVirtualLocationDisplay("");
+
+          // Sleep for 2 seconds then redirect the user to their home page
+          setCurrentView("helpSession");
+          await sleep(2000);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setStartSessionSuccessful(false);
+        setErrorMessages([
+          "There was an unexpected problem while creating the course. Please try again.",
+        ]);
+      });
+  }
+
+  // Create a message to display if course creation was successful or unsuccessful
+  let requestStatusMsg = null;
+  if (startSessionSuccessful) {
+    requestStatusMsg = (
+      <>
+        <Alert
+          severity="success"
+          sx={{
+            mt: "15px",
+            borderRadius: "20px",
+            width: "fit-content",
+          }}
+        >
+          Success! Your new course has been created. Redirecting you now...
+        </Alert>
+        <CircularProgress color="success" sx={{ mt: "15px" }} />
+      </>
+    );
   }
 
   // Grab the courses for this instructor
@@ -376,6 +430,7 @@ const StartSession = () => {
           m: "auto",
         }}
       >
+        {requestStatusMsg}
         {errorMessages.map(function (msg) {
           return (
             <Alert

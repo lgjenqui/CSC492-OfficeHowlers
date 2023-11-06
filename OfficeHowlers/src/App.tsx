@@ -148,7 +148,10 @@ function App() {
             element={<CreateCourse onLoading={handleLoading} />}
           />
 
-          <Route path="/startSession" element={<StartSession />} />
+          <Route
+            path="/startSession"
+            element={<StartSession setCurrentView={setCurrentView} />}
+          />
 
           <Route path="/editRoster" element={<EditRoster />} />
 

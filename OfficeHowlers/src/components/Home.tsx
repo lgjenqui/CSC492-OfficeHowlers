@@ -39,12 +39,13 @@ interface Props {
 }
 
 const instructorOptions = [
+  "My help session",
   "Create course",
   "Start help session",
   "Course analytics",
 ];
 
-const assistantOptions = ["Start help session"];
+const assistantOptions = ["My help session", "Start help session"];
 
 const studentOptions = ["Join a course", "Create help ticket"];
 
@@ -99,9 +100,9 @@ const Home = ({
     }
 
     // Users with faculty help tickets can view them through their active session
-    if (facultyHelpTickets.length > 0) {
-      options.push("My help session");
-    }
+    // if (facultyHelpTickets.length > 0) {
+    //   options.push("My help session");
+    // }
 
     if (instructorCourses.length > 0) {
       options = options.concat(instructorOptions);
@@ -122,7 +123,7 @@ const Home = ({
         studentCourses.length ==
       0
     ) {
-      if (user.primaryRole === "faculty") {
+      if (user.primaryRole != "faculty") {
         options = options.concat(instructorOptions);
       } else {
         // Until a TA is added to a course as a TA, give them the student options

@@ -49,7 +49,7 @@ const ViewCourses = ({
             sx={{
               fontSize: "35px",
               display: "inline-block",
-              width: "100%",
+              width: "80%",
             }}
           >
             It looks like you have no courses. Use the{" "}
