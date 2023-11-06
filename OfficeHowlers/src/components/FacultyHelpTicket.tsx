@@ -40,13 +40,14 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0", textAlign: "center" }}>
-            {/* {ticket.nam} */}
+            {ticket.User.firstName} {ticket.User.lastName}
           </Typography>
           <Box sx={{ textAlign: "center", mt: "5px" }}>
             <Typography
               sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
             >
-              <b>Course: </b>CSC116
+              <b>Course: </b>
+              {ticket.Course.name}
             </Typography>
             <Typography
               sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
@@ -87,10 +88,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 border: "1px solid white",
               }}
             >
-              - I can't open my IDE!I can't open my IDE!I can't open my IDE!I
-              can't open my IDE!I can't open my IDE!I can't open my IDE!I can't
-              open my IDE!I can't open my IDE!I can't open my IDE!I can't open
-              my IDE!I can't open my IDE!
+              - {ticket.problemDescription}
             </Typography>
             <Typography
               sx={{
@@ -115,7 +113,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 border: "1px solid white",
               }}
             >
-              - Turning my computer off and back on...
+              - {ticket.solutionAttempt}
             </Typography>
           </Box>
           <Box
