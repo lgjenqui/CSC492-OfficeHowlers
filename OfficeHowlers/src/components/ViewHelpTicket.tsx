@@ -1,18 +1,13 @@
 import { Box, Divider } from "@mui/material/";
 import Typography from "@mui/material/Typography";
-import TicketModel from "../../../Models/ticket.model";
-import CourseModel from "../../../Models/course.model";
+import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import StudentHelpTicket from "./StudentHelpTicket";
 
 interface Props {
-  studentHelpTicket: TicketModel | null;
-  studentHelpTicketCourse: CourseModel | null;
+  studentHelpTicket: TicketWrapperModel | null;
 }
 
-const ViewHelpTicket = ({
-  studentHelpTicket,
-  studentHelpTicketCourse,
-}: Props) => {
+const ViewHelpTicket = ({ studentHelpTicket }: Props) => {
   return (
     <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
       <Box>
@@ -31,10 +26,7 @@ const ViewHelpTicket = ({
         <Divider
           sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
         />
-        <StudentHelpTicket
-          ticket={studentHelpTicket}
-          course={studentHelpTicketCourse}
-        />
+        <StudentHelpTicket ticket={studentHelpTicket} />
       </Box>
     </Box>
   );

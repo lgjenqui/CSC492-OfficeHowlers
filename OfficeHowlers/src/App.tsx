@@ -20,6 +20,7 @@ import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import TicketModel from "../../Models/ticket.model";
 import { getMySession } from "./services/api/session";
+import TicketWrapperModel from "../../Models/ticketWrapper.model";
 
 function App() {
   const navigate = useNavigate();
@@ -30,12 +31,10 @@ function App() {
   const [assistantCourses, setAssistantCourses] = useState<CourseModel[]>([]);
   const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
   const [studentHelpTicket, setStudentHelpTicket] =
-    useState<TicketModel | null>(null);
-  const [studentHelpTicketCourse, setStudentHelpTicketCourse] =
-    useState<CourseModel | null>(null);
-  const [facultyHelpTickets, setFacultyHelpTickets] = useState<TicketModel[]>(
-    []
-  );
+    useState<TicketWrapperModel | null>(null);
+  const [facultyHelpTickets, setFacultyHelpTickets] = useState<
+    TicketWrapperModel[]
+  >([]);
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
@@ -87,15 +86,8 @@ function App() {
         // Grab the user's help ticket if they are a student
         if (user && user.primaryRole != "faculty") {
           const helpTicket = await getTicket();
+          console.log(helpTicket);
           setStudentHelpTicket(helpTicket);
-
-          // Grab the name of the course associated with the ticket
-          if (helpTicket) {
-            const helpTicketCourse = await getCourseFromUUID(
-              helpTicket.CourseId
-            );
-            setStudentHelpTicketCourse(helpTicketCourse);
-          }
         }
       } catch (err) {
         console.error(err);
@@ -143,7 +135,6 @@ function App() {
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
-                studentHelpTicketCourse={studentHelpTicketCourse}
                 facultyHelpTickets={facultyHelpTickets}
               />
             }

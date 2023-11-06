@@ -22,8 +22,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import ViewHelpTickets from "./ViewHelpTicket";
 import ViewCourses from "./ViewCourses";
-import TicketModel from "../../../Models/ticket.model";
 import ViewHelpSession from "./ViewHelpSession";
+import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 
 interface Props {
   user: UserModel | null;
@@ -34,9 +34,8 @@ interface Props {
   isLoading: boolean;
   currentView: string;
   setCurrentView: (val: string) => void;
-  studentHelpTicket: TicketModel | null;
-  studentHelpTicketCourse: CourseModel | null;
-  facultyHelpTickets: TicketModel[];
+  studentHelpTicket: TicketWrapperModel | null;
+  facultyHelpTickets: TicketWrapperModel[];
 }
 
 const instructorOptions = [
@@ -71,7 +70,6 @@ const Home = ({
   currentView,
   setCurrentView,
   studentHelpTicket,
-  studentHelpTicketCourse,
   facultyHelpTickets,
 }: Props) => {
   var navigate = useNavigate();
@@ -166,12 +164,7 @@ const Home = ({
       );
     }
     if (currentView == "studentTicket") {
-      return (
-        <ViewHelpTickets
-          studentHelpTicket={studentHelpTicket}
-          studentHelpTicketCourse={studentHelpTicketCourse}
-        />
-      );
+      return <ViewHelpTickets studentHelpTicket={studentHelpTicket} />;
     }
     if (currentView == "helpSession") {
       return <ViewHelpSession tickets={facultyHelpTickets} />;
