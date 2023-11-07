@@ -17,10 +17,11 @@ app.use(express.json());
 app.use(async (req, res, next) => {
   const email = req.headers['x-shib_mail'] as string;
   const firstName = req.headers['x-shib_givenname'] as string;
+  const lastName = req.headers['x-shib_sn'] as string;
   const role = (req.headers['x-shib_primary'] as string).toLowerCase();
   console.log("User creating request: " + email);
   if (email) {
-    await findOrCreateUser(email, firstName, role);
+    await findOrCreateUser(email, firstName, lastName, role);
   } else {
     res.status(401).json({ success: false, error: "Unauthenticated user." });
     return;

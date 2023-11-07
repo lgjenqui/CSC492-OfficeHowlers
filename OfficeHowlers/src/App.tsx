@@ -17,6 +17,9 @@ import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
 import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
+import { getTicket } from "./services/api/ticket";
+import { getSessionTickets } from "./services/api/session";
+import TicketWrapperModel from "../../Models/ticketWrapper.model";
 
 function App() {
   const navigate = useNavigate();
@@ -26,17 +29,16 @@ function App() {
   const [instructorCourses, setInstructorCourses] = useState<CourseModel[]>([]);
   const [assistantCourses, setAssistantCourses] = useState<CourseModel[]>([]);
   const [studentCourses, setStudentCourses] = useState<CourseModel[]>([]);
+  const [studentHelpTicket, setStudentHelpTicket] =
+    useState<TicketWrapperModel | null>(null);
+  const [sessionTickets, setSessionTickets] = useState<TicketWrapperModel[]>(
+    []
+  );
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const onOptionsClick = (option: string) => {
-    if (option == "Create course") navigate("/createCourse");
-    else if (option == "Start help session") navigate("/startSession");
-    else if (option == "Create help ticket") navigate("/createHelpTicket");
-    else navigate("/deadend");
-  };
+  const [currentView, setCurrentView] = useState<string>("myCourses");
 
   const onReturnHome = () => {
     navigate("/");
@@ -60,20 +62,34 @@ function App() {
     // Set up a timeout of 2.5 seconds so the user doesn't sit on a blank page too long!
     const controller = new AbortController();
     const timeoutId = setTimeout(() => {
-      console.log("Aborting fetch due to timeout");
       controller.abort();
     }, 5500);
 
     const fetchData = async () => {
       try {
-        const res = await getUser();
-        console.log(res);
-        setUser(res);
+        const user = await getUser();
+        console.log(user);
+        setUser(user);
+
         const courses = await getCourses();
         setInstructorCourses(courses.instructorCourses);
         setAssistantCourses(courses.assistantCourses);
         setStudentCourses(courses.studentCourses);
         setCoursesLoadedSuccessfully(true);
+
+        // Grab the user's help session tickets if they are faculty
+        if (user && user.primaryRole === "faculty") {
+          const sessionTickets = await getSessionTickets();
+          console.log(sessionTickets);
+          setSessionTickets(sessionTickets);
+        }
+
+        // Grab the user's help ticket if they are a student
+        if (user && user.primaryRole != "faculty") {
+          const helpTicket = await getTicket();
+          console.log(helpTicket);
+          setStudentHelpTicket(helpTicket);
+        }
       } catch (err) {
         console.error(err);
         setCoursesLoadedSuccessfully(false);
@@ -116,8 +132,11 @@ function App() {
                 assistantCourses={assistantCourses}
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
-                onOptionsClick={onOptionsClick}
                 isLoading={isLoading}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
+                studentHelpTicket={studentHelpTicket}
+                facultyHelpTickets={sessionTickets}
               />
             }
           />
@@ -129,11 +148,17 @@ function App() {
             element={<CreateCourse onLoading={handleLoading} />}
           />
 
-          <Route path="/startSession" element={<StartSession />} />
+          <Route
+            path="/startSession"
+            element={<StartSession setCurrentView={setCurrentView} />}
+          />
 
           <Route path="/editRoster" element={<EditRoster />} />
 
-          <Route path="/createHelpTicket" element={<CreateHelpTicket />} />
+          <Route
+            path="/helpTickets/create"
+            element={<CreateHelpTicket setCurrentView={setCurrentView} />}
+          />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

@@ -4,6 +4,9 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StartIcon from "@mui/icons-material/Start";
 import QueueIcon from "@mui/icons-material/Queue";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import BackHandIcon from "@mui/icons-material/BackHand";
+import SchoolIcon from "@mui/icons-material/School";
 import {
   Box,
   Grid,
@@ -13,13 +16,14 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import Typography from "@mui/material/Typography";
 import CourseModel from "../../../Models/course.model";
-import CourseCards from "./CourseCards";
 import UserModel from "../../../Models/user.model";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
+import ViewHelpTickets from "./ViewHelpTicket";
+import ViewCourses from "./ViewCourses";
+import ViewHelpSession from "./ViewHelpSession";
+import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 
 interface Props {
   user: UserModel | null;
@@ -27,17 +31,21 @@ interface Props {
   assistantCourses: CourseModel[];
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
-  onOptionsClick: (options: string) => void;
   isLoading: boolean;
+  currentView: string;
+  setCurrentView: (val: string) => void;
+  studentHelpTicket: TicketWrapperModel | null;
+  facultyHelpTickets: TicketWrapperModel[];
 }
 
 const instructorOptions = [
+  "My help session",
   "Create course",
   "Start help session",
   "Course analytics",
 ];
 
-const assistantOptions = ["Start help session"];
+const assistantOptions = ["My help session", "Start help session"];
 
 const studentOptions = ["Join a course", "Create help ticket"];
 
@@ -47,6 +55,9 @@ const getIcon = (option: String) => {
   else if (option == "Start help session") return <StartIcon />;
   else if (option == "Course analytics") return <AssessmentIcon />;
   else if (option == "Join a course") return <QueueIcon />;
+  else if (option == "My help ticket") return <ReceiptLongIcon />;
+  else if (option == "My help session") return <BackHandIcon />;
+  else if (option == "My courses") return <SchoolIcon />;
   else return <SettingsIcon />;
 };
 
@@ -56,14 +67,42 @@ const Home = ({
   assistantCourses,
   studentCourses,
   coursesLoadedSuccessfully,
-  onOptionsClick,
   isLoading,
+  currentView,
+  setCurrentView,
+  studentHelpTicket,
+  facultyHelpTickets,
 }: Props) => {
+  var navigate = useNavigate();
+
+  function onOptionsClick(option: string) {
+    if (option == "Create course") navigate("/createCourse");
+    else if (option == "Start help session") navigate("/startSession");
+    else if (option == "Create help ticket") navigate("/helpTickets/create");
+    else if (option == "My help ticket") setCurrentView("studentTicket");
+    else if (option == "My help session") setCurrentView("helpSession");
+    else if (option == "My courses") setCurrentView("myCourses");
+    else navigate("/deadend");
+  }
+
   function getMenuOptions(user: UserModel | null): string[] {
     let options: string[] = [];
     if (!user) {
       return [];
     }
+
+    // Every user can view their courses
+    options.push("My courses");
+
+    // Users with a student help ticket open can view it
+    if (studentHelpTicket) {
+      options.push("My help ticket");
+    }
+
+    // Users with faculty help tickets can view them through their active session
+    // if (facultyHelpTickets.length > 0) {
+    //   options.push("My help session");
+    // }
 
     if (instructorCourses.length > 0) {
       options = options.concat(instructorOptions);
@@ -84,7 +123,7 @@ const Home = ({
         studentCourses.length ==
       0
     ) {
-      if (user.primaryRole === "faculty") {
+      if (user.primaryRole != "faculty") {
         options = options.concat(instructorOptions);
       } else {
         // Until a TA is added to a course as a TA, give them the student options
@@ -92,7 +131,7 @@ const Home = ({
       }
     }
 
-    // Every user can change their settings!
+    // Every user can change their settings
     options.push("Settings");
 
     return options;
@@ -113,33 +152,25 @@ const Home = ({
     );
   }
 
-  // If coursesLoadedSuccessfully is set to false, that means the requests have gone through and there was an error!
-  // if (coursesLoadedSuccessfully == false) {
-  //   return (
-  //     <Box sx={{ m: "auto" }}>
-  //       <Typography
-  //         sx={{
-  //           fontSize: 45,
-  //           fontWeight: "bold",
-  //           mt: "50px",
-  //           textAlign: "center",
-  //         }}
-  //       >
-  //         Uh-oh...
-  //       </Typography>
-  //       <Typography
-  //         sx={{
-  //           fontSize: 30,
-  //           mt: "20px",
-  //           textAlign: "center",
-  //         }}
-  //       >
-  //         There was a problem fetching your information. Please refresh the page
-  //         to try again.
-  //       </Typography>
-  //     </Box>
-  //   );
-  // }
+  function getCurrentView() {
+    if (currentView == "myCourses") {
+      return (
+        <ViewCourses
+          user={user}
+          instructorCourses={instructorCourses}
+          assistantCourses={assistantCourses}
+          studentCourses={studentCourses}
+          coursesLoadedSuccessfully={coursesLoadedSuccessfully}
+        />
+      );
+    }
+    if (currentView == "studentTicket") {
+      return <ViewHelpTickets studentHelpTicket={studentHelpTicket} />;
+    }
+    if (currentView == "helpSession") {
+      return <ViewHelpSession tickets={facultyHelpTickets} />;
+    }
+  }
 
   if (user && isLoading == false) {
     return (
@@ -174,106 +205,7 @@ const Home = ({
             ))}
           </List>
         </Box>
-        <Box
-          sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}
-        >
-          {coursesLoadedSuccessfully &&
-          instructorCourses.length +
-            assistantCourses.length +
-            studentCourses.length ===
-            0 ? (
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  fontWeight: "bold",
-                  mt: "20px",
-                  ml: 0,
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                My courses
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                It looks like you have no courses. Use the{" "}
-                <b>
-                  {user.primaryRole == "student"
-                    ? "'Join a course' "
-                    : "'Create course' "}
-                </b>
-                option to the left to{" "}
-                {user.primaryRole == "student" ? "join" : "create"} one.
-              </Typography>
-            </Box>
-          ) : null}
-          {coursesLoadedSuccessfully == false ? (
-            <Alert
-              sx={{
-                fontSize: "35px",
-                width: "60%",
-                borderRadius: "15px",
-                "& .MuiAlert-icon": {
-                  fontSize: 40,
-                },
-              }}
-              severity="error"
-            >
-              <AlertTitle sx={{ fontWeight: "bold", fontSize: "35px" }}>
-                Error
-              </AlertTitle>
-              There was an unexpected problem while fetching your information.
-              <br />
-              <br /> Please <strong>reload the page</strong> to try again.
-            </Alert>
-          ) : null}
-
-          {instructorCourses.length +
-            assistantCourses.length +
-            studentCourses.length >
-          0 ? (
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "35px",
-                  fontWeight: "bold",
-                  mt: "20px",
-                  ml: 0,
-                  display: "inline-block",
-                  width: "100%",
-                }}
-              >
-                My courses
-              </Typography>
-              {instructorCourses.length > 0 ? (
-                <CourseCards
-                  courses={instructorCourses}
-                  role="Instructor"
-                ></CourseCards>
-              ) : null}
-
-              {assistantCourses.length > 0 ? (
-                <CourseCards
-                  courses={assistantCourses}
-                  role="Assistant"
-                ></CourseCards>
-              ) : null}
-
-              {studentCourses.length > 0 ? (
-                <CourseCards
-                  courses={studentCourses}
-                  role="Student"
-                ></CourseCards>
-              ) : null}
-            </Box>
-          ) : null}
-        </Box>
+        {getCurrentView()}
       </Grid>
     );
   }
