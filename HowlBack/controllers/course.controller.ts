@@ -59,7 +59,7 @@ export const addInstructorsByEmail = async (req: Request, res: Response): Promis
     const instructorEmail = (req.headers['x-shib_mail']) as string;
     if (await isValidInstructorForCourse(instructorEmail, course)) {
       const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "","", "instructor");
+        return findOrCreateUser(email, "Unset firstname", "Unset lastname", "instructor");
       }));
       await course.addInstructors(instructors);
       res.status(200).json({success:true});
@@ -92,7 +92,7 @@ export const addAssistantsByEmail = async (req: Request, res: Response): Promise
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "","", "assistant");
+        return findOrCreateUser(email, "Unset firstname", "Unset lastname", "assistant");
       }));
       await course.addAssistants(assistants);
       res.status(200).json({ success: true });
@@ -123,7 +123,7 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "","", "student");
+        return findOrCreateUser(email, "Unset firstname", "Unset lastname", "student");
       }));
       await course.addStudents(students);
       res.status(200).json({ success: true });

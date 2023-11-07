@@ -1,5 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, 
-    HasOneSetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
+    HasOneSetAssociationMixin, HasOneGetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
     HasManyAddAssociationMixin, NonAttribute } from 'sequelize';
     import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
     import TicketModel from "../../Models/ticket.model";
@@ -8,10 +8,11 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     
     class Ticket extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
       declare id: number;
-      declare name: string;
-      declare description: string;
+      declare problemDescription: string;
+      declare solutionAttempt: string;
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
+      declare getUser: HasOneGetAssociationMixin<User>;
     
       declare static associations: {
         user: Association<Ticket, User>;
@@ -25,10 +26,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
           autoIncrement: true,
           primaryKey: true,
         },
-        name: {
+        problemDescription: {
           type: DataTypes.STRING
         },
-        description: {
+        solutionAttempt: {
           type: DataTypes.STRING
         },
       },
@@ -41,7 +42,6 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     Ticket.hasOne(Course);
     Course.hasMany(Ticket);
 
-    
     Ticket.hasOne(User);
     User.hasOne(Ticket);
     

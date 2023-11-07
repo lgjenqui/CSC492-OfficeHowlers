@@ -97,3 +97,15 @@ export async function addStudents(emails: string[], courseUUID: string): Promise
   // Add the new students
   return (await fetch(window.location.origin + "/api/course/manage/roster/add?id=" + courseUUID, requestOptions));
 }
+
+export async function getCourseQueue(courseUUID: string): Promise<any> {
+  return (await fetch(window.location.origin + "/api/course/queue?id=" + courseUUID)).json();
+}
+
+export async function getCourseFromUUID(courseUUID: string): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+  return (await fetch(window.location.origin + "/api/course/?id=" + courseUUID, requestOptions)).json();
+}
