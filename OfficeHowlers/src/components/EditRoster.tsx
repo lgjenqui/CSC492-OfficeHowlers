@@ -26,7 +26,6 @@ const EditRoster = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const courseUUID = urlParams.get("id") || "invalid";
-  const [error, setError] = useState<boolean>(false);
   const [studentError, setStudentError] = useState<boolean>(false);
   const [teachingAssistantError, setTeachingAssistantError] =
     useState<boolean>(false);
@@ -37,41 +36,33 @@ const EditRoster = () => {
   const [instructorsEnrolled, setInstructorsEnrolled] = useState<UserModel[]>([]);
   const [teachingAssistantsEnrolled, setTeachingAssistantsEnrolled] = useState<UserModel[]>([]);
   const [studentsEnrolled, setStudentsEnrolled] = useState<UserModel[]>([]);
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [teachingAssistantErrorMessages, setTeachingAssistantErrorMessages] = useState<string[]>([]);
+  const [instructorErrorMessages, setInstructorErrorMessages] = useState<string[]>([]);
+  const [studentErrorMessages, setStudentErrorMessages] = useState<string[]>([]);
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {}
 
   // Checks if the provided input is valid
-  function inputIsValid(): boolean {
+  function inputIsValidInstructor(): boolean {
     // Reset the error values
     resetErrorValues();
 
     let newErrorMessages: string[] = [];
     // Update the value of the error messages array and return a boolean indicating whether the input was valid
-    if (!students && !instructors && !teachingAssistants) {
-      newErrorMessages.push("Please provide a value for at least one box");
-      setError(true);
+    if (!instructors) {
+      newErrorMessages.push("Please provide at least one email");
+      setInstructorError(true);
     }
 
     var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$");
-    var testStudents = regex.exec(students);
-    var testTeachingAssitants = regex.exec(teachingAssistants);
     var testInstructors = regex.exec(instructors);
-    if (students.length > 0 && testStudents == null) {
-      newErrorMessages.push("Incorrect format in student input");
-      setStudentError(true);
-    }
-    if (teachingAssistants.length > 0 && testTeachingAssitants == null) {
-      newErrorMessages.push("Incorrect format in TA input");
-      setTeachingAssistantError(true);
-    }
     if (instructors.length > 0 && testInstructors == null) {
       newErrorMessages.push("Incorrect format in instructor input");
       setInstructorError(true);
     }
 
-    setErrorMessages(newErrorMessages);
+    setInstructorErrorMessages(newErrorMessages);
 
     if (newErrorMessages.length > 0) {
       return false;
@@ -79,20 +70,86 @@ const EditRoster = () => {
     return true;
   }
 
-  // Starts a session
-  function onSubmit() {
-    if (inputIsValid()) {
-      addInstructors(instructors.split("\n"), courseUUID).then(() => {
-        addAssistants(teachingAssistants.split("\n"), courseUUID).then(() => {
-          addStudents(students.split("\n"), courseUUID).then(() => {
-            fetchAllCourseEmails();
-          });
-        });
-      });
 
+  function inputIsValidTeachingAssistant(): boolean {
+    // Reset the error values
+    resetErrorValues();
+
+    let newErrorMessages: string[] = [];
+    // Update the value of the error messages array and return a boolean indicating whether the input was valid
+    if (!teachingAssistants) {
+      newErrorMessages.push("Please provide at least one email");
+      setTeachingAssistantError(true);
+    }
+
+    var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$");
+    var testTeachingAssitants = regex.exec(teachingAssistants);
+    if (teachingAssistants.length > 0 && testTeachingAssitants == null) {
+      newErrorMessages.push("Incorrect format in TA input");
+      setTeachingAssistantError(true);
+    }
+
+
+    setTeachingAssistantErrorMessages(newErrorMessages);
+
+    if (newErrorMessages.length > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  function inputIsValidStudent(): boolean {
+    // Reset the error values
+    resetErrorValues();
+
+    let newErrorMessages: string[] = [];
+    // Update the value of the error messages array and return a boolean indicating whether the input was valid
+    if (!students) {
+      newErrorMessages.push("Please provide a value for at least one box");
+      setStudentError(true);
+    }
+
+    var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu\n?)+$");
+    var testStudents = regex.exec(students);
+    if (students.length > 0 && testStudents == null) {
+      newErrorMessages.push("Incorrect format in student input");
+      setStudentError(true);
+    }
+
+    setStudentErrorMessages(newErrorMessages);
+
+    if (newErrorMessages.length > 0) {
+      return false;
+    }
+    return true;
+  }
+  // Starts a session
+  function onSubmitInstructors() {
+    if (inputIsValidInstructor()) {
+      addInstructors(instructors.split("\n"), courseUUID).then(() => {
+        fetchAllCourseEmails();
+    });
       console.log("submitted");
       setInstructors("");
+    }
+  }
+
+  function onSubmitTeachingAssistants() {
+    if (inputIsValidTeachingAssistant()) {
+      addAssistants(teachingAssistants.split("\n"), courseUUID).then(() => {
+        fetchAllCourseEmails();
+    });
+      console.log("submitted");
       setTeachingAssistants("");
+    }
+  }
+
+  function onSubmitStudents() {
+    if (inputIsValidStudent()) {
+      addStudents(students.split("\n"), courseUUID).then(() => {
+        fetchAllCourseEmails();
+    });
+      console.log("submitted");
       setStudents("");
     }
   }
@@ -180,35 +237,12 @@ const EditRoster = () => {
             <Typography sx={{ fontSize: 14, mb: "15px" }}>
               One on each line in this format: <i>johndoe@org.edu</i>
             </Typography>
-            <TextField
-              id="outlined-multiline-static"
-              label="Student Emails"
-              multiline
-              rows={4}
-              sx={{ mr: "10px" }}
-              value={students}
-              onChange={(e) => {
-                setStudents(e.target.value);
-                setStudentError(false);
-                setError(false);
-              }}
-              error={error || studentError}
-            />
-            <TextField
-              id="outlined-multiline-static"
-              label="TA Emails"
-              multiline
-              rows={4}
-              sx={{ mr: "10px" }}
-              value={teachingAssistants}
-              onChange={(e) => {
-                setTeachingAssistants(e.target.value);
-                setTeachingAssistantError(false);
-                setError(false);
-              }}
-              error={error || teachingAssistantError}
-            />
-            <TextField
+            
+            
+          </Grid>
+          
+        </Grid>
+        <TextField
               id="outlined-multiline-static"
               label="Instructor Emails"
               multiline
@@ -217,163 +251,10 @@ const EditRoster = () => {
               onChange={(e) => {
                 setInstructors(e.target.value);
                 setInstructorError(false);
-                setError(false);
               }}
-              error={error || instructorError}
+              error={instructorError}
             />
-            <br></br>
-            {/* <DataGrid
-         sx={{width:"32%"}}
-          rows={rows}
-          columns={columns}
-          /> */}
-          </Grid>
-          <Grid item></Grid>
-        </Grid>
-
-        <Box
-          sx={{
-            width: "50%",
-            alignContent: "center",
-            m: "auto",
-            mt: "25px",
-            textAlign: "center",
-          }}
-        >
-          <Button
-            sx={{
-              fontSize: 20,
-              backgroundColor: "#CC0000",
-              ":hover": {
-                backgroundColor: "#9e0000",
-              },
-            }}
-            variant="contained"
-            onClick={() => onSubmit()}
-          >
-            Edit Roster
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            textAlign: "center",
-            m: "auto",
-          }}
-        >
-          {errorMessages.map(function (msg) {
-            return (
-              <Alert
-                key={msg}
-                severity="error"
-                sx={{
-                  mt: "15px",
-                  borderRadius: "20px",
-                  width: "fit-content",
-                }}
-              >
-                {msg}
-              </Alert>
-            );
-          })}
-        </Box>
-      </Box>
-      <Grid
-        container
-        direction="row"
-        spacing={3}
-        alignItems="center"
-        width={"100%"}
-      >
-        <Grid item xs={4}>
-          <h3>Enrolled Students</h3>
-          <Box
-            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
-          >
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}>
-                Name
-              </Grid>
-              <Grid item xs={4}>
-                Email
-              </Grid>
-              <Grid item xs={3}>
-                Delete
-              </Grid>
-            </Grid>
-            {studentsEnrolled.map(student => {
-              return(
-                <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid
-                item
-                xs={5}
-                sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {student.firstName}
-              </Grid>
-              <Grid item xs={4}>
-                {student.email}
-              </Grid>
-              <Grid item xs={2}>
-                <IconButton
-                onClick={(e)=> deleteStudent(student.email)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-              );
-            })}
-          </Box>
-        </Grid>
-        <Grid item xs={4}>
-          <h3>Enrolled Teaching Assistants</h3>
-          <Box
-            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
-          >
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}>
-                Name
-              </Grid>
-              <Grid item xs={4}>
-                Email
-              </Grid>
-              <Grid item xs={3}>
-                Delete
-              </Grid>
-            </Grid>
-            {teachingAssistantsEnrolled.map(teachingAssistant => {
-              return(
-                <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid
-                item
-                xs={5}
-                sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {teachingAssistant.firstName}
-              </Grid>
-              <Grid item xs={4}>
-                {teachingAssistant.email}
-              </Grid>
-              <Grid item xs={2}>
-                <IconButton
-                onClick={(e)=> deleteTeachingAssistant(teachingAssistant.email)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-              );
-            })}
-          </Box>
-        </Grid>
-        <Grid item xs={4}>
-          <h3>Enrolled Professors</h3>
+        <h3>Enrolled Instructors</h3>
           <Box
             sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
           >
@@ -417,8 +298,263 @@ const EditRoster = () => {
             
             
           </Box>
-        </Grid>
-      </Grid>
+
+        <Box
+          sx={{
+            width: "50%",
+            alignContent: "center",
+            m: "auto",
+            mt: "25px",
+            textAlign: "center",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: 20,
+              backgroundColor: "#CC0000",
+              ":hover": {
+                backgroundColor: "#9e0000",
+              },
+            }}
+            variant="contained"
+            onClick={() => onSubmitInstructors()}
+          >
+            Edit Instructor Roster
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            textAlign: "center",
+            m: "auto",
+          }}
+        >
+          {instructorErrorMessages.map(function (msg) {
+            return (
+              <Alert
+                key={msg}
+                severity="error"
+                sx={{
+                  mt: "15px",
+                  borderRadius: "20px",
+                  width: "fit-content",
+                }}
+              >
+                {msg}
+              </Alert>
+            );
+          })}
+        </Box>
+        
+          <br></br>
+          <Divider
+          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        />
+         <TextField
+              id="outlined-multiline-static"
+              label="TA Emails"
+              multiline
+              rows={4}
+              sx={{ mr: "10px" }}
+              value={teachingAssistants}
+              onChange={(e) => {
+                setTeachingAssistants(e.target.value);
+                setTeachingAssistantError(false);
+             }}
+              error={teachingAssistantError}
+            />
+            <h3>Enrolled Teaching Assistants</h3>
+          <Box
+            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
+          >
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={5}>
+                Name
+              </Grid>
+              <Grid item xs={4}>
+                Email
+              </Grid>
+              <Grid item xs={3}>
+                Delete
+              </Grid>
+            </Grid>
+            {teachingAssistantsEnrolled.map(teachingAssistant => {
+              return(
+                <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid
+                item
+                xs={5}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {teachingAssistant.firstName}
+              </Grid>
+              <Grid item xs={4}>
+                {teachingAssistant.email}
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                onClick={(e)=> deleteTeachingAssistant(teachingAssistant.email)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+              );
+            })}
+          </Box>
+          <Box
+          sx={{
+            width: "50%",
+            alignContent: "center",
+            m: "auto",
+            mt: "25px",
+            textAlign: "center",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: 20,
+              backgroundColor: "#CC0000",
+              ":hover": {
+                backgroundColor: "#9e0000",
+              },
+            }}
+            variant="contained"
+            onClick={() => onSubmitTeachingAssistants()}
+          >
+            Edit TA Roster
+          </Button>
+        </Box>
+        <br></br>
+        <Box
+          sx={{
+            textAlign: "center",
+            m: "auto",
+          }}
+        >
+          {teachingAssistantErrorMessages.map(function (msg) {
+            return (
+              <Alert
+                key={msg}
+                severity="error"
+                sx={{
+                  mt: "15px",
+                  borderRadius: "20px",
+                  width: "fit-content",
+                }}
+              >
+                {msg}
+              </Alert>
+            );
+          })}
+        </Box>
+        <Divider
+          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        />
+          <TextField
+              id="outlined-multiline-static"
+              label="Student Emails"
+              multiline
+              rows={4}
+              sx={{ mr: "10px" }}
+              value={students}
+              onChange={(e) => {
+                setStudents(e.target.value);
+                setStudentError(false);
+              }}
+              error={studentError}
+            />
+            <h3>Enrolled Students</h3>
+          <Box
+            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
+          >
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={5}>
+                Name
+              </Grid>
+              <Grid item xs={4}>
+                Email
+              </Grid>
+              <Grid item xs={3}>
+                Delete
+              </Grid>
+            </Grid>
+            {studentsEnrolled.map(student => {
+              return(
+                <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid
+                item
+                xs={5}
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {student.firstName}
+              </Grid>
+              <Grid item xs={4}>
+                {student.email}
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton
+                onClick={(e)=> deleteStudent(student.email)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+              );
+            })}
+          </Box>
+          <Box
+          sx={{
+            width: "50%",
+            alignContent: "center",
+            m: "auto",
+            mt: "25px",
+            textAlign: "center",
+          }}
+        >
+          <Button
+            sx={{
+              fontSize: 20,
+              backgroundColor: "#CC0000",
+              ":hover": {
+                backgroundColor: "#9e0000",
+              },
+            }}
+            variant="contained"
+            onClick={() => onSubmitStudents()}
+          >
+            Edit Student Roster
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            textAlign: "center",
+            m: "auto",
+          }}
+        >
+          {studentErrorMessages.map(function (msg) {
+            return (
+              <Alert
+                key={msg}
+                severity="error"
+                sx={{
+                  mt: "15px",
+                  borderRadius: "20px",
+                  width: "fit-content",
+                }}
+              >
+                {msg}
+              </Alert>
+            );
+          })}
+        </Box>
+            
+      </Box>
     </Box>
   );
 };
