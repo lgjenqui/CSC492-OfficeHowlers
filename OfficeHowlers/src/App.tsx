@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/Banner";
-import CreateCourse from "./components/CreateCourse";
 import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
@@ -20,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import { getSessionTickets } from "./services/api/session";
 import TicketWrapperModel from "../../Models/ticketWrapper.model";
+import JoinCourse from "./components/JoinCourse";
 
 function App() {
   const navigate = useNavigate();
@@ -142,11 +142,6 @@ function App() {
           />
 
           <Route path="/course" element={<EditRoster />} />
-
-          <Route
-            path="/createCourse"
-            element={<CreateCourse onLoading={handleLoading} />}
-          />
 
           <Route
             path="/startSession"

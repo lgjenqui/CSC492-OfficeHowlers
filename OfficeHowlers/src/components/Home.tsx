@@ -24,6 +24,7 @@ import ViewHelpTickets from "./ViewHelpTicket";
 import ViewCourses from "./ViewCourses";
 import ViewHelpSession from "./ViewHelpSession";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import JoinCourse from "./JoinCourse";
 
 interface Props {
   user: UserModel | null;
@@ -82,6 +83,7 @@ const Home = ({
     else if (option == "My help ticket") setCurrentView("studentTicket");
     else if (option == "My help session") setCurrentView("helpSession");
     else if (option == "My courses") setCurrentView("myCourses");
+    else if (option == "Join a course") setCurrentView("joinCourse");
     else navigate("/deadend");
   }
 
@@ -169,6 +171,11 @@ const Home = ({
     }
     if (currentView == "helpSession") {
       return <ViewHelpSession tickets={facultyHelpTickets} />;
+    }
+    if (currentView == "joinCourse") {
+      return (
+        <JoinCourse isLoading={isLoading} setCurrentView={setCurrentView} />
+      );
     }
   }
 
