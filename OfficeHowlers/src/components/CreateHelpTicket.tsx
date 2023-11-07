@@ -1,13 +1,21 @@
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Course from "../../../Models/course.model";
-import { startSession } from "../services/api/session";
+import { getCourses } from "../services/api/course";
+import { createTicket } from "../services/api/ticket";
+import { sleep } from "../services/util/sleep";
 
-const CreateHelpTicket = () => {
+interface Props {
+  setCurrentView: (val: string) => void;
+}
+
+const CreateHelpTicket = ({ setCurrentView }: Props) => {
   const [open, setOpen] = React.useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
@@ -33,6 +41,9 @@ const CreateHelpTicket = () => {
     useState<boolean>(false);
   const [virtualLocationDisplayError, setVirtualLocationDisplayError] =
     useState<boolean>(false);
+  const [ticketCreationSuccessful, setTicketCreationSuccessful] = useState<
+    boolean | null
+  >(null);
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {
@@ -50,16 +61,21 @@ const CreateHelpTicket = () => {
 
     let newErrorMessages: string[] = [];
     // Check if at least one course was selected
-    if (selectedCourses.length <= 0) {
-      newErrorMessages.push("Please select a course for this help ticket");
-      setCourseError(true);
-    }
+    // if (selectedCourses.length <= 0) {
+    //   newErrorMessages.push("Please select a course for this help ticket");
+    //   setCourseError(true);
+    // }
     var regex = new RegExp("^([\\w-\\.]+@([\\w-]+\\.)+edu,? ?)+$");
     var testStudents = regex.exec(group);
     // Check if at least one mode of delivery was selected
     if (group.length > 0 && testStudents == null) {
       newErrorMessages.push("Incorrect format for group request");
       setGroupError(true);
+    }
+
+    if (selectedCourses.length == 0) {
+      newErrorMessages.push("Please select a course");
+      setSelectedCoursesError(true);
     }
 
     if (tried.length <= 0) {
@@ -87,24 +103,77 @@ const CreateHelpTicket = () => {
     return true;
   }
 
-  // Starts a session
+  const navigate = useNavigate();
+
+  // Starts a ticket
   function onSubmit() {
     if (inputIsValid()) {
-      console.log("submitting!");
+      createTicket(
+        selectedCourses.id,
+        description,
+        tried,
+        group.split(/\s*,\s*/)
+      )
+        .then(async (res) => {
+          if (res.status == 201) {
+            setTicketCreationSuccessful(true);
+
+            // Clear the form input
+            setSelectedCourses([]);
+            setGroup("");
+            setDescription("");
+            setTried("");
+
+            // Sleep for 2 seconds then redirect the user to the home page set to the tickets view
+            setCurrentView("studentTicket");
+            await sleep(2000);
+            navigate("/");
+          } else {
+            setTicketCreationSuccessful(false);
+            setErrorMessages([
+              "There was an unexpected problem while creating your help ticket. Please try again.",
+            ]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setTicketCreationSuccessful(false);
+          setErrorMessages([
+            "There was an unexpected problem while creating your help ticket. Please try again.",
+          ]);
+        });
     }
   }
 
-  // Grab the courses for this instructor
-  // NOTE - this is grabbing ALL system courses for now
-  // useEffect(() => {
-  //   let res = getCourses();
-  //   res.then((value) => {
-  //     setCourses(value);
-  //   });
-  //   res.catch((error) => {
-  //     console.error(error);
-  //   });
-  // }, []);
+  // Create a message to display if course creation was successful or unsuccessful
+  let requestStatusMsg = null;
+  if (ticketCreationSuccessful == true) {
+    requestStatusMsg = (
+      <>
+        <Alert
+          severity="success"
+          sx={{
+            mt: "15px",
+            borderRadius: "20px",
+            width: "fit-content",
+          }}
+        >
+          Success! Your help ticket has been created. Redirecting you now...
+        </Alert>
+        <CircularProgress color="success" sx={{ mt: "15px" }} />
+      </>
+    );
+  }
+
+  useEffect(() => {
+    getCourses()
+      .then((value: any) => {
+        setCourses(value.studentCourses);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Box
@@ -142,15 +211,14 @@ const CreateHelpTicket = () => {
               return option?.name;
             }}
             isOptionEqualToValue={(option, value) => option.name === value.name}
-            //value={selectedCourses}
+            // value={selectedCourses}
             onChange={(event, newValue) => {
               setSelectedCourses(newValue);
-              setCourseError(false);
             }}
             renderInput={(params) => (
               <TextField
                 required
-                error={courseError}
+                error={selectedCoursesError}
                 {...params}
                 variant="standard"
                 label="Select a course"
@@ -163,7 +231,6 @@ const CreateHelpTicket = () => {
             Group Request
           </Typography>
           <TextField
-            required
             label="Enter emails seperated by commas of who you are working with"
             id="course-name-field"
             sx={{ mr: "20px", width: "100%" }}
@@ -248,6 +315,7 @@ const CreateHelpTicket = () => {
           m: "auto",
         }}
       >
+        {requestStatusMsg}
         {errorMessages.map(function (msg) {
           return (
             <Alert

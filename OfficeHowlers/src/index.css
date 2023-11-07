@@ -5,6 +5,7 @@
 
 html, body, .app, #root {
   width: 100%;
+  min-width: 1000px;
   margin: 0;
   font-family: Roboto !important;
   height: 100%;
