@@ -65,7 +65,7 @@ const Home = ({
       return [];
     }
 
-    if (instructorCourses.length > 0) {
+    if (instructorCourses.length > 0 || true) {
       options = options.concat(instructorOptions);
     }
 

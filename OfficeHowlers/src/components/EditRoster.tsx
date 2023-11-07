@@ -18,6 +18,9 @@ import {
   getAssistants,
   getInstructors,
   getStudents,
+  removeInstructorsByEmail,
+  removeStudentsByEmail,
+  removeTeachingAssistantsByEmail,
 } from "../services/api/course";
 import UserModel from "../../../Models/user.model";
 
@@ -181,13 +184,19 @@ const EditRoster = () => {
   }
 
   function deleteInstructor(instructorEmail: string){
-    console.log(instructorEmail);
+    var instructorEmails = [instructorEmail]; 
+    removeInstructorsByEmail(instructorEmails, courseUUID);
+    fetchAllCourseEmails();
   }
   function deleteStudent(studentEmail: string){
-    console.log(studentEmail);
+    var studentEmails = [studentEmail]; 
+    removeStudentsByEmail(studentEmails, courseUUID);
+    fetchAllCourseEmails();
   }
   function deleteTeachingAssistant(teachingAssistantEmail: string){
-    console.log(teachingAssistantEmail);
+    var teachingAssistantEmails = [teachingAssistantEmail]; 
+    removeTeachingAssistantsByEmail(teachingAssistantEmails, courseUUID);
+    fetchAllCourseEmails();
   }
 
   // Grab the courses for this instructor
@@ -232,10 +241,10 @@ const EditRoster = () => {
         >
           <Grid item>
             <Typography sx={{ fontSize: 20 }}>
-              Manually enter student, TA, and instructor emails
+              Manually enter instructor, TA, and student emails
             </Typography>
             <Typography sx={{ fontSize: 14, mb: "15px" }}>
-              One on each line in this format: <i>johndoe@org.edu</i>
+              One on each line in this format: <i>example@org.edu</i>
             </Typography>
             
             
@@ -243,6 +252,7 @@ const EditRoster = () => {
           
         </Grid>
         <TextField
+              sx={{width:"100%"}}
               id="outlined-multiline-static"
               label="Instructor Emails"
               multiline
@@ -259,13 +269,13 @@ const EditRoster = () => {
             sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
           >
             <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}>
+              <Grid item xs={5}  sx={{fontWeight:"bold"}}>
                 Name
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4}  sx={{fontWeight:"bold"}}>
                 Email
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={3}  sx={{fontWeight:"bold"}}>
                 Delete
               </Grid>
             </Grid>
@@ -281,7 +291,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {instructor.firstName}
+                {instructor.firstName} {instructor.lastName}
               </Grid>
               <Grid item xs={4}>
                 {instructor.email}
@@ -319,7 +329,7 @@ const EditRoster = () => {
             variant="contained"
             onClick={() => onSubmitInstructors()}
           >
-            Edit Instructor Roster
+            Add To Instructor Roster
           </Button>
         </Box>
         <Box
@@ -350,11 +360,11 @@ const EditRoster = () => {
           sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
         />
          <TextField
+          sx={{width:"100%"}}
               id="outlined-multiline-static"
               label="TA Emails"
               multiline
               rows={4}
-              sx={{ mr: "10px" }}
               value={teachingAssistants}
               onChange={(e) => {
                 setTeachingAssistants(e.target.value);
@@ -367,13 +377,13 @@ const EditRoster = () => {
             sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
           >
             <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}>
+              <Grid item xs={5}  sx={{fontWeight:"bold"}}>
                 Name
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4}  sx={{fontWeight:"bold"}}>
                 Email
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={3}  sx={{fontWeight:"bold"}}>
                 Delete
               </Grid>
             </Grid>
@@ -389,7 +399,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {teachingAssistant.firstName}
+                {teachingAssistant.firstName} {teachingAssistant.lastName}
               </Grid>
               <Grid item xs={4}>
                 {teachingAssistant.email}
@@ -424,7 +434,7 @@ const EditRoster = () => {
             variant="contained"
             onClick={() => onSubmitTeachingAssistants()}
           >
-            Edit TA Roster
+            Add To TA Roster
           </Button>
         </Box>
         <br></br>
@@ -454,11 +464,11 @@ const EditRoster = () => {
           sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
         />
           <TextField
+             sx={{width:"100%"}}
               id="outlined-multiline-static"
               label="Student Emails"
               multiline
               rows={4}
-              sx={{ mr: "10px" }}
               value={students}
               onChange={(e) => {
                 setStudents(e.target.value);
@@ -471,13 +481,13 @@ const EditRoster = () => {
             sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
           >
             <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}>
+              <Grid item xs={5} sx={{fontWeight:"bold"}}>
                 Name
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={4} sx={{fontWeight:"bold"}}>
                 Email
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={3} sx={{fontWeight:"bold"}}>
                 Delete
               </Grid>
             </Grid>
@@ -493,7 +503,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {student.firstName}
+                {student.firstName} {student.lastName}
               </Grid>
               <Grid item xs={4}>
                 {student.email}
@@ -528,7 +538,7 @@ const EditRoster = () => {
             variant="contained"
             onClick={() => onSubmitStudents()}
           >
-            Edit Student Roster
+            Add To Student Roster
           </Button>
         </Box>
         <Box

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Course from '../models/course.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
+import { IsEmail } from 'sequelize-typescript';
 
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -58,7 +59,7 @@ export const addInstructorsByEmail = async (req: Request, res: Response): Promis
     const instructorEmail = (req.headers['x-shib_mail']) as string;
     if (await isValidInstructorForCourse(instructorEmail, course)) {
       const instructors = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "Unset firstname", "instructor");
+        return findOrCreateUser(email, "","", "instructor");
       }));
       await course.addInstructors(instructors);
       res.status(200).json({success:true});
@@ -91,7 +92,7 @@ export const addAssistantsByEmail = async (req: Request, res: Response): Promise
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const assistants = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "Unset firstname", "assistant");
+        return findOrCreateUser(email, "","", "assistant");
       }));
       await course.addAssistants(assistants);
       res.status(200).json({ success: true });
@@ -122,7 +123,7 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
     const course = await Course.findByPk(req.query.id as string);
     if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
       const students = await Promise.all(req.body.emails.map(async (email: string) => {
-        return findOrCreateUser(email, "Unset firstname", "student");
+        return findOrCreateUser(email, "","", "student");
       }));
       await course.addStudents(students);
       res.status(200).json({ success: true });
@@ -131,6 +132,57 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
     }
   } catch (error) {
     res.status(500).json({ message: 'Error setting assistants for the course', error: error.message });
+  }
+};
+
+export const removeStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const student = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeStudent(student);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
+  }
+};
+
+export const removeInstructorsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course) && (req.headers['x-shib_mail']) as string != req.body.email[0]) {
+      const instructor = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeInstructor(instructor);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
+  }
+};
+
+export const removeTeachingAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const assistant = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeAssistant(assistant);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
   }
 };
 
