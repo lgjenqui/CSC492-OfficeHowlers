@@ -123,7 +123,7 @@ const Home = ({
         studentCourses.length ==
       0
     ) {
-      if (user.primaryRole != "faculty") {
+      if (user.primaryRole === "faculty") {
         options = options.concat(instructorOptions);
       } else {
         // Until a TA is added to a course as a TA, give them the student options
