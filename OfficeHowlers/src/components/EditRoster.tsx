@@ -291,7 +291,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {instructor.firstName} {instructor.lastName}
+               {(instructor.firstName != "Unset firstname")?instructor.firstName:""} {!!(instructor.lastName != "Unset lastname")?instructor.lastName:""}
               </Grid>
               <Grid item xs={4}>
                 {instructor.email}
@@ -399,7 +399,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {teachingAssistant.firstName} {teachingAssistant.lastName}
+               {(teachingAssistant.firstName != "Unset firstname")?teachingAssistant.firstName:""} {!!(teachingAssistant.lastName != "Unset lastname")?teachingAssistant.lastName:""}
               </Grid>
               <Grid item xs={4}>
                 {teachingAssistant.email}
@@ -503,7 +503,7 @@ const EditRoster = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {student.firstName} {student.lastName}
+               {(student.firstName != "Unset firstname")?student.firstName:""} {!!(student.lastName != "Unset lastname")?student.lastName:""}
               </Grid>
               <Grid item xs={4}>
                 {student.email}
