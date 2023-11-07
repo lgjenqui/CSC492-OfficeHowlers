@@ -55,6 +55,14 @@ function App() {
     return "";
   }
 
+  async function fetchCourses() {
+    const courses = await getCourses();
+    setInstructorCourses(courses.instructorCourses);
+    setAssistantCourses(courses.assistantCourses);
+    setStudentCourses(courses.studentCourses);
+    setCoursesLoadedSuccessfully(true);
+  }
+
   useEffect(() => {
     setCoursesLoadedSuccessfully(null);
     setIsLoading(true);
@@ -71,11 +79,7 @@ function App() {
         console.log(user);
         setUser(user);
 
-        const courses = await getCourses();
-        setInstructorCourses(courses.instructorCourses);
-        setAssistantCourses(courses.assistantCourses);
-        setStudentCourses(courses.studentCourses);
-        setCoursesLoadedSuccessfully(true);
+        fetchCourses();
 
         // Grab the user's help session tickets if they are faculty
         if (user && user.primaryRole === "faculty") {
@@ -137,6 +141,7 @@ function App() {
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
                 facultyHelpTickets={sessionTickets}
+                fetchCourses={fetchCourses}
               />
             }
           />

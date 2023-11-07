@@ -37,6 +37,7 @@ interface Props {
   setCurrentView: (val: string) => void;
   studentHelpTicket: TicketWrapperModel | null;
   facultyHelpTickets: TicketWrapperModel[];
+  fetchCourses: () => void;
 }
 
 const instructorOptions = [
@@ -73,6 +74,7 @@ const Home = ({
   setCurrentView,
   studentHelpTicket,
   facultyHelpTickets,
+  fetchCourses,
 }: Props) => {
   var navigate = useNavigate();
 
@@ -174,7 +176,11 @@ const Home = ({
     }
     if (currentView == "joinCourse") {
       return (
-        <JoinCourse isLoading={isLoading} setCurrentView={setCurrentView} />
+        <JoinCourse
+          isLoading={isLoading}
+          setCurrentView={setCurrentView}
+          fetchCourses={fetchCourses}
+        />
       );
     }
   }

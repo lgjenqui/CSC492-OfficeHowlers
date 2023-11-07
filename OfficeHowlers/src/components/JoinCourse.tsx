@@ -11,9 +11,10 @@ import { useNavigate } from "react-router-dom";
 interface Props {
   isLoading: boolean;
   setCurrentView: (val: string) => void;
+  fetchCourses: () => void;
 }
 
-const JoinCourse = ({ isLoading, setCurrentView }: Props) => {
+const JoinCourse = ({ isLoading, setCurrentView, fetchCourses }: Props) => {
   const [courseCode, setCourseCode] = useState<string>("");
   const [joinCourseSuccessful, setJoinCourseSuccessful] =
     useState<boolean>(false);
@@ -57,8 +58,8 @@ const JoinCourse = ({ isLoading, setCurrentView }: Props) => {
             isLoading = true;
 
             // Sleep for 2 seconds then redirect the user to the course page view
+            fetchCourses();
             await sleep(2000);
-            navigate("/");
             setCurrentView("myCourses");
           } else if (res.status == 400) {
             setErrorMessages([
