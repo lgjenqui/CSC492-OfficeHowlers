@@ -1,6 +1,6 @@
 import express, { Application, Request, Response, Router } from 'express';
 import { createCourse, getCourse, deleteCourse, getAllMyCourses, 
-    joinCourse, getCourseInstructors, getCourseAssistants,
+    joinCourse, joinCourseByCourseCode, getCourseInstructors, getCourseAssistants,
     getCourseStudents, addStudentsByEmail, addAssistantsByEmail,
     addInstructorsByEmail,
     getCourseQueue,
@@ -39,6 +39,8 @@ courseRouter.delete('/manage/instructors/remove', removeInstructorsByEmail)
 courseRouter.delete('/', cors(), deleteCourse );
 
 courseRouter.get('/manage/roster/join', cors(), joinCourse );
+
+courseRouter.post('/join', joinCourseByCourseCode);
 
 courseRouter.get('/queue', cors(), getCourseQueue );
 

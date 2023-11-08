@@ -6,6 +6,7 @@ import User from "./user.model";
 import Ticket from "./ticket.model";
 import Session from "./session.model";
 import { UUID } from 'crypto';
+import { COURSE_JOIN_CODE_LENGTH } from '../src/constants';
 
 class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes<CourseModel>> {
   declare id: UUID;
@@ -13,6 +14,7 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare description: string;
   declare startDate: Date;
   declare endDate: Date;
+  declare studentJoinCode: string;
   declare instructors?: NonAttribute<User[]>;
   declare assistants?: NonAttribute<User[]>;
   declare students?: NonAttribute<User[]>;
@@ -66,6 +68,11 @@ Course.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    studentJoinCode: {
+      type: DataTypes.STRING(COURSE_JOIN_CODE_LENGTH),
+      allowNull: true,
+      unique: true
+    }
   },
   {
     sequelize, // Providing the Sequelize instance here
@@ -73,6 +80,36 @@ Course.init(
   }
 );
 
-// Course.hasOne(Session);
+// Generates a random code consisting of uppercase letters and numbers of a specified length
+function generateRandomCode(length: number): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const charactersLength = characters.length;
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    // Multiply a random float between 0 and 1 by the number of possible characters to 
+    // get a random index
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+// Generates random codes until it finds a unique one
+async function generateUniqueJoinCode(course: Course): Promise<string> {
+  const code = generateRandomCode(COURSE_JOIN_CODE_LENGTH);
+
+  // Look for a course where the student join code is equal to this newly generated code
+  const existingCourse = await Course.findOne({ where: { studentJoinCode: code } });
+  if (existingCourse) {
+    // If code exists, recursively generate a new one
+    return generateUniqueJoinCode(course);
+  }
+  return code;
+}
+
+// Generate a unique join code for the course before its creation
+Course.beforeCreate(async (course, options) => {
+  course.studentJoinCode = await generateUniqueJoinCode(course);
+});
 
 export default Course;

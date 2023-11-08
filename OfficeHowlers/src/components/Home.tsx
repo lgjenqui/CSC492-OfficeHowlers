@@ -24,6 +24,7 @@ import ViewHelpTickets from "./ViewHelpTicket";
 import ViewCourses from "./ViewCourses";
 import ViewHelpSession from "./ViewHelpSession";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import JoinCourse from "./JoinCourse";
 
 interface Props {
   user: UserModel | null;
@@ -36,6 +37,7 @@ interface Props {
   setCurrentView: (val: string) => void;
   studentHelpTicket: TicketWrapperModel | null;
   facultyHelpTickets: TicketWrapperModel[];
+  fetchCourses: () => void;
 }
 
 const instructorOptions = [
@@ -72,6 +74,7 @@ const Home = ({
   setCurrentView,
   studentHelpTicket,
   facultyHelpTickets,
+  fetchCourses,
 }: Props) => {
   var navigate = useNavigate();
 
@@ -82,6 +85,7 @@ const Home = ({
     else if (option == "My help ticket") setCurrentView("studentTicket");
     else if (option == "My help session") setCurrentView("helpSession");
     else if (option == "My courses") setCurrentView("myCourses");
+    else if (option == "Join a course") setCurrentView("joinCourse");
     else navigate("/deadend");
   }
 
@@ -123,7 +127,7 @@ const Home = ({
         studentCourses.length ==
       0
     ) {
-      if (user.primaryRole != "faculty") {
+      if (user.primaryRole === "faculty") {
         options = options.concat(instructorOptions);
       } else {
         // Until a TA is added to a course as a TA, give them the student options
@@ -169,6 +173,15 @@ const Home = ({
     }
     if (currentView == "helpSession") {
       return <ViewHelpSession tickets={facultyHelpTickets} />;
+    }
+    if (currentView == "joinCourse") {
+      return (
+        <JoinCourse
+          isLoading={isLoading}
+          setCurrentView={setCurrentView}
+          fetchCourses={fetchCourses}
+        />
+      );
     }
   }
 
