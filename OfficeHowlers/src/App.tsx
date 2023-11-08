@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/Banner";
-import CreateCourse from "./components/CreateCourse";
 import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
@@ -20,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import { getSessionTickets } from "./services/api/session";
 import TicketWrapperModel from "../../Models/ticketWrapper.model";
+import JoinCourse from "./components/JoinCourse";
 
 function App() {
   const navigate = useNavigate();
@@ -55,6 +55,14 @@ function App() {
     return "";
   }
 
+  async function fetchCourses() {
+    const courses = await getCourses();
+    setInstructorCourses(courses.instructorCourses);
+    setAssistantCourses(courses.assistantCourses);
+    setStudentCourses(courses.studentCourses);
+    setCoursesLoadedSuccessfully(true);
+  }
+
   useEffect(() => {
     setCoursesLoadedSuccessfully(null);
     setIsLoading(true);
@@ -71,11 +79,7 @@ function App() {
         console.log(user);
         setUser(user);
 
-        const courses = await getCourses();
-        setInstructorCourses(courses.instructorCourses);
-        setAssistantCourses(courses.assistantCourses);
-        setStudentCourses(courses.studentCourses);
-        setCoursesLoadedSuccessfully(true);
+        fetchCourses();
 
         // Grab the user's help session tickets if they are faculty
         if (user && user.primaryRole === "faculty") {
@@ -137,16 +141,12 @@ function App() {
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
                 facultyHelpTickets={sessionTickets}
+                fetchCourses={fetchCourses}
               />
             }
           />
 
           <Route path="/course" element={<EditRoster />} />
-
-          <Route
-            path="/createCourse"
-            element={<CreateCourse onLoading={handleLoading} />}
-          />
 
           <Route
             path="/startSession"

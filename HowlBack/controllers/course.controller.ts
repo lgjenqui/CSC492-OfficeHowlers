@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Course from '../models/course.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
+import { COURSE_JOIN_CODE_LENGTH } from '../src/constants';
 
 export const createCourse = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -156,6 +157,33 @@ export const joinCourse = async (req: Request, res: Response): Promise<void> => 
     res.status(201).json({ success: true });
   } catch (error) {
     res.status(500).json({ message: 'Error adding the course', error: error.message });
+  }
+};
+
+export const joinCourseByCourseCode = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userEmail = req.headers['x-shib_mail'] as string;
+    const courseCode = req.query.courseCode as string
+
+    // Check that the course code consists of uppercase letters, numbers, and is of the appropriate length
+    const courseCodeRegex = new RegExp(`^[A-Z0-9]{${COURSE_JOIN_CODE_LENGTH}}$`);
+    if (!courseCodeRegex.test(courseCode)) {
+      res.status(400).json({ message: 'Invalid course code'});
+      return;
+    }
+
+    const user = await retrieveUser(userEmail);
+    const course = await Course.findOne({ where: { studentJoinCode: courseCode } });
+
+    if (!course) {
+      res.status(404).json({ message: 'Could not find a course with that course code'});
+      return;
+    }
+
+    await course.addStudent(user);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: 'Error joining the course', error: error.message });
   }
 };
 

@@ -83,3 +83,11 @@ export async function getCourseFromUUID(courseUUID: string): Promise<any> {
   };
   return (await fetch(window.location.origin + "/api/course/?id=" + courseUUID, requestOptions)).json();
 }
+
+export async function joinCourseByCourseCode(courseCode: string) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  };
+  return (await fetch(window.location.origin + "/api/course/join/?courseCode=" + courseCode, requestOptions));
+}
