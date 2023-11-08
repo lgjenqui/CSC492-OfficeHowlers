@@ -4,7 +4,10 @@ import { createCourse, getCourse, deleteCourse, getAllMyCourses,
     getCourseStudents, addStudentsByEmail, addAssistantsByEmail,
     addInstructorsByEmail,
     getCourseQueue,
-    getCourseSessions} from '../controllers/course.controller';
+    getCourseSessions,
+    removeStudentsByEmail,
+    removeTeachingAssistantsByEmail,
+    removeInstructorsByEmail} from '../controllers/course.controller';
 import cors from "cors";
 
 const courseRouter: Router = express.Router();
@@ -26,6 +29,12 @@ courseRouter.get('/manage/assistants/get', getCourseAssistants);
 courseRouter.post('/manage/roster/add', addStudentsByEmail);
 
 courseRouter.get('/manage/roster/get', getCourseStudents);
+
+courseRouter.delete('/manage/roster/remove', removeStudentsByEmail);
+
+courseRouter.delete('/manage/assistants/remove', removeTeachingAssistantsByEmail);
+
+courseRouter.delete('/manage/instructors/remove', removeInstructorsByEmail)
 
 courseRouter.delete('/', cors(), deleteCourse );
 

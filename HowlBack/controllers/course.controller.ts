@@ -135,6 +135,57 @@ export const addStudentsByEmail = async (req: Request, res: Response): Promise<v
   }
 };
 
+export const removeStudentsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const student = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeStudent(student);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
+  }
+};
+
+export const removeInstructorsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course) && (req.headers['x-shib_mail']) as string != req.body.email[0]) {
+      const instructor = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeInstructor(instructor);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
+  }
+};
+
+export const removeTeachingAssistantsByEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const assistant = await Promise.all(req.body.email.map(async (email: string) => {
+        return retrieveUser(email);
+      }));
+      await course.removeAssistant(assistant);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error removing students for the course', error: error.message });
+  }
+};
+
 export const getCourseStudents = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(req.query.id as string);

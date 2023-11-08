@@ -199,7 +199,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
         container
         spacing={3}
       >
-        <Grid sx={{ width: "30%" }} item>
+        <Grid sx={{ width: "20%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Select your Course
           </Typography>
@@ -226,7 +226,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             )}
           />
         </Grid>
-        <Grid sx={{ width: "70%" }} item>
+        <Grid sx={{ width: "45%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Group Request
           </Typography>
@@ -242,15 +242,32 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             error={groupError}
           />
         </Grid>
+        <Grid sx={{ width: "35%" }} item>
+        <Typography sx={{ fontSize: 20 , mb: "5px" }}>
+            What are you working on?
+          </Typography>
+          <TextField
+            required
+            label="Assignment"
+            id="course-name-field"
+            sx={{ mr: "20px", width: "100%" }}
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              setDescriptionError(false);
+            }}
+            error={descriptionError}
+          />
+        </Grid>
         <Grid sx={{ width: "50%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
-            What is the problem?
+            What would you like help with?
           </Typography>
           <TextField
             required
             multiline={true}
             rows={3}
-            label="Description of problem"
+            label="Description of what you need help with"
             id="course-name-field"
             sx={{ mr: "20px", width: "100%" }}
             value={description}

@@ -31,6 +31,32 @@ export async function getInstructors(courseUUID: string): Promise<{ instructors:
   return (await fetch(window.location.origin + "/api/course/manage/instructors/get?id=" + courseUUID)).json();
 }
 
+export async function removeStudentsByEmail(email: string[], courseUUID: string): Promise<any> {
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email }),
+  };
+  return (await fetch(window.location.origin + "/api/course/manage/roster/remove?id=" + courseUUID, requestOptions));
+}
+
+export async function removeInstructorsByEmail(email: string[], courseUUID: string): Promise<any> {
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email }),
+  };
+  return (await fetch(window.location.origin + "/api/course/manage/instructors/remove?id=" + courseUUID, requestOptions));
+}
+export async function removeTeachingAssistantsByEmail(email: string[], courseUUID: string): Promise<any> {
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email }),
+  };
+  return (await fetch(window.location.origin + "/api/course/manage/assistants/remove?id=" + courseUUID, requestOptions));
+}
+
 export async function getAssistants(courseUUID: string): Promise<{assistants: User[]}> {
   return (await fetch(window.location.origin + "/api/course/manage/assistants/get?id=" + courseUUID)).json();
 }

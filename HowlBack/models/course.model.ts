@@ -1,5 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, NonAttribute, 
-  HasManyGetAssociationsMixin, HasManyAddAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin } from 'sequelize';
+  HasManyGetAssociationsMixin, HasManyAddAssociationsMixin, HasManyAddAssociationMixin, HasManySetAssociationsMixin, HasManyRemoveAssociationsMixin } from 'sequelize';
 import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
 import CourseModel from "../../Models/course.model";
 import User from "./user.model";
@@ -27,6 +27,9 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare addAssistants: HasManyAddAssociationsMixin<User, number>;
   declare getStudents: HasManyGetAssociationsMixin<User>; // Note the null assertions!
   declare addStudents: HasManyAddAssociationsMixin<User, number>;
+  declare removeStudent: HasManyRemoveAssociationsMixin<User, number>;
+  declare removeInstructor: HasManyRemoveAssociationsMixin<User, number>;
+  declare removeAssistant: HasManyRemoveAssociationsMixin<User, number>;
   declare addStudent: HasManyAddAssociationMixin<User, number>;
   declare setInstructors: HasManySetAssociationsMixin<User, number>;
   declare setAssistants: HasManySetAssociationsMixin<User, number>;
