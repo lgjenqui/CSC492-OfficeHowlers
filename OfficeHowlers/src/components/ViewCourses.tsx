@@ -22,7 +22,15 @@ const ViewCourses = ({
   coursesLoadedSuccessfully,
 }: Props) => {
   return (
-    <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
+    <Box
+      sx={{
+        width: "70%",
+        height: "100%",
+        m: "auto",
+        mt: 0,
+        userSelect: "none",
+      }}
+    >
       {user &&
       coursesLoadedSuccessfully &&
       instructorCourses.length +

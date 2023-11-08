@@ -115,8 +115,10 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
         sx={{
-          height: "100%",
-          position: "relative",
+          minHeight: "100vh", // Ensures at least full viewport height
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between", // Positions children at the start and end of the container
         }}
       >
         <Banner
@@ -165,8 +167,11 @@ function App() {
 
         <Box
           sx={{
-            bottom: 15,
-            left: 15,
+            position: "relative",
+            width: "100%",
+            mt: "10px",
+            // bottom: 15,
+            // left: 15,
           }}
         >
           <img src={NCSULogo} width="162" height="78" alt="" />

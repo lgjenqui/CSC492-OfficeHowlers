@@ -187,14 +187,14 @@ const Home = ({
 
   if (user && isLoading == false) {
     return (
-      <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
+      <Grid sx={{ flexGrow: 1, mt: "35px" }} container spacing={3}>
         <Box
           sx={{
             width: "20%",
             height: "min-height: 1000px",
             m: "auto",
             ml: "50px",
-            mt: "50px",
+            mt: 0,
             userSelect: "none",
             borderRight: "1px solid black",
           }}
