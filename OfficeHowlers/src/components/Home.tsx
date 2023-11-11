@@ -26,6 +26,7 @@ import ViewHelpSession from "./ViewHelpSession";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import JoinCourse from "./JoinCourse";
 import CreateHelpTicket from "./CreateHelpTicket";
+import CreateCourse from "./CreateCourse";
 
 interface Props {
   user: UserModel | null;
@@ -34,6 +35,7 @@ interface Props {
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
   isLoading: boolean;
+  setIsLoading: (val: boolean) => void;
   currentView: string;
   setCurrentView: (val: string) => void;
   studentHelpTicket: TicketWrapperModel | null;
@@ -71,6 +73,7 @@ const Home = ({
   studentCourses,
   coursesLoadedSuccessfully,
   isLoading,
+  setIsLoading,
   currentView,
   setCurrentView,
   studentHelpTicket,
@@ -80,7 +83,7 @@ const Home = ({
   var navigate = useNavigate();
 
   function onOptionsClick(option: string) {
-    if (option == "Create course") navigate("/createCourse");
+    if (option == "Create course") setCurrentView("createCourse");
     else if (option == "Start help session") navigate("/startSession");
     else if (option == "Create help ticket") setCurrentView("createHelpTicket");
     else if (option == "My help ticket") setCurrentView("studentTicket");
@@ -188,6 +191,9 @@ const Home = ({
       return (
         <CreateHelpTicket setCurrentView={setCurrentView}></CreateHelpTicket>
       );
+    }
+    if (currentView == "createCourse") {
+      return <CreateCourse setIsLoading={setIsLoading}></CreateCourse>;
     }
   }
 

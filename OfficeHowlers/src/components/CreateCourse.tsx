@@ -12,10 +12,10 @@ import { createCourse } from "../services/api/course";
 import { sleep } from "../services/util/sleep";
 
 interface Props {
-  onLoading: (isLoading: boolean) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
-const CreateCourse = ({ onLoading }: Props) => {
+const CreateCourse = ({ setIsLoading }: Props) => {
   const [courseName, setCourseName] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -118,7 +118,7 @@ const CreateCourse = ({ onLoading }: Props) => {
             setEndDate(null);
 
             // Set isLoading to true before navigating away
-            onLoading(true);
+            setIsLoading(true);
 
             // Sleep for 2 seconds then redirect the user to their home page
             await sleep(2000);
@@ -158,14 +158,15 @@ const CreateCourse = ({ onLoading }: Props) => {
   return (
     <Box
       sx={{
-        width: "60%",
-        maxWidth: "1200px",
+        width: "70%",
+        height: "100%",
         m: "auto",
         mt: "20px",
-        alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Create a course</Typography>
+      <Typography sx={{ fontSize: 38, fontWeight: "bold", mb: "5px" }}>
+        Create a course
+      </Typography>
       <Divider
         sx={{
           borderTop: "1px solid lightgrey",

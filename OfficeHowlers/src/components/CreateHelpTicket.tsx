@@ -181,7 +181,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
         width: "70%",
         height: "100%",
         m: "auto",
-        mt: 0,
+        mt: "20px",
       }}
     >
       <Typography sx={{ fontSize: 38, fontWeight: "bold", mb: "5px" }}>

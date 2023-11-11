@@ -139,6 +139,7 @@ function App() {
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
                 isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
