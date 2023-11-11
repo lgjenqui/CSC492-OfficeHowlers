@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/Banner";
-import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
@@ -14,12 +13,10 @@ import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
-import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import { getSessionTickets } from "./services/api/session";
 import TicketWrapperModel from "../../Models/ticketWrapper.model";
-import JoinCourse from "./components/JoinCourse";
 
 function App() {
   const navigate = useNavigate();
@@ -150,11 +147,6 @@ function App() {
           />
 
           <Route path="/course" element={<EditRoster />} />
-
-          <Route
-            path="/startSession"
-            element={<StartSession setCurrentView={setCurrentView} />}
-          />
 
           <Route path="/editRoster" element={<EditRoster />} />
 

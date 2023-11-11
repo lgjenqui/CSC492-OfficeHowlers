@@ -223,21 +223,21 @@ const StartSession = ({ setCurrentView }: Props) => {
   return (
     <Box
       sx={{
-        width: "60%",
-        maxWidth: "1200px",
+        width: "70%",
+        height: "100%",
         m: "auto",
         mt: "20px",
-        alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>Start a session</Typography>
+      <Typography sx={{ fontSize: 38, fontWeight: "bold", mb: "5px" }}>
+        Start a session
+      </Typography>
       <Divider
         sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
       />
       <Grid
         sx={{
           flexGrow: 1,
-          justifyContent: "center",
         }}
         container
         spacing={3}

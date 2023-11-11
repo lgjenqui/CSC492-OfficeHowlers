@@ -27,6 +27,7 @@ import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import JoinCourse from "./JoinCourse";
 import CreateHelpTicket from "./CreateHelpTicket";
 import CreateCourse from "./CreateCourse";
+import StartSession from "./StartSession";
 
 interface Props {
   user: UserModel | null;
@@ -84,7 +85,7 @@ const Home = ({
 
   function onOptionsClick(option: string) {
     if (option == "Create course") setCurrentView("createCourse");
-    else if (option == "Start help session") navigate("/startSession");
+    else if (option == "Start help session") setCurrentView("startSession");
     else if (option == "Create help ticket") setCurrentView("createHelpTicket");
     else if (option == "My help ticket") setCurrentView("studentTicket");
     else if (option == "My help session") setCurrentView("helpSession");
@@ -194,6 +195,9 @@ const Home = ({
     }
     if (currentView == "createCourse") {
       return <CreateCourse setIsLoading={setIsLoading}></CreateCourse>;
+    }
+    if (currentView == "startSession") {
+      return <StartSession setCurrentView={setCurrentView} />;
     }
   }
 
