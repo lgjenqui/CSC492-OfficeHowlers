@@ -178,23 +178,23 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
   return (
     <Box
       sx={{
-        width: "60%",
-        maxWidth: "1200px",
+        width: "70%",
+        height: "100%",
         m: "auto",
-        mt: "20px",
-        alignContent: "center",
+        mt: 0,
       }}
     >
       <Typography sx={{ fontSize: 42, mb: "5px" }}>
         Create help ticket
       </Typography>
       <Divider
-        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
       />
       <Grid
         sx={{
           flexGrow: 1,
           justifyContent: "center",
+          width: "90%",
         }}
         container
         spacing={3}
@@ -243,7 +243,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
           />
         </Grid>
         <Grid sx={{ width: "35%" }} item>
-        <Typography sx={{ fontSize: 20 , mb: "5px" }}>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
             What are you working on?
           </Typography>
           <TextField
@@ -297,35 +297,36 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             error={triedError}
           />
         </Grid>
-      </Grid>
-      <Box
-        sx={{
-          width: "50%",
-          alignContent: "center",
-          m: "auto",
-          mt: "25px",
-          textAlign: "center",
-        }}
-      >
-        <Button
+        <Box
           sx={{
-            fontSize: 20,
-            backgroundColor: "#CC0000",
-            ":hover": {
-              backgroundColor: "#9e0000",
-            },
-          }}
-          variant="contained"
-          onClick={() => {
-            if (inputIsValid()) {
-              setOpen(true);
-            }
-            onSubmit();
+            width: "50%",
+            alignContent: "center",
+            m: "auto",
+            mt: "20px",
+            textAlign: "center",
           }}
         >
-          Create Help Ticket
-        </Button>
-      </Box>
+          <Button
+            sx={{
+              fontSize: 20,
+              mt: "20px",
+              backgroundColor: "#CC0000",
+              ":hover": {
+                backgroundColor: "#9e0000",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              if (inputIsValid()) {
+                setOpen(true);
+              }
+              onSubmit();
+            }}
+          >
+            Create Help Ticket
+          </Button>
+        </Box>
+      </Grid>
       <Box
         sx={{
           textAlign: "center",

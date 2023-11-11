@@ -157,11 +157,6 @@ function App() {
 
           <Route path="/editRoster" element={<EditRoster />} />
 
-          <Route
-            path="/helpTickets/create"
-            element={<CreateHelpTicket setCurrentView={setCurrentView} />}
-          />
-
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
 

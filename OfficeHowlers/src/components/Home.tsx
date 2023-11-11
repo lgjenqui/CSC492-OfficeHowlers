@@ -25,6 +25,7 @@ import ViewCourses from "./ViewCourses";
 import ViewHelpSession from "./ViewHelpSession";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import JoinCourse from "./JoinCourse";
+import CreateHelpTicket from "./CreateHelpTicket";
 
 interface Props {
   user: UserModel | null;
@@ -81,7 +82,7 @@ const Home = ({
   function onOptionsClick(option: string) {
     if (option == "Create course") navigate("/createCourse");
     else if (option == "Start help session") navigate("/startSession");
-    else if (option == "Create help ticket") navigate("/helpTickets/create");
+    else if (option == "Create help ticket") setCurrentView("createHelpTicket");
     else if (option == "My help ticket") setCurrentView("studentTicket");
     else if (option == "My help session") setCurrentView("helpSession");
     else if (option == "My courses") setCurrentView("myCourses");
@@ -181,6 +182,11 @@ const Home = ({
           setCurrentView={setCurrentView}
           fetchCourses={fetchCourses}
         />
+      );
+    }
+    if (currentView == "createHelpTicket") {
+      return (
+        <CreateHelpTicket setCurrentView={setCurrentView}></CreateHelpTicket>
       );
     }
   }
