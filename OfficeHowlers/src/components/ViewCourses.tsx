@@ -40,7 +40,7 @@ const ViewCourses = ({
         <Box>
           <Typography
             sx={{
-              fontSize: "35px",
+              fontSize: 38,
               fontWeight: "bold",
               mt: "20px",
               ml: 0,
@@ -99,7 +99,7 @@ const ViewCourses = ({
         <Box>
           <Typography
             sx={{
-              fontSize: "35px",
+              fontSize: 38,
               fontWeight: "bold",
               mt: "20px",
               ml: 0,

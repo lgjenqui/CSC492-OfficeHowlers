@@ -184,11 +184,11 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
         mt: 0,
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>
+      <Typography sx={{ fontSize: 38, fontWeight: "bold", mb: "5px" }}>
         Create help ticket
       </Typography>
       <Divider
-        sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
+        sx={{ borderTop: "1px solid black", width: "80%", mb: "15px" }}
       />
       <Grid
         sx={{
