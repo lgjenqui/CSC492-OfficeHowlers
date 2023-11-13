@@ -120,7 +120,7 @@ function App() {
       >
         <Banner
           title={"OfficeHowlers"}
-          subtitle="Think and Do"
+          subtitle={"Think and Do"}
           greeting={getGreeting()}
           onReturnHome={onReturnHome}
         ></Banner>
