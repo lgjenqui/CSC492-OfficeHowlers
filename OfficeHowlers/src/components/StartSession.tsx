@@ -233,7 +233,7 @@ const StartSession = ({ setCurrentView }: Props) => {
         Start a session
       </Typography>
       <Divider
-        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
       />
       <Grid
         sx={{
