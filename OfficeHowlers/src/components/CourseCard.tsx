@@ -5,10 +5,10 @@ import Course from "../../../Models/course.model";
 interface Props {
   course: Course;
   role: string;
-  setCourse: (course: string) => void;
+  // setCourse: (course: string) => void;
 }
 
-const CourseCard = ({ course, role, setCourseUUID }: Props) => {
+const CourseCard = ({ course, role }: Props) => {
   return (
     <Box
       sx={{
@@ -29,7 +29,8 @@ const CourseCard = ({ course, role, setCourseUUID }: Props) => {
           color: "white",
           borderRadius: "15px",
         }}
-        onClick={() => setCourseUUID(course.id)}
+        // onClick={() => setCourseUUID(course.id)}
+        onClick={() => {}}
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0" }}>{course.name}</Typography>

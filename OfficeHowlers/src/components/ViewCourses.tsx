@@ -47,7 +47,6 @@ const ViewCourses = ({
           <CourseCards
             courses={instructorCourses}
             role="Instructor"
-            setCourseUUID={setCourseUUID}
           ></CourseCards>
         ) : null}
 
@@ -55,7 +54,7 @@ const ViewCourses = ({
           <CourseCards
             courses={assistantCourses}
             role="Assistant"
-            setCourseUUID={setCourseUUID}
+            // setCourseUUID={setCourseUUID}
           ></CourseCards>
         ) : null}
 
@@ -63,7 +62,7 @@ const ViewCourses = ({
           <CourseCards
             courses={studentCourses}
             role="Student"
-            setCourseUUID={setCourseUUID}
+            // setCourseUUID={setCourseUUID}
           ></CourseCards>
         ) : null}
       </Box>
@@ -77,9 +76,15 @@ const ViewCourses = ({
   function getCourseView() {
     if (courseUUID) {
       return getCourseDetails();
-    } else {
+    } else if (
+      instructorCourses.length +
+        assistantCourses.length +
+        studentCourses.length >
+      0
+    ) {
       return getCourseCards();
     }
+    return null;
   }
 
   return (

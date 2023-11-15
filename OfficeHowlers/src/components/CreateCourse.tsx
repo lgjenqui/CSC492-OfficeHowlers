@@ -168,18 +168,9 @@ const CreateCourse = ({ setIsLoading }: Props) => {
         Create a course
       </Typography>
       <Divider
-        sx={{
-          borderTop: "1px solid lightgrey",
-          width: "100%",
-          m: "auto",
-          mb: "20px",
-        }}
+        sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
       />
-      <Grid
-        sx={{ flexGrow: 1, justifyContent: "center" }}
-        container
-        spacing={3}
-      >
+      <Grid sx={{ flexGrow: 1 }} container spacing={3}>
         <Grid item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>Course Name</Typography>
           <TextField
@@ -212,6 +203,7 @@ const CreateCourse = ({ setIsLoading }: Props) => {
             error={courseDescError}
           />
         </Grid>
+        <Box width={"100%"}></Box>
         <Grid item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course start date
