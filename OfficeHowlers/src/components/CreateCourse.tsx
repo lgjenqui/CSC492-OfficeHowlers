@@ -171,14 +171,14 @@ const CreateCourse = ({ setIsLoading }: Props) => {
         sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
       />
       <Grid sx={{ flexGrow: 1 }} container spacing={3}>
-        <Grid item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>Course Name</Typography>
           <TextField
             required
             label="Course Name"
             id="course-name-field"
             value={courseName}
-            sx={{ mr: "20px" }}
+            sx={{ mr: "20px", width: "90%" }}
             onChange={(e) => {
               setCourseName(e.target.value);
               setCourseNameError(false);
@@ -186,7 +186,7 @@ const CreateCourse = ({ setIsLoading }: Props) => {
             error={courseNameError}
           />
         </Grid>
-        <Grid item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course Description
           </Typography>
@@ -195,7 +195,7 @@ const CreateCourse = ({ setIsLoading }: Props) => {
             label="Course Description"
             id="course-description"
             value={courseDesc}
-            sx={{ mr: "20px" }}
+            sx={{ width: "90%", mr: "20px" }}
             onChange={(e) => {
               setCourseDesc(e.target.value);
               setCourseDescError(false);
@@ -204,12 +204,13 @@ const CreateCourse = ({ setIsLoading }: Props) => {
           />
         </Grid>
         <Box width={"100%"}></Box>
-        <Grid item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course start date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              sx={{ width: "90%" }}
               value={dayjs(startDate)}
               onChange={(date) => {
                 setStartDate(date);
@@ -224,12 +225,13 @@ const CreateCourse = ({ setIsLoading }: Props) => {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid item>
+        <Grid sx={{ width: "40%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Course end date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              sx={{ width: "90%" }}
               value={dayjs(endDate)}
               onChange={(date) => {
                 setEndDate(date);
@@ -253,22 +255,21 @@ const CreateCourse = ({ setIsLoading }: Props) => {
           mt: "25px",
           textAlign: "center",
         }}
+      ></Box>
+      <Button
+        id="create-course-button"
+        sx={{
+          fontSize: 20,
+          backgroundColor: "#CC0000",
+          ":hover": {
+            backgroundColor: "#9e0000",
+          },
+        }}
+        variant="contained"
+        onClick={() => onSubmit()}
       >
-        <Button
-          id="create-course-button"
-          sx={{
-            fontSize: 20,
-            backgroundColor: "#CC0000",
-            ":hover": {
-              backgroundColor: "#9e0000",
-            },
-          }}
-          variant="contained"
-          onClick={() => onSubmit()}
-        >
-          Create course
-        </Button>
-      </Box>
+        Create course
+      </Button>
       <Box
         sx={{
           textAlign: "center",

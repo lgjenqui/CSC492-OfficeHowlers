@@ -400,10 +400,7 @@ const StartSession = ({ setCurrentView }: Props) => {
       <Box
         sx={{
           width: "50%",
-          alignContent: "center",
-          m: "auto",
           mt: "25px",
-          textAlign: "center",
         }}
       >
         <Button
