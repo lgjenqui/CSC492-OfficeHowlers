@@ -6,10 +6,16 @@ import { Grid } from "@mui/material";
 interface Props {
   courses: Course[];
   role: string;
-  // setCourse: (course: CourseModel) => void;
+  setDisplayedCourse: (course: CourseModel | null) => void;
+  setDisplayedCourseRole: (role: string) => void;
 }
 
-const CourseCards = ({ courses, role }: Props) => {
+const CourseCards = ({
+  courses,
+  role,
+  setDisplayedCourse,
+  setDisplayedCourseRole,
+}: Props) => {
   if (!courses) {
     return null;
   }
@@ -20,7 +26,8 @@ const CourseCards = ({ courses, role }: Props) => {
           <CourseCard
             course={course}
             role={role}
-            // setCourse={setCourse}
+            setDisplayedCourse={setDisplayedCourse}
+            setDisplayedCourseRole={setDisplayedCourseRole}
           ></CourseCard>
         </Grid>
       ))}

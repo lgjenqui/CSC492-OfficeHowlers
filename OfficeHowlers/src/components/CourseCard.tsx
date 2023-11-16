@@ -1,14 +1,21 @@
 import { Box, CardContent, Divider, Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Course from "../../../Models/course.model";
+import CourseModel from "../../../Models/course.model";
 
 interface Props {
   course: Course;
   role: string;
-  // setCourse: (course: string) => void;
+  setDisplayedCourse: (course: CourseModel | null) => void;
+  setDisplayedCourseRole: (role: string) => void;
 }
 
-const CourseCard = ({ course, role }: Props) => {
+const CourseCard = ({
+  course,
+  role,
+  setDisplayedCourse,
+  setDisplayedCourseRole,
+}: Props) => {
   return (
     <Box
       sx={{
@@ -29,8 +36,10 @@ const CourseCard = ({ course, role }: Props) => {
           color: "white",
           borderRadius: "15px",
         }}
-        // onClick={() => setCourseUUID(course.id)}
-        onClick={() => {}}
+        onClick={() => {
+          setDisplayedCourse(course);
+          setDisplayedCourseRole(role);
+        }}
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0" }}>{course.name}</Typography>

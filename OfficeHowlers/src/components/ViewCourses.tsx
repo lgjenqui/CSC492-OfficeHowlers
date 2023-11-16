@@ -23,7 +23,12 @@ const ViewCourses = ({
   studentCourses,
   coursesLoadedSuccessfully,
 }: Props) => {
-  const [courseUUID, setCourseUUID] = useState<string | null>(null);
+  const [displayedCourse, setDisplayedCourse] = useState<CourseModel | null>(
+    null
+  );
+  const [displayedCourseRole, setDisplayedCourseRole] = useState<string | null>(
+    null
+  );
 
   function getCourseCards() {
     return (
@@ -47,6 +52,8 @@ const ViewCourses = ({
           <CourseCards
             courses={instructorCourses}
             role="Instructor"
+            setDisplayedCourse={setDisplayedCourse}
+            setDisplayedCourseRole={setDisplayedCourseRole}
           ></CourseCards>
         ) : null}
 
@@ -54,7 +61,8 @@ const ViewCourses = ({
           <CourseCards
             courses={assistantCourses}
             role="Assistant"
-            // setCourseUUID={setCourseUUID}
+            setDisplayedCourse={setDisplayedCourse}
+            setDisplayedCourseRole={setDisplayedCourseRole}
           ></CourseCards>
         ) : null}
 
@@ -62,20 +70,24 @@ const ViewCourses = ({
           <CourseCards
             courses={studentCourses}
             role="Student"
-            // setCourseUUID={setCourseUUID}
+            setDisplayedCourse={setDisplayedCourse}
+            setDisplayedCourseRole={setDisplayedCourseRole}
           ></CourseCards>
         ) : null}
       </Box>
     );
   }
 
-  function getCourseDetails() {
-    return <CourseDetails></CourseDetails>;
-  }
-
   function getCourseView() {
-    if (courseUUID) {
-      return getCourseDetails();
+    if (displayedCourse) {
+      return (
+        <CourseDetails
+          displayedCourse={displayedCourse}
+          displayedCourseRole={displayedCourseRole}
+          setDisplayedCourse={setDisplayedCourse}
+          setDisplayedCourseRole={setDisplayedCourseRole}
+        ></CourseDetails>
+      );
     } else if (
       instructorCourses.length +
         assistantCourses.length +
