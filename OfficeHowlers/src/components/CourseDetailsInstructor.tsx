@@ -2,13 +2,16 @@ import { Box, Button } from "@mui/material/";
 import CourseModel from "../../../Models/course.model";
 import { useState } from "react";
 import EditRoster from "./EditRoster";
+import CourseInfo from "./courseInfo";
 
 interface Props {
+  displayedCourse: CourseModel | null;
   setDisplayedCourse: (course: CourseModel | null) => void;
   setDisplayedCourseRole: (role: string | null) => void;
 }
 
 const CourseDetailsInstructor = ({
+  displayedCourse,
   setDisplayedCourse,
   setDisplayedCourseRole,
 }: Props) => {
@@ -18,7 +21,7 @@ const CourseDetailsInstructor = ({
 
   function getSelectedCourseOptionView() {
     if (selectedCourseOption == "courseInfo") {
-      return <Box>course info</Box>;
+      return <CourseInfo course={displayedCourse} />;
     } else if (selectedCourseOption == "manageRoster") {
       return <Box>edit roster</Box>;
     } else if (selectedCourseOption == "accessCode") {

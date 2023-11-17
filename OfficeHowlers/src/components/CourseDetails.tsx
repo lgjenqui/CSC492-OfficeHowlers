@@ -23,6 +23,7 @@ const CourseDetails = ({
     } else if (displayedCourseRole == "Instructor") {
       return (
         <CourseDetailsInstructor
+          displayedCourse={displayedCourse}
           setDisplayedCourse={setDisplayedCourse}
           setDisplayedCourseRole={setDisplayedCourseRole}
         />
@@ -42,7 +43,7 @@ const CourseDetails = ({
       >
         <Typography
           sx={{
-            fontSize: 38,
+            fontSize: 45,
             fontWeight: "bold",
             mb: "5px",
             display: "inline",
