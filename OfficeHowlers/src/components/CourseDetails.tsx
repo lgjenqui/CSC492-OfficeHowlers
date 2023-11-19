@@ -1,8 +1,9 @@
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider, Button } from "@mui/material";
 import CourseModel from "../../../Models/course.model";
 import CourseDetailsStudent from "./CourseDetailsStudent";
 import CourseDetailsInstructor from "./CourseDetailsInstructor";
 import CourseDetailsAssistant from "./CourseDetailsAssistant";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface Props {
   displayedCourse: CourseModel | null;
@@ -55,6 +56,29 @@ const CourseDetails = ({
         <Typography sx={{ fontSize: 20, display: "inline" }} variant="body2">
           Enrolled as {displayedCourseRole}{" "}
         </Typography>
+        <Button
+          sx={{
+            fontSize: 15,
+            backgroundColor: "#CC0000",
+            ":hover": {
+              backgroundColor: "#9e0000",
+            },
+            mr: "50px",
+            mb: "10px",
+            display: "flex",
+            fontSize: "17px",
+          }}
+          variant="contained"
+          onClick={() => {
+            setDisplayedCourse(null);
+            setDisplayedCourseRole(null);
+          }}
+        >
+          <ArrowBackIcon
+            sx={{ fontSize: 30, m: "auto", verticalAlign: "center" }}
+          />{" "}
+          <span style={{ marginLeft: "10px" }}>View all courses</span>
+        </Button>
         <Divider
           sx={{ borderTop: "1px solid black", width: "90%", mb: "10px" }}
         />
