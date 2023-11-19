@@ -1,5 +1,7 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
+import { useState } from "react";
 import CourseModel from "../../../Models/course.model";
+import { regenerateCourseCode } from "../services/api/course";
 
 interface Props {
   course: CourseModel | null;
@@ -9,6 +11,28 @@ const CourseJoinCode = ({ course }: Props) => {
   if (!course) {
     return null;
   }
+
+  const [joinCode, setJoinCode] = useState<string | null>(
+    course.studentJoinCode
+  );
+
+  const handleRegenerateCodeClick = async () => {
+    if (course.id) {
+      try {
+        const response = await regenerateCourseCode(course.id);
+        if (response.ok) {
+          const data = await response.json();
+          setJoinCode(data.studentJoinCode);
+        } else {
+          // Handle the error response here
+          console.error("Failed to regenerate course code.", response.status);
+        }
+      } catch (error) {
+        console.error("Error during regeneration!", error);
+      }
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -51,7 +75,7 @@ const CourseJoinCode = ({ course }: Props) => {
             display: "inline",
           }}
         >
-          {course.studentJoinCode}
+          {joinCode}
         </Typography>
         <Button
           sx={{
@@ -66,7 +90,7 @@ const CourseJoinCode = ({ course }: Props) => {
             display: "block",
           }}
           variant="contained"
-          onClick={() => {}}
+          onClick={() => handleRegenerateCodeClick()}
         >
           Regenerate Code
         </Button>
