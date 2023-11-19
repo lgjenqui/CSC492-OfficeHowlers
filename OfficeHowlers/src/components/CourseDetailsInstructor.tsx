@@ -4,6 +4,7 @@ import { useState } from "react";
 import EditRoster from "./EditRoster";
 import CourseInfo from "./CourseInfo";
 import CourseJoinCode from "./CourseJoinCode";
+import { display } from "@mui/system";
 
 interface Props {
   displayedCourse: CourseModel | null;
@@ -35,7 +36,7 @@ const CourseDetailsInstructor = ({ displayedCourse }: Props) => {
     if (selectedCourseOption == BUTTONS.COURSE_INFO) {
       return <CourseInfo course={displayedCourse} />;
     } else if (selectedCourseOption == BUTTONS.MANAGE_ROSTER) {
-      return <Box>edit roster</Box>;
+      return <EditRoster course={displayedCourse} />;
     } else if (selectedCourseOption == BUTTONS.JOIN_CODE) {
       return <CourseJoinCode course={displayedCourse} />;
     }

@@ -23,12 +23,19 @@ import {
   removeTeachingAssistantsByEmail,
 } from "../services/api/course";
 import UserModel from "../../../Models/user.model";
+import CourseModel from "../../../Models/course.model";
 
+interface Props {
+  course: CourseModel | null;
+}
 
-const EditRoster = () => {
+const EditRoster = ({ course }: Props) => {
+  if (!course) {
+    return null;
+  }
+
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
-  const courseUUID = urlParams.get("id") || "invalid";
   const [studentError, setStudentError] = useState<boolean>(false);
   const [teachingAssistantError, setTeachingAssistantError] =
     useState<boolean>(false);
@@ -36,12 +43,21 @@ const EditRoster = () => {
   const [students, setStudents] = useState("");
   const [teachingAssistants, setTeachingAssistants] = useState("");
   const [instructors, setInstructors] = useState("");
-  const [instructorsEnrolled, setInstructorsEnrolled] = useState<UserModel[]>([]);
-  const [teachingAssistantsEnrolled, setTeachingAssistantsEnrolled] = useState<UserModel[]>([]);
+  const [instructorsEnrolled, setInstructorsEnrolled] = useState<UserModel[]>(
+    []
+  );
+  const [teachingAssistantsEnrolled, setTeachingAssistantsEnrolled] = useState<
+    UserModel[]
+  >([]);
   const [studentsEnrolled, setStudentsEnrolled] = useState<UserModel[]>([]);
-  const [teachingAssistantErrorMessages, setTeachingAssistantErrorMessages] = useState<string[]>([]);
-  const [instructorErrorMessages, setInstructorErrorMessages] = useState<string[]>([]);
-  const [studentErrorMessages, setStudentErrorMessages] = useState<string[]>([]);
+  const [teachingAssistantErrorMessages, setTeachingAssistantErrorMessages] =
+    useState<string[]>([]);
+  const [instructorErrorMessages, setInstructorErrorMessages] = useState<
+    string[]
+  >([]);
+  const [studentErrorMessages, setStudentErrorMessages] = useState<string[]>(
+    []
+  );
 
   // Resets all error values so the fields don't display with red outlines and such
   function resetErrorValues(): void {}
@@ -73,7 +89,6 @@ const EditRoster = () => {
     return true;
   }
 
-
   function inputIsValidTeachingAssistant(): boolean {
     // Reset the error values
     resetErrorValues();
@@ -91,7 +106,6 @@ const EditRoster = () => {
       newErrorMessages.push("Incorrect format in TA input");
       setTeachingAssistantError(true);
     }
-
 
     setTeachingAssistantErrorMessages(newErrorMessages);
 
@@ -128,52 +142,65 @@ const EditRoster = () => {
   }
   // Starts a session
   function onSubmitInstructors() {
+    if (!course) {
+      return;
+    }
     if (inputIsValidInstructor()) {
-      addInstructors(instructors.split("\n"), courseUUID).then(() => {
+      addInstructors(instructors.split("\n"), course.id).then(() => {
         fetchAllCourseEmails();
-    });
+      });
       console.log("submitted");
       setInstructors("");
     }
   }
 
   function onSubmitTeachingAssistants() {
+    if (!course) {
+      return;
+    }
     if (inputIsValidTeachingAssistant()) {
-      addAssistants(teachingAssistants.split("\n"), courseUUID).then(() => {
+      addAssistants(teachingAssistants.split("\n"), course.id).then(() => {
         fetchAllCourseEmails();
-    });
+      });
       console.log("submitted");
       setTeachingAssistants("");
     }
   }
 
   function onSubmitStudents() {
+    if (!course) {
+      return;
+    }
     if (inputIsValidStudent()) {
-      addStudents(students.split("\n"), courseUUID).then(() => {
+      addStudents(students.split("\n"), course.id).then(() => {
         fetchAllCourseEmails();
-    });
+      });
       console.log("submitted");
       setStudents("");
     }
   }
 
   function fetchAllCourseEmails() {
-    getInstructors(courseUUID)
+    if (!course) {
+      return;
+    }
+    getInstructors(course.id)
       .then((instructorEmails) => {
-          setInstructorsEnrolled(instructorEmails.instructors);
-          console.log(instructorsEnrolled);
+        console.log(instructorEmails);
+        setInstructorsEnrolled(instructorEmails.instructors);
+        console.log(instructorsEnrolled);
       })
       .catch((error) => {
         console.error(error);
       });
-    getAssistants(courseUUID)
+    getAssistants(course.id)
       .then((assistantEmails) => {
         setTeachingAssistantsEnrolled(assistantEmails.assistants);
       })
       .catch((error) => {
         console.error(error);
       });
-    getStudents(courseUUID)
+    getStudents(course.id)
       .then((studentEmails) => {
         setStudentsEnrolled(studentEmails.students);
         console.log(studentsEnrolled);
@@ -183,19 +210,28 @@ const EditRoster = () => {
       });
   }
 
-  function deleteInstructor(instructorEmail: string){
-    var instructorEmails = [instructorEmail]; 
-    removeInstructorsByEmail(instructorEmails, courseUUID);
+  function deleteInstructor(instructorEmail: string) {
+    var instructorEmails = [instructorEmail];
+    if (!course) {
+      return;
+    }
+    removeInstructorsByEmail(instructorEmails, course.id);
     fetchAllCourseEmails();
   }
-  function deleteStudent(studentEmail: string){
-    var studentEmails = [studentEmail]; 
-    removeStudentsByEmail(studentEmails, courseUUID);
+  function deleteStudent(studentEmail: string) {
+    if (!course) {
+      return;
+    }
+    var studentEmails = [studentEmail];
+    removeStudentsByEmail(studentEmails, course.id);
     fetchAllCourseEmails();
   }
-  function deleteTeachingAssistant(teachingAssistantEmail: string){
-    var teachingAssistantEmails = [teachingAssistantEmail]; 
-    removeTeachingAssistantsByEmail(teachingAssistantEmails, courseUUID);
+  function deleteTeachingAssistant(teachingAssistantEmail: string) {
+    if (!course) {
+      return;
+    }
+    var teachingAssistantEmails = [teachingAssistantEmail];
+    removeTeachingAssistantsByEmail(teachingAssistantEmails, course.id);
     fetchAllCourseEmails();
   }
 
@@ -208,8 +244,9 @@ const EditRoster = () => {
   return (
     <Box
       sx={{
-        width: "80%",
+        width: "100%",
         maxWidth: "1200px",
+        borderRadius: "15px",
         m: "auto",
         mt: "20px",
         alignContent: "center",
@@ -217,18 +254,24 @@ const EditRoster = () => {
     >
       <Box
         sx={{
-          width: "60%",
+          width: "100%",
           maxWidth: "1200px",
           m: "auto",
-          mt: "20px",
           alignContent: "center",
         }}
       >
-        <Typography sx={{ fontSize: 42, mb: "5px" }}>
+        <Typography
+          sx={{ fontSize: 35, textAlign: "center", mb: "5px", color: "black" }}
+        >
           Edit Course Roster
         </Typography>
         <Divider
-          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+          sx={{
+            borderTop: "1px solid lightgrey",
+            width: "90%",
+            m: "auto",
+            mb: "20px",
+          }}
         />
         <Grid
           sx={{
@@ -240,74 +283,99 @@ const EditRoster = () => {
           spacing={3}
         >
           <Grid item>
-            <Typography sx={{ fontSize: 20 }}>
+            <Typography sx={{ fontSize: 20, color: "grey" }}>
               Manually enter instructor, TA, and student emails
             </Typography>
-            <Typography sx={{ fontSize: 14, mb: "15px" }}>
+            <Typography sx={{ fontSize: 14, mb: "15px", color: "grey" }}>
               One on each line in this format: <i>example@org.edu</i>
             </Typography>
-            
-            
           </Grid>
-          
         </Grid>
-        <TextField
-              sx={{width:"100%"}}
-              id="outlined-multiline-static"
-              label="Instructor Emails"
-              multiline
-              rows={4}
-              value={instructors}
-              onChange={(e) => {
-                setInstructors(e.target.value);
-                setInstructorError(false);
-              }}
-              error={instructorError}
-            />
         <h3>Enrolled Instructors</h3>
-          <Box
-            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
-          >
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}  sx={{fontWeight:"bold"}}>
-                Name
-              </Grid>
-              <Grid item xs={4}  sx={{fontWeight:"bold"}}>
-                Email
-              </Grid>
-              <Grid item xs={3}  sx={{fontWeight:"bold"}}>
-                Delete
-              </Grid>
+        <TextField
+          sx={{
+            width: "100%",
+            color: "white",
+            backgroundColor: "white",
+            mb: "15px",
+          }}
+          id="outlined-multiline-static"
+          label="Instructor Emails"
+          multiline
+          rows={4}
+          value={instructors}
+          onChange={(e) => {
+            setInstructors(e.target.value);
+            setInstructorError(false);
+          }}
+          error={instructorError}
+        />
+        <Box
+          sx={{
+            overflowY: "scroll",
+            maxHeight: "300px",
+            maxWidth: "100%",
+          }}
+        >
+          <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid item xs={5} sx={{ fontWeight: "bold" }}>
+              Name
             </Grid>
-            {instructorsEnrolled.map(instructor => {
-              return(
-                <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid item xs={4} sx={{ fontWeight: "bold" }}>
+              Email
+            </Grid>
+            <Grid item xs={3} sx={{ fontWeight: "bold" }}>
+              Delete
+            </Grid>
+            <Divider
+              sx={{
+                borderTop: "1px solid white",
+                width: "100%",
+                m: "auto",
+                mt: "10px",
+                mb: "10px",
+              }}
+            />
+          </Grid>
+          {instructorsEnrolled.map((instructor) => {
+            return (
               <Grid
-                item
-                xs={5}
-                sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
+                container
+                direction="row"
+                alignItems="center"
+                spacing={3}
+                key={instructor.email}
               >
-               {(instructor.firstName != "Unset firstname")?instructor.firstName:""} {!!(instructor.lastName != "Unset lastname")?instructor.lastName:""}
+                <Grid
+                  item
+                  xs={5}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {instructor.firstName != "Unset firstname"
+                    ? instructor.firstName
+                    : ""}{" "}
+                  {!!(instructor.lastName != "Unset lastname")
+                    ? instructor.lastName
+                    : ""}
+                </Grid>
+                <Grid item xs={4}>
+                  {instructor.email}
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    onClick={(e) => deleteInstructor(instructor.email)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                {instructor.email}
-              </Grid>
-              <Grid item xs={2}>
-                <IconButton
-                onClick={(e)=> deleteInstructor(instructor.email)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-              );
-            })}
-            
-            
-          </Box>
+            );
+          })}
+        </Box>
 
         <Box
           sx={{
@@ -354,67 +422,86 @@ const EditRoster = () => {
             );
           })}
         </Box>
-        
-          <br></br>
-          <Divider
-          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+
+        <br></br>
+        <h3>Enrolled Teaching Assistants</h3>
+
+        <TextField
+          sx={{ width: "100%", backgroundColor: "white", mb: "15px" }}
+          id="outlined-multiline-static"
+          label="TA Emails"
+          multiline
+          rows={4}
+          value={teachingAssistants}
+          onChange={(e) => {
+            setTeachingAssistants(e.target.value);
+            setTeachingAssistantError(false);
+          }}
+          error={teachingAssistantError}
         />
-         <TextField
-          sx={{width:"100%"}}
-              id="outlined-multiline-static"
-              label="TA Emails"
-              multiline
-              rows={4}
-              value={teachingAssistants}
-              onChange={(e) => {
-                setTeachingAssistants(e.target.value);
-                setTeachingAssistantError(false);
-             }}
-              error={teachingAssistantError}
+        <Box sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}>
+          <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid item xs={5} sx={{ fontWeight: "bold" }}>
+              Name
+            </Grid>
+            <Grid item xs={4} sx={{ fontWeight: "bold" }}>
+              Email
+            </Grid>
+            <Grid item xs={3} sx={{ fontWeight: "bold" }}>
+              Delete
+            </Grid>
+            <Divider
+              sx={{
+                borderTop: "1px solid white",
+                width: "100%",
+                m: "auto",
+                mt: "10px",
+                mb: "10px",
+              }}
             />
-            <h3>Enrolled Teaching Assistants</h3>
-          <Box
-            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
-          >
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5}  sx={{fontWeight:"bold"}}>
-                Name
-              </Grid>
-              <Grid item xs={4}  sx={{fontWeight:"bold"}}>
-                Email
-              </Grid>
-              <Grid item xs={3}  sx={{fontWeight:"bold"}}>
-                Delete
-              </Grid>
-            </Grid>
-            {teachingAssistantsEnrolled.map(teachingAssistant => {
-              return(
-                <Grid container direction="row" alignItems="center" spacing={3}>
+          </Grid>
+          {teachingAssistantsEnrolled.map((teachingAssistant) => {
+            return (
               <Grid
-                item
-                xs={5}
-                sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
+                container
+                direction="row"
+                alignItems="center"
+                spacing={3}
+                key={teachingAssistant.email}
               >
-               {(teachingAssistant.firstName != "Unset firstname")?teachingAssistant.firstName:""} {!!(teachingAssistant.lastName != "Unset lastname")?teachingAssistant.lastName:""}
+                <Grid
+                  item
+                  xs={5}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {teachingAssistant.firstName != "Unset firstname"
+                    ? teachingAssistant.firstName
+                    : ""}{" "}
+                  {!!(teachingAssistant.lastName != "Unset lastname")
+                    ? teachingAssistant.lastName
+                    : ""}
+                </Grid>
+                <Grid item xs={4}>
+                  {teachingAssistant.email}
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    onClick={(e) =>
+                      deleteTeachingAssistant(teachingAssistant.email)
+                    }
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                {teachingAssistant.email}
-              </Grid>
-              <Grid item xs={2}>
-                <IconButton
-                onClick={(e)=> deleteTeachingAssistant(teachingAssistant.email)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-              );
-            })}
-          </Box>
-          <Box
+            );
+          })}
+        </Box>
+        <Box
           sx={{
             width: "50%",
             alignContent: "center",
@@ -460,65 +547,80 @@ const EditRoster = () => {
             );
           })}
         </Box>
-        <Divider
-          sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        <h3>Enrolled Students</h3>
+
+        <TextField
+          sx={{ width: "100%", backgroundColor: "white", mb: "15px" }}
+          id="outlined-multiline-static"
+          label="Student Emails"
+          multiline
+          rows={4}
+          value={students}
+          onChange={(e) => {
+            setStudents(e.target.value);
+            setStudentError(false);
+          }}
+          error={studentError}
         />
-          <TextField
-             sx={{width:"100%"}}
-              id="outlined-multiline-static"
-              label="Student Emails"
-              multiline
-              rows={4}
-              value={students}
-              onChange={(e) => {
-                setStudents(e.target.value);
-                setStudentError(false);
+        <Box sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}>
+          <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid item xs={5} sx={{ fontWeight: "bold" }}>
+              Name
+            </Grid>
+            <Grid item xs={4} sx={{ fontWeight: "bold" }}>
+              Email
+            </Grid>
+            <Grid item xs={3} sx={{ fontWeight: "bold" }}>
+              Delete
+            </Grid>
+            <Divider
+              sx={{
+                borderTop: "1px solid white",
+                width: "100%",
+                m: "auto",
+                mt: "10px",
+                mb: "10px",
               }}
-              error={studentError}
             />
-            <h3>Enrolled Students</h3>
-          <Box
-            sx={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "100%" }}
-          >
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={5} sx={{fontWeight:"bold"}}>
-                Name
-              </Grid>
-              <Grid item xs={4} sx={{fontWeight:"bold"}}>
-                Email
-              </Grid>
-              <Grid item xs={3} sx={{fontWeight:"bold"}}>
-                Delete
-              </Grid>
-            </Grid>
-            {studentsEnrolled.map(student => {
-              return(
-                <Grid container direction="row" alignItems="center" spacing={3}>
+          </Grid>
+          {studentsEnrolled.map((student) => {
+            return (
               <Grid
-                item
-                xs={5}
-                sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                }}
+                container
+                direction="row"
+                alignItems="center"
+                spacing={3}
+                key={student.email}
               >
-               {(student.firstName != "Unset firstname")?student.firstName:""} {!!(student.lastName != "Unset lastname")?student.lastName:""}
+                <Grid
+                  item
+                  xs={5}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {student.firstName != "Unset firstname"
+                    ? student.firstName
+                    : ""}{" "}
+                  {!!(student.lastName != "Unset lastname")
+                    ? student.lastName
+                    : ""}
+                </Grid>
+                <Grid item xs={4}>
+                  {student.email}
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton onClick={(e) => deleteStudent(student.email)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                {student.email}
-              </Grid>
-              <Grid item xs={2}>
-                <IconButton
-                onClick={(e)=> deleteStudent(student.email)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-              );
-            })}
-          </Box>
-          <Box
+            );
+          })}
+        </Box>
+        <Box
           sx={{
             width: "50%",
             alignContent: "center",
@@ -563,7 +665,6 @@ const EditRoster = () => {
             );
           })}
         </Box>
-            
       </Box>
     </Box>
   );
