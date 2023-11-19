@@ -59,7 +59,7 @@ const CourseJoinCode = ({ course }: Props) => {
             color: "#CC0000",
             backgroundColor: "white",
             ":hover": {
-              backgroundColor: "#CC0000",
+              backgroundColor: "#EAEAEA",
             },
             m: "auto",
             mb: "15px",
