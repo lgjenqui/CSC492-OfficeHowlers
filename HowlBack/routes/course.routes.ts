@@ -7,7 +7,8 @@ import { createCourse, getCourse, deleteCourse, getAllMyCourses,
     getCourseSessions,
     removeStudentsByEmail,
     removeTeachingAssistantsByEmail,
-    removeInstructorsByEmail} from '../controllers/course.controller';
+    removeInstructorsByEmail,
+    regenerateJoinCode} from '../controllers/course.controller';
 import cors from "cors";
 
 const courseRouter: Router = express.Router();
@@ -41,6 +42,8 @@ courseRouter.delete('/', cors(), deleteCourse );
 courseRouter.get('/manage/roster/join', cors(), joinCourse );
 
 courseRouter.post('/join', joinCourseByCourseCode);
+
+courseRouter.put('/regenerateJoinCode', regenerateJoinCode);
 
 courseRouter.get('/queue', cors(), getCourseQueue );
 

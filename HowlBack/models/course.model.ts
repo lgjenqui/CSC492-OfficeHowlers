@@ -95,21 +95,21 @@ function generateRandomCode(length: number): string {
 }
 
 // Generates random codes until it finds a unique one
-async function generateUniqueJoinCode(course: Course): Promise<string> {
+export async function generateUniqueJoinCode(): Promise<string> {
   const code = generateRandomCode(COURSE_JOIN_CODE_LENGTH);
 
   // Look for a course where the student join code is equal to this newly generated code
   const existingCourse = await Course.findOne({ where: { studentJoinCode: code } });
   if (existingCourse) {
     // If code exists, recursively generate a new one
-    return generateUniqueJoinCode(course);
+    return generateUniqueJoinCode();
   }
   return code;
 }
 
 // Generate a unique join code for the course before its creation
 Course.beforeCreate(async (course, options) => {
-  course.studentJoinCode = await generateUniqueJoinCode(course);
+  course.studentJoinCode = await generateUniqueJoinCode();
 });
 
 export default Course;

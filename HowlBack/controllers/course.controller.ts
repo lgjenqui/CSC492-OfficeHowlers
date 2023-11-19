@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Course from '../models/course.model';
+import Course, { generateUniqueJoinCode }  from '../models/course.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
 import { COURSE_JOIN_CODE_LENGTH } from '../src/constants';
@@ -235,6 +235,22 @@ export const joinCourseByCourseCode = async (req: Request, res: Response): Promi
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ message: 'Error joining the course', error: error.message });
+  }
+};
+
+export const regenerateJoinCode = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (course && await isValidInstructorForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const newCourseCode = await generateUniqueJoinCode();
+      course.studentJoinCode = newCourseCode;
+      await course.save();
+      res.status(200).json({ success: true, studentJoinCode: newCourseCode });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized for course modification" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error regenerating the course join code', error: error.message });
   }
 };
 
