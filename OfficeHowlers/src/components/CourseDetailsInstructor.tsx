@@ -1,14 +1,11 @@
 import { Box, Button } from "@mui/material/";
 import CourseModel from "../../../Models/course.model";
 import { useState } from "react";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditRoster from "./EditRoster";
 import CourseInfo from "./courseInfo";
 
 interface Props {
   displayedCourse: CourseModel | null;
-  setDisplayedCourse: (course: CourseModel | null) => void;
-  setDisplayedCourseRole: (role: string | null) => void;
 }
 
 const BUTTONS = {
@@ -17,14 +14,21 @@ const BUTTONS = {
   ACCESS_CODE: "accessCode",
 };
 
-const CourseDetailsInstructor = ({
-  displayedCourse,
-  setDisplayedCourse,
-  setDisplayedCourseRole,
-}: Props) => {
+const CourseDetailsInstructor = ({ displayedCourse }: Props) => {
   const [selectedCourseOption, setSelectedCourseOption] = useState<
     string | null
-  >("courseInfo");
+  >(BUTTONS.COURSE_INFO);
+
+  const selectedButtonStyle = {
+    bgcolor: "white",
+    color: "#CC0000",
+    borderRadius: "20px",
+    border: "2px solid grey",
+    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+    "&:hover": {
+      bgcolor: "#f0f0f0",
+    },
+  };
 
   function getSelectedCourseOptionView() {
     if (selectedCourseOption == BUTTONS.COURSE_INFO) {
@@ -51,9 +55,9 @@ const CourseDetailsInstructor = ({
               backgroundColor: "#9e0000",
             },
             mr: "50px",
-            ...(selectedCourseOption === BUTTONS.COURSE_INFO && {
-              className: "selectedButton",
-            }),
+            ...(selectedCourseOption === BUTTONS.COURSE_INFO
+              ? selectedButtonStyle
+              : null),
           }}
           variant="contained"
           onClick={() => setSelectedCourseOption(BUTTONS.COURSE_INFO)}
@@ -68,6 +72,9 @@ const CourseDetailsInstructor = ({
               backgroundColor: "#9e0000",
             },
             mr: "50px",
+            ...(selectedCourseOption === BUTTONS.MANAGE_ROSTER
+              ? selectedButtonStyle
+              : null),
           }}
           variant="contained"
           onClick={() => setSelectedCourseOption(BUTTONS.MANAGE_ROSTER)}
@@ -82,6 +89,9 @@ const CourseDetailsInstructor = ({
               backgroundColor: "#9e0000",
             },
             mr: "50px",
+            ...(selectedCourseOption === BUTTONS.ACCESS_CODE
+              ? selectedButtonStyle
+              : null),
           }}
           variant="contained"
           onClick={() => setSelectedCourseOption(BUTTONS.ACCESS_CODE)}

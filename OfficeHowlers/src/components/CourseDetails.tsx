@@ -22,13 +22,7 @@ const CourseDetails = ({
     if (displayedCourseRole == "Student") {
       return <CourseDetailsStudent />;
     } else if (displayedCourseRole == "Instructor") {
-      return (
-        <CourseDetailsInstructor
-          displayedCourse={displayedCourse}
-          setDisplayedCourse={setDisplayedCourse}
-          setDisplayedCourseRole={setDisplayedCourseRole}
-        />
-      );
+      return <CourseDetailsInstructor displayedCourse={displayedCourse} />;
     }
     return <CourseDetailsAssistant />;
   }
@@ -58,7 +52,6 @@ const CourseDetails = ({
         </Typography>
         <Button
           sx={{
-            fontSize: 15,
             backgroundColor: "#CC0000",
             ":hover": {
               backgroundColor: "#9e0000",
@@ -66,7 +59,7 @@ const CourseDetails = ({
             mr: "50px",
             mb: "10px",
             display: "flex",
-            fontSize: "17px",
+            fontSize: "20px",
           }}
           variant="contained"
           onClick={() => {

@@ -14,7 +14,7 @@ const CourseInfo = ({ course }: Props) => {
   return (
     <Box
       sx={{
-        mt: "30px",
+        mt: "20px",
         background: "#CC0000",
         borderRadius: "15px",
         padding: "30px",
