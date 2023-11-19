@@ -19,6 +19,7 @@ const CourseInfo = ({ course }: Props) => {
         borderRadius: "15px",
         padding: "30px",
         color: "white",
+        textAlign: "center",
       }}
     >
       <Typography
@@ -31,7 +32,12 @@ const CourseInfo = ({ course }: Props) => {
         Available staff:
       </Typography>
       <Divider
-        sx={{ borderTop: "1px solid white", width: "50%", mb: "10px" }}
+        sx={{
+          borderTop: "1px solid white",
+          width: "50%",
+          m: "auto",
+          mb: "10px",
+        }}
       />
       <Grid sx={{ mb: "30px" }} container spacing={2}>
         <Grid item>

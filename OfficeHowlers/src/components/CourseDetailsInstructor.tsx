@@ -2,7 +2,8 @@ import { Box, Button } from "@mui/material/";
 import CourseModel from "../../../Models/course.model";
 import { useState } from "react";
 import EditRoster from "./EditRoster";
-import CourseInfo from "./courseInfo";
+import CourseInfo from "./CourseInfo";
+import CourseJoinCode from "./CourseJoinCode";
 
 interface Props {
   displayedCourse: CourseModel | null;
@@ -11,7 +12,7 @@ interface Props {
 const BUTTONS = {
   COURSE_INFO: "courseInfo",
   MANAGE_ROSTER: "manageRoster",
-  ACCESS_CODE: "accessCode",
+  JOIN_CODE: "joinCode",
 };
 
 const CourseDetailsInstructor = ({ displayedCourse }: Props) => {
@@ -35,8 +36,8 @@ const CourseDetailsInstructor = ({ displayedCourse }: Props) => {
       return <CourseInfo course={displayedCourse} />;
     } else if (selectedCourseOption == BUTTONS.MANAGE_ROSTER) {
       return <Box>edit roster</Box>;
-    } else if (selectedCourseOption == BUTTONS.ACCESS_CODE) {
-      return <Box>access code</Box>;
+    } else if (selectedCourseOption == BUTTONS.JOIN_CODE) {
+      return <CourseJoinCode course={displayedCourse} />;
     }
   }
 
@@ -89,14 +90,14 @@ const CourseDetailsInstructor = ({ displayedCourse }: Props) => {
               backgroundColor: "#9e0000",
             },
             mr: "50px",
-            ...(selectedCourseOption === BUTTONS.ACCESS_CODE
+            ...(selectedCourseOption === BUTTONS.JOIN_CODE
               ? selectedButtonStyle
               : null),
           }}
           variant="contained"
-          onClick={() => setSelectedCourseOption(BUTTONS.ACCESS_CODE)}
+          onClick={() => setSelectedCourseOption(BUTTONS.JOIN_CODE)}
         >
-          Access Code
+          Join Code
         </Button>
       </Box>
       {getSelectedCourseOptionView()}
