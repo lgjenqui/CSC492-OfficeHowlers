@@ -17,7 +17,7 @@ const CourseInfo = ({ course }: Props) => {
         mt: "20px",
         background: "#CC0000",
         borderRadius: "15px",
-        padding: "30px",
+        padding: "15px",
         color: "white",
         textAlign: "center",
       }}
