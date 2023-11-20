@@ -9,22 +9,19 @@ import Ticket from '../models/ticket.model';
 
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Create a course in the database
-    const createdSession = await Session.create();
     const instructorUser = await retrieveUser(req.headers['x-shib_mail'] as string);
     if(instructorUser ) {
-      await createdSession.setUser(instructorUser);
-      // await createdSession.online=req.body.online;
-      await Promise.all(req.body.courseIDs.map(async (id: UUID) => {
+      const courses = await Promise.all(req.body.courseIDs.map(async (id: UUID) => {
         const course = await Course.findByPk(id);
         if ( await isValidInstructorOrAssistantForCourse(instructorUser.email, course)) {
-          createdSession.startTime = req.body.startTime;
-          createdSession.endTime = req.body.endTime;
-          createdSession.inPerson = req.body.inPerson;
-          createdSession.online = req.body.online;
-          return createdSession.addCourse(course);
+          return course;
         }
         return Promise.reject("User not eligible to start Session for Course: " + course.name);
+      }));
+      const createdSession = await Session.create(req.body);
+      await createdSession.setUser(instructorUser);
+      await Promise.all(courses.map(async (course: Course) => {
+        return createdSession.addCourse(course);
       }));
       res.status(201).json(createdSession);
     }
