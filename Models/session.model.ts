@@ -6,4 +6,8 @@ export default interface SessionModel extends Model {
     endTime: Date;
     inPerson: Boolean;
     online: Boolean;
+    inPersonLocation: String;
+    onlineLocation: String;
+    showToAll: Boolean;
+    showToHelpees: Boolean;
 }
