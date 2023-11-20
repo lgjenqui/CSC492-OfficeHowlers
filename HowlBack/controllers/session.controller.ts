@@ -18,6 +18,10 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
       await Promise.all(req.body.courseIDs.map(async (id: UUID) => {
         const course = await Course.findByPk(id);
         if ( await isValidInstructorOrAssistantForCourse(instructorUser.email, course)) {
+          createdSession.startTime = req.body.startTime;
+          createdSession.endTime = req.body.endTime;
+          createdSession.inPerson = req.body.inPerson;
+          createdSession.online = req.body.online;
           return createdSession.addCourse(course);
         }
         return Promise.reject("User not eligible to start Session for Course: " + course.name);
