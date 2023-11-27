@@ -20,6 +20,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<any>([]);
   const [group, setGroup] = useState<string>("");
+  const [assignment, setAssignment] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [tried, setTried] = useState<string>("");
   const [startTime, setStartTime] = React.useState<Dayjs | null>(
@@ -35,6 +36,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
     useState<boolean>(false);
   const [courseError, setCourseError] = useState<boolean>(false);
   const [groupError, setGroupError] = useState<boolean>(false);
+  const [assignmentError, setAssignmentError] = useState<boolean>(false);
   const [descriptionError, setDescriptionError] = useState<boolean>(false);
   const [triedError, setTriedError] = useState<boolean>(false);
   const [inPersonLocationError, setInPersonLocationError] =
@@ -49,6 +51,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
   function resetErrorValues(): void {
     setCourseError(false);
     setGroupError(false);
+    setAssignmentError(false);
     setDescriptionError(false);
     setTriedError(false);
   }
@@ -76,6 +79,11 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
     if (selectedCourses.length == 0) {
       newErrorMessages.push("Please select a course");
       setSelectedCoursesError(true);
+    }
+
+    if (assignment.length <= 0) {
+      newErrorMessages.push("Please describe what you are working on");
+      setAssignmentError(true);
     }
 
     if (tried.length <= 0) {
@@ -110,6 +118,7 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
     if (inputIsValid()) {
       createTicket(
         selectedCourses.id,
+        assignment,
         description,
         tried,
         group.split(/\s*,\s*/)
@@ -252,12 +261,12 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             label="Assignment"
             id="course-name-field"
             sx={{ mr: "20px", width: "100%" }}
-            value={description}
+            value={assignment}
             onChange={(e) => {
-              setDescription(e.target.value);
-              setDescriptionError(false);
+              setAssignment(e.target.value);
+              setAssignmentError(false);
             }}
-            error={descriptionError}
+            error={assignmentError}
           />
         </Grid>
         <Grid sx={{ width: "50%" }} item>

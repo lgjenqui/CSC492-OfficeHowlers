@@ -1,6 +1,8 @@
 import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import { getTimeDiffStr } from "../services/util/misc";
+import dayjs from "dayjs";
 
 interface Props {
   ticket: TicketWrapperModel | null;
@@ -57,7 +59,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
             <Typography
               sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
             >
-              <b>Waiting for: </b>45 min
+              <b>Waiting for: </b>{getTimeDiffStr(ticket.createdAt, dayjs())}
             </Typography>
             <Divider
               sx={{
@@ -70,6 +72,26 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
             />
           </Box>
           <Box sx={{ m: "auto", mt: "10px" }}>
+            <Typography sx={{ fontSize: 23, mb: "5px", fontWeight: "bold" }}>
+              Assignment:
+            </Typography>
+            <Typography
+              sx={{
+                // background: "#D9D9D9",
+                color: "white",
+                width: "90%",
+                paddingTop: "3px",
+                paddingBottom: "3px",
+                paddingLeft: "15px",
+                fontSize: 23,
+                mb: "15px",
+                ml: "20px",
+                mt: "5px",
+                border: "1px solid white",
+              }}
+            >
+              - {ticket.assignment}
+            </Typography>
             <Typography sx={{ fontSize: 23, mb: "5px", fontWeight: "bold" }}>
               Problem description:
             </Typography>

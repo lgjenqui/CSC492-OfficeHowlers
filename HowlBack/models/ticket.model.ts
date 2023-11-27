@@ -26,6 +26,9 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
           autoIncrement: true,
           primaryKey: true,
         },
+        assignment: {
+          type: DataTypes.STRING
+        },
         problemDescription: {
           type: DataTypes.STRING
         },
