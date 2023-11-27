@@ -29,3 +29,13 @@ export async function getTicket(): Promise<any> {
   // Create the new course
   return (await fetch(window.location.origin + "/api/ticket", requestOptions)).json();
 }
+
+export async function getMyTicketPosition(): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  // Create the new course
+  return (await fetch(window.location.origin + "/api/ticket/position", requestOptions)).json();
+}

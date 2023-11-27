@@ -1,16 +1,28 @@
 import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import { getMyTicketPosition } from "../services/api/ticket";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   ticket: TicketWrapperModel | null;
 }
 
 const StudentHelpTicket = ({ ticket }: Props) => {
+  const [ticketPosition, setTicketPosition] = useState<string | null>("");
   if (!ticket) {
     return null;
   }
   console.log(ticket);
+  useEffect(() => {
+    getMyTicketPosition()
+      .then((value: string) => {
+        setTicketPosition(value);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Box
@@ -42,7 +54,7 @@ const StudentHelpTicket = ({ ticket }: Props) => {
           />
           <Typography sx={{ fontSize: 23 }}>
             <b>Position in queue: </b>
-            3rd
+            {ticketPosition}
           </Typography>
           <Typography sx={{ fontSize: 23 }}>
             <b>Problem description: </b>
