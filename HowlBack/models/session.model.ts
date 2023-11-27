@@ -59,9 +59,6 @@ import { UUID } from 'crypto';
       showToAll: {
         type: DataTypes.BOOLEAN
       },
-      showToHelpees: {
-        type: DataTypes.BOOLEAN
-      },
     },
     {
       sequelize, // Providing the Sequelize instance here

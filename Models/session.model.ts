@@ -9,5 +9,4 @@ export default interface SessionModel extends Model {
     inPersonLocation: String;
     onlineLocation: String;
     showToAll: Boolean;
-    showToHelpees: Boolean;
 }
