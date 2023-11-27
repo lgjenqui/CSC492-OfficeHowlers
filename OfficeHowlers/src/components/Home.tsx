@@ -25,6 +25,9 @@ import ViewCourses from "./ViewCourses";
 import ViewHelpSession from "./ViewHelpSession";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import JoinCourse from "./JoinCourse";
+import CreateHelpTicket from "./CreateHelpTicket";
+import CreateCourse from "./CreateCourse";
+import StartSession from "./StartSession";
 
 interface Props {
   user: UserModel | null;
@@ -33,6 +36,7 @@ interface Props {
   studentCourses: CourseModel[];
   coursesLoadedSuccessfully: boolean | null;
   isLoading: boolean;
+  setIsLoading: (val: boolean) => void;
   currentView: string;
   setCurrentView: (val: string) => void;
   studentHelpTicket: TicketWrapperModel | null;
@@ -70,6 +74,7 @@ const Home = ({
   studentCourses,
   coursesLoadedSuccessfully,
   isLoading,
+  setIsLoading,
   currentView,
   setCurrentView,
   studentHelpTicket,
@@ -79,9 +84,9 @@ const Home = ({
   var navigate = useNavigate();
 
   function onOptionsClick(option: string) {
-    if (option == "Create course") navigate("/createCourse");
-    else if (option == "Start help session") navigate("/startSession");
-    else if (option == "Create help ticket") navigate("/helpTickets/create");
+    if (option == "Create course") setCurrentView("createCourse");
+    else if (option == "Start help session") setCurrentView("startSession");
+    else if (option == "Create help ticket") setCurrentView("createHelpTicket");
     else if (option == "My help ticket") setCurrentView("studentTicket");
     else if (option == "My help session") setCurrentView("helpSession");
     else if (option == "My courses") setCurrentView("myCourses");
@@ -183,18 +188,29 @@ const Home = ({
         />
       );
     }
+    if (currentView == "createHelpTicket") {
+      return (
+        <CreateHelpTicket setCurrentView={setCurrentView}></CreateHelpTicket>
+      );
+    }
+    if (currentView == "createCourse") {
+      return <CreateCourse setIsLoading={setIsLoading}></CreateCourse>;
+    }
+    if (currentView == "startSession") {
+      return <StartSession setCurrentView={setCurrentView} />;
+    }
   }
 
   if (user && isLoading == false) {
     return (
-      <Grid sx={{ flexGrow: 1, mt: "20px" }} container spacing={3}>
+      <Grid sx={{ flexGrow: 1, mt: "35px" }} container spacing={3}>
         <Box
           sx={{
             width: "20%",
             height: "min-height: 1000px",
             m: "auto",
             ml: "50px",
-            mt: "50px",
+            mt: 0,
             userSelect: "none",
             borderRight: "1px solid black",
           }}

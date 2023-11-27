@@ -178,28 +178,28 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
   return (
     <Box
       sx={{
-        width: "60%",
-        maxWidth: "1200px",
+        width: "70%",
+        height: "100%",
         m: "auto",
         mt: "20px",
-        alignContent: "center",
       }}
     >
-      <Typography sx={{ fontSize: 42, mb: "5px" }}>
+      <Typography sx={{ fontSize: 38, fontWeight: "bold", mb: "5px" }}>
         Create help ticket
       </Typography>
       <Divider
-        sx={{ borderTop: "1px solid lightgrey", width: "90%", mb: "20px" }}
+        sx={{ borderTop: "1px solid black", width: "80%", mb: "15px" }}
       />
       <Grid
         sx={{
           flexGrow: 1,
           justifyContent: "center",
+          width: "90%",
         }}
         container
         spacing={3}
       >
-        <Grid sx={{ width: "20%" }} item>
+        <Grid sx={{ width: "50%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Select your Course
           </Typography>
@@ -226,7 +226,8 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             )}
           />
         </Grid>
-        <Grid sx={{ width: "45%" }} item>
+        <Box width="100%"></Box>
+        <Grid sx={{ width: "50%" }} item>
           <Typography sx={{ fontSize: 20, mb: "5px" }}>
             Group Request
           </Typography>
@@ -242,8 +243,8 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
             error={groupError}
           />
         </Grid>
-        <Grid sx={{ width: "35%" }} item>
-        <Typography sx={{ fontSize: 20 , mb: "5px" }}>
+        <Grid sx={{ width: "50%" }} item>
+          <Typography sx={{ fontSize: 20, mb: "5px" }}>
             What are you working on?
           </Typography>
           <TextField
@@ -301,10 +302,8 @@ const CreateHelpTicket = ({ setCurrentView }: Props) => {
       <Box
         sx={{
           width: "50%",
-          alignContent: "center",
-          m: "auto",
-          mt: "25px",
-          textAlign: "center",
+          mt: "20px",
+          ml: 0,
         }}
       >
         <Button
