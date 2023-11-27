@@ -144,7 +144,7 @@ const StartSession = ({ setCurrentView }: Props) => {
   function onSubmit() {
     const online = modes.includes("Virtual");
     const inPerson = modes.includes("In-Person");
-    startSession(selectedCourses, inPerson, online, startTime, endTime)
+    startSession(selectedCourses, inPerson, online, dayjs(), endTime)
       .then(async (res) => {
         if (res.status == 201) {
           setStartSessionSuccessful(true);
