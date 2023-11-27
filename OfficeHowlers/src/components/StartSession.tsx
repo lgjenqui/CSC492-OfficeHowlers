@@ -46,7 +46,6 @@ const StartSession = ({ setCurrentView }: Props) => {
   const [selectedCoursesError, setSelectedCoursesError] =
     useState<boolean>(false);
   const [modesError, setModesError] = useState<boolean>(false);
-  const [startTimeError, setStartTimeError] = useState<boolean>(false);
   const [endTimeError, setEndTimeError] = useState<boolean>(false);
   const [virtualLocationError, setVirtualLocationError] =
     useState<boolean>(false);
@@ -63,7 +62,6 @@ const StartSession = ({ setCurrentView }: Props) => {
   function resetErrorValues(): void {
     setSelectedCoursesError(false);
     setModesError(false);
-    setStartTimeError(false);
     setEndTimeError(false);
     setVirtualLocationError(false);
     setInPersonLocationError(false);
@@ -89,12 +87,6 @@ const StartSession = ({ setCurrentView }: Props) => {
       setModesError(true);
     }
 
-    // Check if one or both of the start and end times was not provided
-    if (!startTime) {
-      newErrorMessages.push("Please provide a session start time");
-      setStartTimeError(true);
-    }
-
     if (!endTime) {
       newErrorMessages.push("Please provide a session end time");
       setEndTimeError(true);
@@ -113,13 +105,6 @@ const StartSession = ({ setCurrentView }: Props) => {
         setEndTimeError(true);
       }
 
-      // The start and end times must not have already passed
-      if (startTime.isBefore(dayjs(), "minute")) {
-        newErrorMessages.push(
-          "The session start time must be the current time or later"
-        );
-        setStartTimeError(true);
-      }
       if (endTime.isBefore(dayjs(), "minute")) {
         newErrorMessages.push(
           "The session end time must be the current time or later"
@@ -159,7 +144,7 @@ const StartSession = ({ setCurrentView }: Props) => {
   function onSubmit() {
     const online = modes.includes("Virtual");
     const inPerson = modes.includes("In-Person");
-    startSession(selectedCourses, inPerson, online, startTime, endTime)
+    startSession(selectedCourses, inPerson, online, dayjs(), endTime)
       .then(async (res) => {
         if (res.status == 201) {
           setStartSessionSuccessful(true);
@@ -305,14 +290,10 @@ const StartSession = ({ setCurrentView }: Props) => {
             Session start time
           </Typography>
           <TimePicker
+            disabled
             sx={{ width: "90%" }}
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
-            slotProps={{
-              textField: {
-                error: startTimeError,
-              },
-            }}
           />
         </Grid>
         <Grid item sx={{ width: "40%" }}>
@@ -385,12 +366,7 @@ const StartSession = ({ setCurrentView }: Props) => {
                 <FormControlLabel
                   value="helpedStudent"
                   control={<Radio />}
-                  label="Only the student(s) being helped"
-                />
-                <FormControlLabel
-                  value="manual"
-                  control={<Radio />}
-                  label="Only the student(s) I send it to"
+                  label="Only the student(s) currently being helped"
                 />
               </RadioGroup>
             </FormControl>
