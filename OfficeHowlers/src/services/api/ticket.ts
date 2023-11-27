@@ -2,12 +2,13 @@ import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
 import Ticket from "../../../../Models/ticket.model";
 
-export async function createTicket(courseId: string, problemDescription: string, solutionAttempt: string, group: string[]): Promise<any> {
+export async function createTicket(courseId: string, assignment: string, problemDescription: string, solutionAttempt: string, group: string[]): Promise<any> {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ticket: {
+          assignment: assignment,
           problemDescription: problemDescription,
           solutionAttempt: solutionAttempt
         },

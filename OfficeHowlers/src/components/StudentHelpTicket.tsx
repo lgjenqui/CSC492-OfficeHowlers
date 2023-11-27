@@ -41,6 +41,10 @@ const StudentHelpTicket = ({ ticket }: Props) => {
             sx={{ borderTop: "1px solid white", width: "80%", mb: "10px" }}
           />
           <Typography sx={{ fontSize: 23 }}>
+            <b>Assignment: </b>
+            {ticket.assignment}
+          </Typography>
+          <Typography sx={{ fontSize: 23 }}>
             <b>Position in queue: </b>
             3rd
           </Typography>
