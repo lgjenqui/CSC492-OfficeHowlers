@@ -19,16 +19,3 @@ export async function isValidUserForCourse( email: string, course: Course ) {
     const allCourseUsers = instructors.concat(assistants, students);
     return allCourseUsers.find((user) => { return user.email == email });
 }
-
-// export async function getCourseQueue (req: Request, res: Response) {
-//     try {
-//       if (await isValidInstructorOrAssistantForCourse((req.headers['x-shib_mail']) as string, course)) {
-        
-//         res.status(200).json({ tickets: tickets });
-//       } else {
-//         res.status(403).json({ success: false, error: "Unauthorized to view course queue" });
-//       }
-//     } catch (error) {
-//       res.status(500).json({ message: 'Error retrieving course queue', error: error.message });
-//     }
-//   };
