@@ -386,12 +386,7 @@ const StartSession = ({ setCurrentView }: Props) => {
                 <FormControlLabel
                   value="helpedStudent"
                   control={<Radio />}
-                  label="Only the student(s) being helped"
-                />
-                <FormControlLabel
-                  value="manual"
-                  control={<Radio />}
-                  label="Only the student(s) I send it to"
+                  label="Only the student(s) currently being helped"
                 />
               </RadioGroup>
             </FormControl>
