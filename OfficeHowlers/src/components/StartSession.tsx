@@ -305,6 +305,7 @@ const StartSession = ({ setCurrentView }: Props) => {
             Session start time
           </Typography>
           <TimePicker
+            disabled
             sx={{ width: "90%" }}
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
