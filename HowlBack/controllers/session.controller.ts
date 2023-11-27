@@ -6,6 +6,13 @@ import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
 import { UUID } from 'crypto';
 import Ticket from '../models/ticket.model';
+import {deleteExpiredSession} from '../services/session.service';
+
+const cron = require('node-cron');
+cron.schedule('* * * * *', async () => {
+  // Call the function to delete expired sessions
+  await deleteExpiredSession();
+});
 
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
