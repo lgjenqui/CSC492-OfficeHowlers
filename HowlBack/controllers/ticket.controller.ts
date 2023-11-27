@@ -6,6 +6,8 @@ import Ticket from '../models/ticket.model';
 import { retrieveUser, findOrCreateUser } from '../services/user.service';
 import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
 import { UUID } from 'crypto';
+import { getCourseQueue } from './course.controller';
+import { IntegerDataType } from 'sequelize';
 
 export const createTicket = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -43,6 +45,25 @@ export const getMyTicket = async (req: Request, res: Response): Promise<void> =>
     });
     res.status(200).json(ticket);
   } catch {
-    res.status(200).json
+    res.status(500).json //server side error
+  }
+}
+
+export const getMyTicketPosition = async (req: Request, res: Response): Promise<void> => {
+  const user = (await retrieveUser((req.headers['x-shib_mail']) as string));
+  const myTicket = await user.getTicket();
+  const course = await myTicket.getCourse();
+  const tickets = await course.getTickets();
+
+  try {
+    let position = 0;
+    tickets.forEach((t, index) => {
+      if(t.id == myTicket.id) {
+        position = index;        
+      }
+    });
+    res.status(200).json(position + 1);
+  } catch {
+    res.status(404).json;
   }
 }

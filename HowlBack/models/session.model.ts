@@ -14,6 +14,10 @@ import { UUID } from 'crypto';
     declare endTime: Date;
     declare inPerson: Boolean;
     declare online: Boolean;
+    declare inPersonLocation: String;
+    declare onlineLocation: String;
+    declare showToAll: Boolean;
+    declare showToHelpees: Boolean;
     declare setUser: HasOneSetAssociationMixin<User, string>; 
 
     declare courses?: NonAttribute<Course[]>;
@@ -44,6 +48,15 @@ import { UUID } from 'crypto';
         type: DataTypes.BOOLEAN
       },
       online: {
+        type: DataTypes.BOOLEAN
+      },
+      inPersonLocation: {
+        type: DataTypes.STRING
+      },
+      onlineLocation: {
+        type: DataTypes.STRING
+      },
+      showToAll: {
         type: DataTypes.BOOLEAN
       },
     },

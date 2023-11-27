@@ -10,8 +10,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       declare id: number;
       declare problemDescription: string;
       declare solutionAttempt: string;
+
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
+      declare getCourse: HasOneGetAssociationMixin<Course>;
       declare getUser: HasOneGetAssociationMixin<User>;
     
       declare static associations: {
