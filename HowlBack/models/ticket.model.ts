@@ -14,6 +14,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       // declare position: number;
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
+      declare getCourse: HasOneGetAssociationMixin<Course>;
       declare getUser: HasOneGetAssociationMixin<User>;
       // declare setPosition: HasOneSetAssociationMixin<User, number>;
     

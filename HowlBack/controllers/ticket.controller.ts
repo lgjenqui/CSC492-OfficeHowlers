@@ -52,7 +52,7 @@ export const getMyTicket = async (req: Request, res: Response): Promise<void> =>
 export const getMyTicketPosition = async (req: Request, res: Response): Promise<void> => {
   const user = (await retrieveUser((req.headers['x-shib_mail']) as string));
   const myTicket = await user.getTicket();
-  const course = await Course.findByPk(req.query.id as string);
+  const course = await myTicket.getCourse();
   const tickets = await course.getTickets();
 
   try {
@@ -62,7 +62,7 @@ export const getMyTicketPosition = async (req: Request, res: Response): Promise<
         position = index;        
       }
     });
-    res.status(200).json(position);
+    res.status(200).json(position + 1);
   } catch {
     res.status(404).json;
   }
