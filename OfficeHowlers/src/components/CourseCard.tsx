@@ -1,16 +1,21 @@
 import { Box, CardContent, Divider, Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
 import Course from "../../../Models/course.model";
+import CourseModel from "../../../Models/course.model";
 
 interface Props {
   course: Course;
   role: string;
+  setDisplayedCourse: (course: CourseModel | null) => void;
+  setDisplayedCourseRole: (role: string) => void;
 }
 
-const CourseCard = ({ course, role }: Props) => {
-  const navigate = useNavigate();
-
+const CourseCard = ({
+  course,
+  role,
+  setDisplayedCourse,
+  setDisplayedCourseRole,
+}: Props) => {
   return (
     <Box
       sx={{
@@ -31,7 +36,10 @@ const CourseCard = ({ course, role }: Props) => {
           color: "white",
           borderRadius: "15px",
         }}
-        onClick={() => navigate("/course?id=" + course.id)}
+        onClick={() => {
+          setDisplayedCourse(course);
+          setDisplayedCourseRole(role);
+        }}
       >
         <CardContent>
           <Typography sx={{ fontSize: 42, mb: "0" }}>{course.name}</Typography>

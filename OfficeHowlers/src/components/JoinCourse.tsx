@@ -135,10 +135,18 @@ const JoinCourse = ({ isLoading, setCurrentView, fetchCourses }: Props) => {
   }
 
   return (
-    <Box sx={{ width: "70%", height: "100%", m: "auto", userSelect: "none" }}>
+    <Box
+      sx={{
+        width: "70%",
+        height: "100%",
+        m: "auto",
+        mt: 0,
+        userSelect: "none",
+      }}
+    >
       <Typography
         sx={{
-          fontSize: "35px",
+          fontSize: 38,
           fontWeight: "bold",
           mt: "20px",
           ml: 0,

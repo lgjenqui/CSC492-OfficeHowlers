@@ -5,7 +5,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import NCSULogo from "./assets/ncstate-logo.jpg";
 import Banner from "./components/Banner";
-import StartSession from "./components/StartSession";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import { getUser } from "./services/api/user";
@@ -14,12 +13,10 @@ import EditRoster from "./components/EditRoster";
 import { useEffect, useState } from "react";
 import CourseModel from "../../Models/course.model";
 import User from "../../Models/user.model";
-import CreateHelpTicket from "./components/CreateHelpTicket";
 import { useLocation } from "react-router-dom";
 import { getTicket } from "./services/api/ticket";
 import { getSessionTickets } from "./services/api/session";
 import TicketWrapperModel from "../../Models/ticketWrapper.model";
-import JoinCourse from "./components/JoinCourse";
 
 function App() {
   const navigate = useNavigate();
@@ -115,13 +112,15 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box
         sx={{
-          height: "100%",
-          position: "relative",
+          minHeight: "100vh", // Ensures at least full viewport height
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between", // Positions children at the start and end of the container
         }}
       >
         <Banner
           title={"OfficeHowlers"}
-          subtitle="Think and Do"
+          subtitle={"Think and Do"}
           greeting={getGreeting()}
           onReturnHome={onReturnHome}
         ></Banner>
@@ -137,6 +136,7 @@ function App() {
                 studentCourses={studentCourses}
                 coursesLoadedSuccessfully={coursesLoadedSuccessfully}
                 isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 studentHelpTicket={studentHelpTicket}
@@ -148,25 +148,18 @@ function App() {
 
           <Route path="/course" element={<EditRoster />} />
 
-          <Route
-            path="/startSession"
-            element={<StartSession setCurrentView={setCurrentView} />}
-          />
-
           <Route path="/editRoster" element={<EditRoster />} />
-
-          <Route
-            path="/helpTickets/create"
-            element={<CreateHelpTicket setCurrentView={setCurrentView} />}
-          />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>
 
         <Box
           sx={{
-            bottom: 15,
-            left: 15,
+            position: "relative",
+            width: "100%",
+            mt: "10px",
+            // bottom: 15,
+            // left: 15,
           }}
         >
           <img src={NCSULogo} width="162" height="78" alt="" />

@@ -117,3 +117,11 @@ export async function joinCourseByCourseCode(courseCode: string) {
   };
   return (await fetch(window.location.origin + "/api/course/join/?courseCode=" + courseCode, requestOptions));
 }
+
+export async function regenerateCourseCode(courseUUID: string) {
+  const requestOptions = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  };
+  return (await fetch(window.location.origin + "/api/course/regenerateJoinCode/?id=" + courseUUID, requestOptions));
+}
