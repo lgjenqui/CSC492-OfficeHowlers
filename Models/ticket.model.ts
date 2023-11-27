@@ -4,4 +4,5 @@ export default interface TicketModel extends Model {
     id: number;
     problemDescription: string;
     solutionAttempt: string;
+    // position: number;
 }

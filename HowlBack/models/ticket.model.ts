@@ -10,9 +10,12 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       declare id: number;
       declare problemDescription: string;
       declare solutionAttempt: string;
+
+      // declare position: number;
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
       declare getUser: HasOneGetAssociationMixin<User>;
+      // declare setPosition: HasOneSetAssociationMixin<User, number>;
     
       declare static associations: {
         user: Association<Ticket, User>;
@@ -32,6 +35,9 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
         solutionAttempt: {
           type: DataTypes.STRING
         },
+        // position: {
+        //   type: DataTypes.INTEGER
+        // },
       },
       {
         sequelize, // Providing the Sequelize instance here
