@@ -31,6 +31,16 @@ export async function getTicket(): Promise<any> {
   return (await fetch(window.location.origin + "/api/ticket", requestOptions)).json();
 }
 
+export async function setBeingHelped(): Promise<any> {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  // Create the new course
+  return (await fetch(window.location.origin + "/api/ticket/help", requestOptions)).json();
+}
+
 export async function getMyTicketPosition(): Promise<any> {
   const requestOptions = {
     method: "GET",

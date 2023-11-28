@@ -8,6 +8,7 @@ import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isVa
 import { UUID } from 'crypto';
 import { getCourseQueue } from './course.controller';
 import { IntegerDataType } from 'sequelize';
+import exp from 'constants';
 
 export const createTicket = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -33,6 +34,18 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ message: 'Error creating the ticket', error: error.message });
   }
 };
+
+export const setBeingHelped = async (req: Request, res: Response): Promise<void> => {
+  const user = await retrieveUser((req.headers['x-shib_mail']) as string);
+  try {
+    const ticket = await user.getTicket();
+    ticket.update({beingHelped: !ticket.beingHelped});
+    res.status(200).json(ticket);
+  }
+  catch {
+    res.status(500).json //server side error
+  }
+}
 
 export const getMyTicket = async (req: Request, res: Response): Promise<void> => {
   const user = await retrieveUser((req.headers['x-shib_mail']) as string);

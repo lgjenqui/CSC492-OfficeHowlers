@@ -2,17 +2,24 @@ import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import { getTimeDiffStr } from "../services/util/misc";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { setBeingHelped } from "../services/api/ticket";
+import React from "react";
 
 interface Props {
   ticket: TicketWrapperModel | null;
 }
 
 const FacultyHelpTicket = ({ ticket }: Props) => {
+  var helpTime = dayjs();
   if (!ticket) {
     return null;
   }
 
+  function beingHelped(): void{
+    localStorage.setItem("time", helpTime.toString());
+    setBeingHelped();
+  }
   return (
     <Box
       sx={{
@@ -56,11 +63,18 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
             >
               <b>Location: </b>Virtual
             </Typography>
-            <Typography
+            {!ticket.beingHelped && <Typography
               sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
             >
               <b>Waiting for: </b>{getTimeDiffStr(ticket.createdAt, dayjs())}
             </Typography>
+            }
+            {ticket.beingHelped && <Typography
+              sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
+            >
+              <b>Being Helped For: </b>{getTimeDiffStr(dayjs(localStorage.getItem("time")), dayjs())}
+            </Typography>
+            }
             <Divider
               sx={{
                 m: "auto",
@@ -144,7 +158,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
               mt: "35px",
             }}
           >
-            <Button
+            {!ticket.beingHelped && <Button
               sx={{
                 fontSize: 20,
                 color: "#CC0000",
@@ -155,11 +169,12 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 mr: "20px",
               }}
               variant="contained"
-              onClick={() => {}}
+              onClick={() => {beingHelped()}}
             >
               Help student
             </Button>
-            <Button
+            }
+            {!ticket.beingHelped && <Button
               sx={{
                 fontSize: 20,
                 color: "#CC0000",
@@ -173,6 +188,22 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
             >
               Remove from queue
             </Button>
+            }
+            {ticket.beingHelped && <Button
+              sx={{
+                fontSize: 20,
+                color: "#CC0000",
+                backgroundColor: "white",
+                ":hover": {
+                  backgroundColor: "#D9D9D9",
+                },
+              }}
+              variant="contained"
+              onClick={() => {setBeingHelped()}}
+            >
+              Return to queue
+            </Button>
+            }
           </Box>
         </CardContent>
       </Card>

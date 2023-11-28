@@ -1,7 +1,7 @@
 import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
-import { getMyTicketPosition } from "../services/api/ticket";
+import { getMyTicketPosition, getTicket} from "../services/api/ticket";
 import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -22,8 +22,8 @@ const StudentHelpTicket = ({ ticket }: Props) => {
       .catch((error: any) => {
         console.error(error);
       });
+    
   }, []);
-
   return (
     <Box
       sx={{
@@ -52,25 +52,38 @@ const StudentHelpTicket = ({ ticket }: Props) => {
           <Divider
             sx={{ borderTop: "1px solid white", width: "80%", mb: "10px" }}
           />
-          <Typography sx={{ fontSize: 23 }}>
+          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
             <b>Assignment: </b>
             {ticket.assignment}
           </Typography>
-          <Typography sx={{ fontSize: 23 }}>
+          }
+          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
             <b>Position in queue: </b>
             {ticketPosition}
           </Typography>
-          <Typography sx={{ fontSize: 23 }}>
+          }
+          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
             <b>Problem description: </b>
             {ticket.problemDescription}
           </Typography>
+          }
+          { ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
+            You have been invited to join office hours
+            </Typography>
+          }
+          { ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
+            <b>Location: </b>
+            location
+            </Typography>
+          }
+          
           <Box
             sx={{
               textAlign: "center",
               mt: "35px",
             }}
           >
-            <Button
+            { !ticket.beingHelped && <Button
               sx={{
                 fontSize: 20,
                 color: "#CC0000",
@@ -85,6 +98,7 @@ const StudentHelpTicket = ({ ticket }: Props) => {
             >
               Edit help ticket
             </Button>
+            }
             <Button
               sx={{
                 fontSize: 20,

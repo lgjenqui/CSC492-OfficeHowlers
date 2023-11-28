@@ -1,6 +1,6 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, 
     HasOneSetAssociationMixin, HasOneGetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
-    HasManyAddAssociationMixin, NonAttribute } from 'sequelize';
+    HasManyAddAssociationMixin, NonAttribute, HasManyRemoveAssociationsMixin } from 'sequelize';
     import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
     import TicketModel from "../../Models/ticket.model";
     import Course from "./course.model";
@@ -8,9 +8,12 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
     
     class Ticket extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
       declare id: number;
+      declare assignment: string;
       declare problemDescription: string;
       declare solutionAttempt: string;
+      declare beingHelped: boolean;
 
+      
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
       declare getCourse: HasOneGetAssociationMixin<Course>;
@@ -36,6 +39,9 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
         },
         solutionAttempt: {
           type: DataTypes.STRING
+        },
+        beingHelped: {
+          type: DataTypes.BOOLEAN
         },
       },
       {
