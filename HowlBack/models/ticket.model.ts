@@ -11,7 +11,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       declare assignment: string;
       declare problemDescription: string;
       declare solutionAttempt: string;
-      declare beingHelped: boolean;
+      declare active: boolean;
 
       
       declare setUser: HasOneSetAssociationMixin<User, string>;
@@ -40,8 +40,9 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
         solutionAttempt: {
           type: DataTypes.STRING
         },
-        beingHelped: {
-          type: DataTypes.BOOLEAN
+        active: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
         },
       },
       {

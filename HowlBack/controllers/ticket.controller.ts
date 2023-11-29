@@ -35,15 +35,15 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-export const setBeingHelped = async (req: Request, res: Response): Promise<void> => {
-  const user = await retrieveUser((req.headers['x-shib_mail']) as string);
+export const setTicketStatus = async (req: Request, res: Response): Promise<void> => {
   try {
+    const user = await retrieveUser((req.headers['x-shib_mail']) as string);
     const ticket = await user.getTicket();
-    ticket.update({beingHelped: !ticket.beingHelped});
+    ticket.update({active: (req.active as boolean)});
     res.status(200).json(ticket);
   }
-  catch {
-    res.status(500).json //server side error
+  catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
