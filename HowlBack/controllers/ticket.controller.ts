@@ -39,7 +39,7 @@ export const setTicketStatus = async (req: Request, res: Response): Promise<void
   try {
     const user = await retrieveUser((req.headers['x-shib_mail']) as string);
     const ticket = await user.getTicket();
-    ticket.update({active: (req.active as boolean)});
+    ticket.update({active: (req.body.active as boolean)});
     res.status(200).json(ticket);
   }
   catch (error) {
