@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
-export async function startSession(courses: Course[], inPerson: Boolean, online: Boolean, startTime: Dayjs | null, endTime: Dayjs | null) {
+export async function startSession(courses: Course[], inPerson: Boolean, online: Boolean, startTime: Dayjs | null, endTime: Dayjs | null, 
+  inPersonLocation: String | null, virtualLocation: String | null, showToAll: Boolean) {
     var names:string[] = new Array(courses.length);
     for(var i = 0; i < courses.length; i++){
         names[i] = courses[i].name;
@@ -18,7 +19,10 @@ export async function startSession(courses: Course[], inPerson: Boolean, online:
         inPerson: inPerson,
         online: online,
         startTime: startTime,
-        endTime: endTime
+        endTime: endTime,
+        onlineLocation: virtualLocation,
+        inPersonLocation: inPersonLocation,
+        showToAll: showToAll,
       }),
     };
 

@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material/";
 import CourseModel from "../../../Models/course.model";
 import { useState } from "react";
 import EditRoster from "./EditRoster";
-import CourseInfo from "./CourseInfo";
+import CourseInfo from "./courseInfo";
 import CourseJoinCode from "./CourseJoinCode";
 import { display } from "@mui/system";
 

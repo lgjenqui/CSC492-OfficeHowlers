@@ -144,7 +144,7 @@ const StartSession = ({ setCurrentView }: Props) => {
   function onSubmit() {
     const online = modes.includes("Virtual");
     const inPerson = modes.includes("In-Person");
-    startSession(selectedCourses, inPerson, online, dayjs(), endTime)
+    startSession(selectedCourses, inPerson, online, dayjs(), endTime, inPersonLocation, virtualLocation, virtualLocationDisplay === "all")
       .then(async (res) => {
         if (res.status == 201) {
           setStartSessionSuccessful(true);
@@ -157,6 +157,7 @@ const StartSession = ({ setCurrentView }: Props) => {
           setStartTime(null);
           setEndTime(null);
           setVirtualLocationDisplay("");
+
 
           // Sleep for 2 seconds then redirect the user to their home page
           setCurrentView("helpSession");

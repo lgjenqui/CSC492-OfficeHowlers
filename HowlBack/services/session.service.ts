@@ -1,5 +1,5 @@
 import { Where } from 'sequelize/types/utils';
-import Session from '../models/course.model';
+import Session from '../models/session.model';
 import { Op, WhereOptions } from 'sequelize';
 
 export const deleteExpiredSession = async () => {
