@@ -1,11 +1,13 @@
-import { Box, Button, Card, CardContent, Divider } from "@mui/material";
+import { Box, Button, Card, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 import { setStudentTicketStatus } from "../services/api/ticket";
 import { getTimeDiffStr } from "../services/util/misc";
+import { useEffect, useState } from "react";
 
 interface Props {
+  // TODO: This component should receive MULTIPLE tickets
   ticket: TicketWrapperModel | null;
 }
 
@@ -15,11 +17,30 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
     return null;
   }
 
+  const [activeTicket, setActiveTicket] = useState<TicketWrapperModel | null>(
+    null
+  );
+
   function setStudentTicketStatusHandler(active: boolean): void {
     // TODO: Send this info to the backend instead of using local storage
     localStorage.setItem("time", helpTime.toString());
-    setStudentTicketStatus(active);
+    setStudentTicketStatus(active).then();
+
+    // Update the view to show that this ticket is active
+    if (active) {
+      setActiveTicket(ticket);
+    } else {
+      ticket!.active = false;
+      setActiveTicket(null);
+    }
   }
+
+  useEffect(() => {
+    if (ticket && ticket.active) {
+      setActiveTicket(ticket);
+    }
+  });
+
   return (
     <Box
       sx={{
@@ -75,7 +96,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
               >
                 <b>Location: </b>Virtual
               </Typography>
-              {!ticket.active && (
+              {!activeTicket && (
                 <Typography
                   sx={{
                     display: "inline",
@@ -88,7 +109,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                   {getTimeDiffStr(ticket.createdAt, dayjs())}
                 </Typography>
               )}
-              {ticket.active && (
+              {activeTicket && (
                 <Typography
                   sx={{
                     display: "inline",
@@ -180,7 +201,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 mt: "35px",
               }}
             >
-              {!ticket.active && (
+              {!activeTicket && (
                 <Button
                   sx={{
                     fontSize: 20,
@@ -199,7 +220,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                   Help student
                 </Button>
               )}
-              {!ticket.active && (
+              {!activeTicket && (
                 <Button
                   sx={{
                     fontSize: 20,
@@ -215,12 +236,12 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                   Remove from queue
                 </Button>
               )}
-              {ticket.active && (
+              {activeTicket && (
                 <Button
                   sx={{
                     fontSize: 20,
-                    color: "#CC0000",
-                    backgroundColor: "white",
+                    color: "white",
+                    backgroundColor: "#CC0000",
                     ":hover": {
                       backgroundColor: "#D9D9D9",
                     },

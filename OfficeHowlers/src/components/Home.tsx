@@ -28,6 +28,7 @@ import JoinCourse from "./JoinCourse";
 import CreateHelpTicket from "./CreateHelpTicket";
 import CreateCourse from "./CreateCourse";
 import StartSession from "./StartSession";
+import { useEffect, useState } from "react";
 
 interface Props {
   user: UserModel | null;
