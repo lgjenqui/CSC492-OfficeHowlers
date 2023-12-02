@@ -1,10 +1,9 @@
-import { Box, CardContent, Divider, Card, Button } from "@mui/material";
+import { Box, Button, Card, CardContent, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import { setStudentTicketStatus } from "../services/api/ticket";
 import { getTimeDiffStr } from "../services/util/misc";
-import dayjs, { Dayjs } from "dayjs";
-import { setBeingHelped } from "../services/api/ticket";
-import React from "react";
 
 interface Props {
   ticket: TicketWrapperModel | null;
@@ -16,9 +15,10 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
     return null;
   }
 
-  function beingHelped(): void {
+  function setStudentTicketStatusHandler(active: boolean): void {
+    // TODO: Send this info to the backend instead of using local storage
     localStorage.setItem("time", helpTime.toString());
-    setBeingHelped();
+    setStudentTicketStatus(active);
   }
   return (
     <Box
@@ -175,7 +175,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 }}
                 variant="contained"
                 onClick={() => {
-                  beingHelped();
+                  setStudentTicketStatusHandler(true);
                 }}
               >
                 Help student
@@ -209,7 +209,7 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
                 }}
                 variant="contained"
                 onClick={() => {
-                  setBeingHelped();
+                  setStudentTicketStatusHandler(false);
                 }}
               >
                 Return to queue

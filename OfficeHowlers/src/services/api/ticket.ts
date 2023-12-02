@@ -31,14 +31,17 @@ export async function getTicket(): Promise<any> {
   return (await fetch(window.location.origin + "/api/ticket", requestOptions)).json();
 }
 
-export async function setBeingHelped(): Promise<any> {
+export async function setStudentTicketStatus(active: boolean): Promise<any> {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      "active": active
+    }),
   };
 
   // Create the new course
-  return (await fetch(window.location.origin + "/api/ticket/help", requestOptions)).json();
+  return (await fetch(window.location.origin + "/api/ticket/setStatus", requestOptions)).json();
 }
 
 export async function getMyTicketPosition(): Promise<any> {
