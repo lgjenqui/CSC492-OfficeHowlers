@@ -12,11 +12,11 @@ interface Props {
 
 const FacultyHelpTicket = ({ ticket }: Props) => {
   var helpTime = dayjs();
-  if (!ticket) {
+  if (!ticket || !ticket.User) {
     return null;
   }
 
-  function beingHelped(): void{
+  function beingHelped(): void {
     localStorage.setItem("time", helpTime.toString());
     setBeingHelped();
   }
@@ -63,18 +63,22 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
             >
               <b>Location: </b>Virtual
             </Typography>
-            {!ticket.beingHelped && <Typography
-              sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
-            >
-              <b>Waiting for: </b>{getTimeDiffStr(ticket.createdAt, dayjs())}
-            </Typography>
-            }
-            {ticket.beingHelped && <Typography
-              sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
-            >
-              <b>Being Helped For: </b>{getTimeDiffStr(dayjs(localStorage.getItem("time")), dayjs())}
-            </Typography>
-            }
+            {!ticket.active && (
+              <Typography
+                sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
+              >
+                <b>Waiting for: </b>
+                {getTimeDiffStr(ticket.createdAt, dayjs())}
+              </Typography>
+            )}
+            {ticket.active && (
+              <Typography
+                sx={{ display: "inline", fontSize: 23, mb: "5px", mr: "45px" }}
+              >
+                <b>Being Helped For: </b>
+                {getTimeDiffStr(dayjs(localStorage.getItem("time")), dayjs())}
+              </Typography>
+            )}
             <Divider
               sx={{
                 m: "auto",
@@ -158,52 +162,59 @@ const FacultyHelpTicket = ({ ticket }: Props) => {
               mt: "35px",
             }}
           >
-            {!ticket.beingHelped && <Button
-              sx={{
-                fontSize: 20,
-                color: "#CC0000",
-                backgroundColor: "white",
-                ":hover": {
-                  backgroundColor: "#D9D9D9",
-                },
-                mr: "20px",
-              }}
-              variant="contained"
-              onClick={() => {beingHelped()}}
-            >
-              Help student
-            </Button>
-            }
-            {!ticket.beingHelped && <Button
-              sx={{
-                fontSize: 20,
-                color: "#CC0000",
-                backgroundColor: "white",
-                ":hover": {
-                  backgroundColor: "#D9D9D9",
-                },
-              }}
-              variant="contained"
-              onClick={() => {}}
-            >
-              Remove from queue
-            </Button>
-            }
-            {ticket.beingHelped && <Button
-              sx={{
-                fontSize: 20,
-                color: "#CC0000",
-                backgroundColor: "white",
-                ":hover": {
-                  backgroundColor: "#D9D9D9",
-                },
-              }}
-              variant="contained"
-              onClick={() => {setBeingHelped()}}
-            >
-              Return to queue
-            </Button>
-            }
+            {!ticket.active && (
+              <Button
+                sx={{
+                  fontSize: 20,
+                  color: "#CC0000",
+                  backgroundColor: "white",
+                  ":hover": {
+                    backgroundColor: "#D9D9D9",
+                  },
+                  mr: "20px",
+                }}
+                variant="contained"
+                onClick={() => {
+                  beingHelped();
+                }}
+              >
+                Help student
+              </Button>
+            )}
+            {!ticket.active && (
+              <Button
+                sx={{
+                  fontSize: 20,
+                  color: "#CC0000",
+                  backgroundColor: "white",
+                  ":hover": {
+                    backgroundColor: "#D9D9D9",
+                  },
+                }}
+                variant="contained"
+                onClick={() => {}}
+              >
+                Remove from queue
+              </Button>
+            )}
+            {ticket.active && (
+              <Button
+                sx={{
+                  fontSize: 20,
+                  color: "#CC0000",
+                  backgroundColor: "white",
+                  ":hover": {
+                    backgroundColor: "#D9D9D9",
+                  },
+                }}
+                variant="contained"
+                onClick={() => {
+                  setBeingHelped();
+                }}
+              >
+                Return to queue
+              </Button>
+            )}
           </Box>
         </CardContent>
       </Card>

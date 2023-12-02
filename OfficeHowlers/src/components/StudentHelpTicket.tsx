@@ -1,7 +1,7 @@
 import { Box, CardContent, Divider, Card, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
-import { getMyTicketPosition, getTicket} from "../services/api/ticket";
+import { getMyTicketPosition, getTicket } from "../services/api/ticket";
 import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -22,7 +22,6 @@ const StudentHelpTicket = ({ ticket }: Props) => {
       .catch((error: any) => {
         console.error(error);
       });
-    
   }, []);
   return (
     <Box
@@ -52,53 +51,59 @@ const StudentHelpTicket = ({ ticket }: Props) => {
           <Divider
             sx={{ borderTop: "1px solid white", width: "80%", mb: "10px" }}
           />
-          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
-            <b>Assignment: </b>
-            {ticket.assignment}
-          </Typography>
-          }
-          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
-            <b>Position in queue: </b>
-            {ticketPosition}
-          </Typography>
-          }
-          { !ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
-            <b>Problem description: </b>
-            {ticket.problemDescription}
-          </Typography>
-          }
-          { ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
-            You have been invited to join office hours
+          {!ticket.active && (
+            <Typography sx={{ fontSize: 23 }}>
+              <b>Assignment: </b>
+              {ticket.assignment}
             </Typography>
-          }
-          { ticket.beingHelped && <Typography sx={{ fontSize: 23 }}>
-            <b>Location: </b>
-            location
+          )}
+          {!ticket.active && (
+            <Typography sx={{ fontSize: 23 }}>
+              <b>Position in queue: </b>
+              {ticketPosition}
             </Typography>
-          }
-          
+          )}
+          {!ticket.active && (
+            <Typography sx={{ fontSize: 23 }}>
+              <b>Problem description: </b>
+              {ticket.problemDescription}
+            </Typography>
+          )}
+          {ticket.active && (
+            <Typography sx={{ fontSize: 23 }}>
+              You have been invited to join office hours
+            </Typography>
+          )}
+          {ticket.active && (
+            <Typography sx={{ fontSize: 23 }}>
+              <b>Location: </b>
+              location
+            </Typography>
+          )}
+
           <Box
             sx={{
               textAlign: "center",
               mt: "35px",
             }}
           >
-            { !ticket.beingHelped && <Button
-              sx={{
-                fontSize: 20,
-                color: "#CC0000",
-                backgroundColor: "white",
-                ":hover": {
-                  backgroundColor: "#D9D9D9",
-                },
-                mr: "20px",
-              }}
-              variant="contained"
-              onClick={() => {}}
-            >
-              Edit help ticket
-            </Button>
-            }
+            {!ticket.active && (
+              <Button
+                sx={{
+                  fontSize: 20,
+                  color: "#CC0000",
+                  backgroundColor: "white",
+                  ":hover": {
+                    backgroundColor: "#D9D9D9",
+                  },
+                  mr: "20px",
+                }}
+                variant="contained"
+                onClick={() => {}}
+              >
+                Edit help ticket
+              </Button>
+            )}
             <Button
               sx={{
                 fontSize: 20,
