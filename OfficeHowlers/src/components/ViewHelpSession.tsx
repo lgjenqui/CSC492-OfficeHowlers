@@ -1,6 +1,6 @@
 import { Box, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import FacultyHelpTicket from "./FacultyHelpTicket";
+import HelpSessionTickets from "./HelpSessionTickets";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
 
 interface Props {
@@ -55,9 +55,7 @@ const ViewHelpSession = ({ tickets }: Props) => {
           sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
         />
         {noTicketsMsg}
-        {tickets.map((ticket, index) => (
-          <FacultyHelpTicket ticket={ticket} key={index} />
-        ))}
+        <HelpSessionTickets tickets={tickets} />
       </Box>
     </Box>
   );
