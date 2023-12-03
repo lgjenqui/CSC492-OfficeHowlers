@@ -9,7 +9,7 @@ interface Props {
 
 const ViewHelpSession = ({ tickets }: Props) => {
   var noTicketsMsg = null;
-  if (tickets.length == 0) {
+  if (!Array.isArray(tickets) || tickets.length == 0) {
     noTicketsMsg = (
       <Typography
         sx={{

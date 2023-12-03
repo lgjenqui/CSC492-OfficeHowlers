@@ -159,9 +159,8 @@ const StartSession = ({ setCurrentView }: Props) => {
           setVirtualLocationDisplay("");
 
           // Sleep for 2 seconds then redirect the user to their home page
-          setCurrentView("helpSession");
           await sleep(2000);
-          navigate("/");
+          setCurrentView("helpSession");
         }
       })
       .catch((error) => {

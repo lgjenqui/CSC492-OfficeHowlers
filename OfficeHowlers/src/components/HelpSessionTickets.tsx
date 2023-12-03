@@ -12,6 +12,10 @@ interface Props {
 }
 
 const HelpSessionTickets = ({ tickets }: Props) => {
+  if (!Array.isArray(tickets) || tickets.length == 0) {
+    return null;
+  }
+
   var helpTime = dayjs();
   if (tickets.length == 0) {
     return null;
@@ -47,10 +51,6 @@ const HelpSessionTickets = ({ tickets }: Props) => {
       }
     });
   });
-
-  if (tickets.length == 0) {
-    return null;
-  }
 
   return (
     <Box
