@@ -1,11 +1,11 @@
+import { UUID } from 'crypto';
 import { Request, Response } from 'express';
 import Course from '../models/course.model';
-import User from '../models/user.model';
 import Session from '../models/session.model';
-import { retrieveUser, findOrCreateUser } from '../services/user.service';
-import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
-import { UUID } from 'crypto';
 import Ticket from '../models/ticket.model';
+import User from '../models/user.model';
+import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isValidUserForCourse } from '../services/course.service';
+import { findOrCreateUser, retrieveUser } from '../services/user.service';
 
 export const createSession = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -74,6 +74,29 @@ export const getSessionTickets = async (req: Request, res: Response): Promise<vo
     res.status(200).json(tickets);
   } catch (error) {
     console.error('Error fetching session tickets:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const userHasOngoingSession = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await retrieveUser(req.headers['x-shib_mail'] as string);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const session = await user.getSession();
+    // Check if the user has a session and it's not yet ended
+    if (session && session.endTime > new Date()) {
+      res.status(200).json({ hasSession: true });
+    } else {
+      res.status(200).json({ hasSession: false });
+    }
+
+    
+  } catch (error) {
+    console.error('Error checking if this user has an ongoing session', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
