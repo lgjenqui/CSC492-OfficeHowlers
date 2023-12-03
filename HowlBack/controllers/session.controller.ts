@@ -7,6 +7,7 @@ import { isValidInstructorForCourse, isValidInstructorOrAssistantForCourse, isVa
 import { UUID } from 'crypto';
 import Ticket from '../models/ticket.model';
 import {deleteExpiredSession} from '../services/session.service';
+import ExpiredSession from '../models/expiredSession.model';
 
 const cron = require('node-cron');
 cron.schedule('* * * * *', async () => {
@@ -27,6 +28,13 @@ export const createSession = async (req: Request, res: Response): Promise<void> 
       }));
       const createdSession = await Session.create(req.body);
       await createdSession.setUser(instructorUser);
+      //creating an expired session here since it will be need to be stored eventually.
+      const createdExpiredSession = await ExpiredSession.create(req.body);
+      await createdExpiredSession.setUser(instructorUser);
+      await Promise.all(courses.map(async (course: Course) => {
+        return createdExpiredSession.addCourse(course);
+      }));
+
       await Promise.all(courses.map(async (course: Course) => {
         return createdSession.addCourse(course);
       }));
