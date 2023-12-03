@@ -13,6 +13,11 @@ export async function findOrCreateUser(email: string, firstName: string, lastNam
         email: email,
         primaryRole: role
       });
+    } else if (user.firstName === "Unset firstname" || user.lastName == "Unset lastname") {
+      // If user exists but has placeholder first / last name values, update them
+      user.firstName = firstName;
+      user.lastName = lastName;
+      await user.save(); // Save the changes
     }
     return user;
 }
