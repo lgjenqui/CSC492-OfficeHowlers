@@ -9,7 +9,7 @@ import { createCourse, getCourse, deleteCourse, getAllMyCourses,
     removeStudentsByEmail,
     removeTeachingAssistantsByEmail,
     removeInstructorsByEmail,
-    regenerateJoinCode} from '../controllers/course.controller';
+    regenerateJoinCode } from '../controllers/course.controller';
 import cors from "cors";
 
 const courseRouter: Router = express.Router();
@@ -51,7 +51,6 @@ courseRouter.get('/queue', cors(), getCourseQueue );
 courseRouter.get('/sessions', cors(), getCourseSessions );
 
 courseRouter.get('/expiredSessions', cors(), getCourseExpiredSessions );
-
 
 export default courseRouter;
 

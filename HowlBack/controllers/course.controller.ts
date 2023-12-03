@@ -268,6 +268,22 @@ export const getCourseSessions = async (req: Request, res: Response): Promise<vo
   }
 };
 
+export const checkForOngoingCourseSessions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const course = await Course.findByPk(req.query.id as string);
+    if (await isValidUserForCourse((req.headers['x-shib_mail']) as string, course)) {
+      const sessions = await course.getSessions();
+      let length: number = sessions.length;
+      let boolSessions: boolean = length > 0;
+      res.status(200).json({ boolSessions: boolSessions });
+    } else {
+      res.status(403).json({ success: false, error: "Unauthorized to view course sessions" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving number of course sessions', error: error.message });
+  }
+};
+
 export const getCourseExpiredSessions = async (req: Request, res: Response): Promise<void> => {
   try {
     const course = await Course.findByPk(req.query.id as string);
