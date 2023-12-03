@@ -13,7 +13,6 @@ export async function createTicket(courseId: string, assignment: string, problem
           solutionAttempt: solutionAttempt
         },
         group: group
-
       }),
     };
   

@@ -16,6 +16,7 @@ const HelpSessionTickets = ({ tickets }: Props) => {
   if (tickets.length == 0) {
     return null;
   }
+  console.log(tickets);
 
   const [activeTicket, setActiveTicket] = useState<TicketWrapperModel | null>(
     null
@@ -47,6 +48,10 @@ const HelpSessionTickets = ({ tickets }: Props) => {
     });
   });
 
+  if (tickets.length == 0) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -63,16 +68,15 @@ const HelpSessionTickets = ({ tickets }: Props) => {
       }}
     >
       {tickets.map((ticket) => {
-        if (!ticket || !ticket.User) {
+        if (!ticket || !ticket.User || !ticket.Course) {
           console.log(ticket);
           return null;
         }
         return (
           <Card
+            key={ticket.id}
             sx={{
               mt: "20px",
-              // backgroundColor: "#CC0000",
-              // background: "#EDEDED",
               border: "2px solid #CC0000",
               backgroundClip: "padding-box",
               color: "black",

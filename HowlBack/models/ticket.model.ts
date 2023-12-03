@@ -51,10 +51,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       }
     );
   
-    Ticket.hasOne(Course);
+    Ticket.belongsTo(Course);
     Course.hasMany(Ticket);
 
-    Ticket.hasOne(User);
+    Ticket.belongsTo(User);
     User.hasOne(Ticket);
     
     export default Ticket;
