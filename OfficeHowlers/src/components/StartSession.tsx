@@ -391,6 +391,7 @@ const StartSession = ({ setCurrentView }: Props) => {
           onClick={() => {
             if (inputIsValid()) {
               setOpen(true);
+              setStartTime(dayjs());
             }
           }}
         >
@@ -431,7 +432,7 @@ const StartSession = ({ setCurrentView }: Props) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              This session will be {getTimeDiffStr(startTime, endTime)} long.
+              This session will be {getTimeDiffStr(dayjs(), endTime)} long.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
