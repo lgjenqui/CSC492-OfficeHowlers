@@ -51,10 +51,12 @@ import { UUID } from 'crypto';
         type: DataTypes.BOOLEAN
       },
       inPersonLocation: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: ""
       },
       onlineLocation: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: ""
       },
       showToAll: {
         type: DataTypes.BOOLEAN

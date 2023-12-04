@@ -6,4 +6,5 @@ export default interface TicketModel extends Model {
     problemDescription: string;
     solutionAttempt: string;
     active: boolean;
+    location: string;
 }

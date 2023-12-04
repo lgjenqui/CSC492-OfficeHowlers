@@ -37,9 +37,34 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
 
 export const setTicketStatus = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await retrieveUser((req.headers['x-shib_mail']) as string);
+    const user = await retrieveUser(req.headers['x-shib_mail'] as string);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
     const ticket = await Ticket.findByPk(req.body.ticketId);
-    ticket.update({active: (req.body.active as boolean)});
+    if (!ticket) {
+      res.status(404).json({ message: 'Ticket not found' });
+      return;
+    }
+
+    const session = await user.getSession();
+    if (!session) {
+      res.status(404).json({ message: 'Session not found for the user' });
+      return;
+    }
+
+    ticket.active = req.body.active;
+
+    // Determine the ticket location based on the session location
+    let ticketLocation = session.inPersonLocation.length > 0 ? session.inPersonLocation : session.onlineLocation;
+    console.log(ticketLocation);
+    ticket.location = ticketLocation as string;
+
+    // Save the changes to the ticket
+    await ticket.save();
+    console.log(ticket.location);
     res.status(200).json(ticket);
   }
   catch (error) {

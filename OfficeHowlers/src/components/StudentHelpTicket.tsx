@@ -1,8 +1,8 @@
-import { Box, CardContent, Divider, Card, Button } from "@mui/material";
+import { Box, Button, Card, CardContent, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
-import { getMyTicketPosition, getTicket } from "../services/api/ticket";
-import React, { useEffect, useState } from "react";
+import { getMyTicketPosition } from "../services/api/ticket";
 
 interface Props {
   ticket: TicketWrapperModel | null;
@@ -10,6 +10,8 @@ interface Props {
 
 const StudentHelpTicket = ({ ticket }: Props) => {
   const [ticketPosition, setTicketPosition] = useState<string | null>("");
+  const [ticketLocation, setTicketLocation] = useState<string | null>("");
+
   if (!ticket) {
     return null;
   }
@@ -77,7 +79,7 @@ const StudentHelpTicket = ({ ticket }: Props) => {
           {ticket.active && (
             <Typography sx={{ fontSize: 23 }}>
               <b>Location: </b>
-              location
+              {ticket.location}
             </Typography>
           )}
 

@@ -12,7 +12,7 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
       declare problemDescription: string;
       declare solutionAttempt: string;
       declare active: boolean;
-
+      declare location: string;
       
       declare setUser: HasOneSetAssociationMixin<User, string>;
       declare setCourse: HasOneSetAssociationMixin<Course, string>;
@@ -44,6 +44,10 @@ import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association
           type: DataTypes.BOOLEAN,
           defaultValue: false
         },
+        location: {
+          type: DataTypes.STRING,
+          defaultValue: ""
+        }
       },
       {
         sequelize, // Providing the Sequelize instance here
