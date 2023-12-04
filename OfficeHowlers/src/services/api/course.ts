@@ -125,3 +125,11 @@ export async function regenerateCourseCode(courseUUID: string) {
   };
   return (await fetch(window.location.origin + "/api/course/regenerateJoinCode/?id=" + courseUUID, requestOptions));
 }
+
+export async function getActiveFacultyMembers(courseUUID: string) {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+  return (await fetch(window.location.origin + "/api/course/activeFaculty/?id=" + courseUUID, requestOptions)).json();
+}
