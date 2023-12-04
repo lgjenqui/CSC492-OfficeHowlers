@@ -198,7 +198,7 @@ const StartSession = ({ setCurrentView }: Props) => {
   useEffect(() => {
     let res = getCourses();
     res.then((value) => {
-      setCourses(value.instructorCourses);
+      setCourses([...value.instructorCourses,...value.assistantCourses]);
     });
     res.catch((error) => {
       console.error(error);
