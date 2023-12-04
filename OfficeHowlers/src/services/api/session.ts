@@ -35,6 +35,14 @@ export async function getSessionTickets(): Promise<any> {
     headers: { "Content-Type": "application/json" },
   };
 
-  // Create the new course
   return (await fetch(window.location.origin + "/api/session/tickets", requestOptions)).json();
+}
+
+export async function userHasOngoingSession(): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  return (await fetch(window.location.origin + "/api/session/ongoing", requestOptions)).json();
 }

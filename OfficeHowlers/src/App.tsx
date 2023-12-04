@@ -34,6 +34,9 @@ function App() {
   const [coursesLoadedSuccessfully, setCoursesLoadedSuccessfully] = useState<
     boolean | null
   >(null);
+  const [fetchCoursesDone, setFetchCoursesDone] = useState<boolean | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState<string>("myCourses");
 
@@ -58,6 +61,7 @@ function App() {
     setAssistantCourses(courses.assistantCourses);
     setStudentCourses(courses.studentCourses);
     setCoursesLoadedSuccessfully(true);
+    setFetchCoursesDone(true);
   }
 
   useEffect(() => {
@@ -73,22 +77,25 @@ function App() {
     const fetchData = async () => {
       try {
         const user = await getUser();
-        console.log(user);
         setUser(user);
 
-        fetchCourses();
+        await fetchCourses();
 
         // Grab the user's help session tickets if they are faculty
-        if (user && user.primaryRole === "faculty") {
+        if (
+          user &&
+          (user.primaryRole === "faculty" || instructorCourses.length > 0)
+        ) {
           const sessionTickets = await getSessionTickets();
-          console.log(sessionTickets);
           setSessionTickets(sessionTickets);
         }
 
         // Grab the user's help ticket if they are a student
-        if (user && user.primaryRole != "faculty") {
+        if (
+          (user && user.primaryRole != "faculty") ||
+          studentCourses.length > 0
+        ) {
           const helpTicket = await getTicket();
-          console.log(helpTicket);
           setStudentHelpTicket(helpTicket);
         }
       } catch (err) {
@@ -106,7 +113,7 @@ function App() {
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [location]);
+  }, [location, fetchCoursesDone]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -145,10 +152,6 @@ function App() {
               />
             }
           />
-
-          <Route path="/course" element={<EditRoster />} />
-
-          <Route path="/editRoster" element={<EditRoster />} />
 
           <Route path="/*" element={<NotFound onReturnHome={onReturnHome} />} />
         </Routes>

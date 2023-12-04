@@ -1,16 +1,20 @@
-import express, { Application, Request, Response, Router } from 'express';
-import { createSession } from '../controllers/session.controller';
+import express, { Router } from 'express';
 import cors from "cors";
-import { createTicket, getMyTicketPosition } from '../controllers/ticket.controller';
-import { getMyTicket } from '../controllers/ticket.controller';
+import {
+  createTicket, 
+  getMyTicket, 
+  getMyTicketPosition, 
+  setTicketStatus 
+} from '../controllers/ticket.controller';
 
 const ticketRouter: Router = express.Router();
 
-ticketRouter.get('/', cors(), getMyTicket );
+// Apply CORS middleware to all routes in this router
+ticketRouter.use(cors());
 
-ticketRouter.get('/position', cors(), getMyTicketPosition );
-
-ticketRouter.post('/create', cors(), createTicket );
+ticketRouter.get('/', getMyTicket);
+ticketRouter.get('/position', getMyTicketPosition);
+ticketRouter.post('/create', createTicket);
+ticketRouter.post('/setStatus', setTicketStatus);
 
 export default ticketRouter;
-

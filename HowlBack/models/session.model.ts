@@ -1,5 +1,5 @@
 import { Model, DataTypes, InferAttributes, InferCreationAttributes, Association, 
-  HasOneSetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
+  HasOneSetAssociationMixin, HasOneGetAssociationMixin, ForeignKey, HasManyGetAssociationsMixin, 
   HasManyAddAssociationMixin, NonAttribute } from 'sequelize';
   import sequelize from '../sequelize_db'; // Import path from module sequalize is imprted from
   import SessionModel from "../../Models/session.model";
@@ -19,6 +19,7 @@ import { UUID } from 'crypto';
     declare showToAll: Boolean;
     declare showToHelpees: Boolean;
     declare setUser: HasOneSetAssociationMixin<User, string>; 
+    declare getUser: HasOneGetAssociationMixin<User>;
 
     declare courses?: NonAttribute<Course[]>;
   
@@ -51,10 +52,12 @@ import { UUID } from 'crypto';
         type: DataTypes.BOOLEAN
       },
       inPersonLocation: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: ""
       },
       onlineLocation: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: ""
       },
       showToAll: {
         type: DataTypes.BOOLEAN

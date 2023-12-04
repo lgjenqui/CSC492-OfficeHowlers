@@ -160,9 +160,8 @@ const StartSession = ({ setCurrentView }: Props) => {
 
 
           // Sleep for 2 seconds then redirect the user to their home page
-          setCurrentView("helpSession");
           await sleep(2000);
-          navigate("/");
+          setCurrentView("helpSession");
         }
       })
       .catch((error) => {
@@ -392,6 +391,7 @@ const StartSession = ({ setCurrentView }: Props) => {
           onClick={() => {
             if (inputIsValid()) {
               setOpen(true);
+              setStartTime(dayjs());
             }
           }}
         >
@@ -432,7 +432,7 @@ const StartSession = ({ setCurrentView }: Props) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              This session will be {getTimeDiffStr(startTime, endTime)} long.
+              This session will be {getTimeDiffStr(dayjs(), endTime)} long.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
