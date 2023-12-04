@@ -32,7 +32,9 @@ const HelpSessionTickets = ({ tickets }: Props) => {
   ): void {
     // TODO: Send this info to the backend instead of using local storage
     localStorage.setItem("time", helpTime.toString());
-    setStudentTicketStatus(active).then();
+
+    // TODO: Implement error checks for this
+    setStudentTicketStatus(active, ticket);
 
     // Update the view to show that this ticket is active
     if (active) {

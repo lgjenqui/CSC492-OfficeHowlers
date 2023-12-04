@@ -38,7 +38,7 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
 export const setTicketStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await retrieveUser((req.headers['x-shib_mail']) as string);
-    const ticket = await user.getTicket();
+    const ticket = await Ticket.findByPk(req.body.ticketId);
     ticket.update({active: (req.body.active as boolean)});
     res.status(200).json(ticket);
   }
