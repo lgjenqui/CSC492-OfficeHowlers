@@ -5,6 +5,7 @@ import { createCourse, getCourse, deleteCourse, getAllMyCourses,
     addInstructorsByEmail,
     getCourseQueue,
     getCourseSessions,
+    getCourseExpiredSessions,
     removeStudentsByEmail,
     removeTeachingAssistantsByEmail,
     removeInstructorsByEmail,
@@ -51,6 +52,8 @@ courseRouter.get('/queue', cors(), getCourseQueue );
 courseRouter.get('/sessions', cors(), getCourseSessions );
 
 courseRouter.get('/activeFaculty', cors(), getActiveFacultyMembers );
+
+courseRouter.get('/expiredSessions', cors(), getCourseExpiredSessions );
 
 export default courseRouter;
 

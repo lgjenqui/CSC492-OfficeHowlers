@@ -5,6 +5,7 @@ import CourseModel from "../../Models/course.model";
 import User from "./user.model";
 import Ticket from "./ticket.model";
 import Session from "./session.model";
+import ExpiredSession from "./expiredSession.model";
 import { UUID } from 'crypto';
 import { COURSE_JOIN_CODE_LENGTH } from '../src/constants';
 
@@ -36,6 +37,8 @@ class Course extends Model<InferAttributes<CourseModel>, InferCreationAttributes
   declare setStudents: HasManySetAssociationsMixin<User, number>;
 
   declare getSessions: HasManyGetAssociationsMixin<Session>;
+  declare getExpiredSessions: HasManyGetAssociationsMixin<ExpiredSession>;
+
 
   declare getTickets: HasManyGetAssociationsMixin<Session>;
   declare addTicket: HasManyAddAssociationMixin<Ticket, number>;
