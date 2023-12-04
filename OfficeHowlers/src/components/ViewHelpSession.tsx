@@ -2,6 +2,8 @@ import { Box, Divider } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import HelpSessionTickets from "./HelpSessionTickets";
 import TicketWrapperModel from "../../../Models/ticketWrapper.model";
+import { useEffect, useState } from "react";
+import { userHasOngoingSession } from "../services/api/session";
 
 interface Props {
   tickets: TicketWrapperModel[];
@@ -9,7 +11,25 @@ interface Props {
 
 const ViewHelpSession = ({ tickets }: Props) => {
   var noTicketsMsg = null;
-  if (!Array.isArray(tickets) || tickets.length == 0) {
+  const [ongoingSession, setOngoingSession] = useState<Boolean>(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await userHasOngoingSession().then((res) => {
+          if (res && res.hasSession) {
+            setOngoingSession(true);
+          }
+        });
+      } catch {
+        console.log("Error checking if the user has an ongoing session.");
+      }
+    };
+
+    fetchData();
+  });
+
+  if (!ongoingSession) {
     noTicketsMsg = (
       <Typography
         sx={{
@@ -18,12 +38,25 @@ const ViewHelpSession = ({ tickets }: Props) => {
           width: "80%",
         }}
       >
-        It looks like you haven't started a session or no students have
-        submitted a help ticket.
-        <br />
+        It looks like you haven't started a help session yet.
         <br />
         To start a help session, use the <b>'Start help session'</b> option to
         the left.
+      </Typography>
+    );
+  } else if (
+    ongoingSession &&
+    (!Array.isArray(tickets) || tickets.length == 0)
+  ) {
+    noTicketsMsg = (
+      <Typography
+        sx={{
+          fontSize: "35px",
+          display: "inline-block",
+          width: "80%",
+        }}
+      >
+        No students have submitted help tickets yet.
       </Typography>
     );
   }

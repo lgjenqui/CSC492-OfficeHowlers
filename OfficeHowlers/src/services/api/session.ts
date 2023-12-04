@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 import Course from "../../../../Models/course.model";
+
 export async function startSession(courses: Course[], inPerson: Boolean, online: Boolean, startTime: Dayjs | null, endTime: Dayjs | null) {
     var names:string[] = new Array(courses.length);
     for(var i = 0; i < courses.length; i++){
@@ -31,6 +32,14 @@ export async function getSessionTickets(): Promise<any> {
     headers: { "Content-Type": "application/json" },
   };
 
-  // Create the new course
   return (await fetch(window.location.origin + "/api/session/tickets", requestOptions)).json();
+}
+
+export async function userHasOngoingSession(): Promise<any> {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  return (await fetch(window.location.origin + "/api/session/ongoing", requestOptions)).json();
 }

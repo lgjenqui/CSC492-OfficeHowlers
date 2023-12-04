@@ -86,13 +86,15 @@ export const userHasOngoingSession = async (req: Request, res: Response): Promis
       return;
     }
 
-    const session = await user.getSession();
-    // Check if the user has a session and it's not yet ended
-    if (session && session.endTime > new Date()) {
-      res.status(200).json({ hasSession: true });
-    } else {
-      res.status(200).json({ hasSession: false });
-    }
+    const session = await user.getSession().then((session) => {
+      // Check if the user has a session and it's not yet ended
+      if (session && session.endTime > new Date()) {
+        res.status(200).json({ hasSession: true });
+      } else {
+        console.log("SESSION:", session);
+        res.status(200).json({ hasSession: false });
+      }
+    })
 
     
   } catch (error) {
