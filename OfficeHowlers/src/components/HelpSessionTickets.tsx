@@ -37,6 +37,7 @@ const HelpSessionTickets = ({ tickets }: Props) => {
     // Update the view to show that this ticket is active
     if (active) {
       setActiveTicket(ticket);
+      ticket.active = true;
     } else {
       ticket!.active = false;
       setActiveTicket(null);
@@ -55,15 +56,12 @@ const HelpSessionTickets = ({ tickets }: Props) => {
   return (
     <Box
       sx={{
-        width: "80%",
+        width: "100%",
         minWidth: "600px",
         maxWidth: "1200px",
         display: "block",
         ":hover": {
           cursor: "pointer",
-        },
-        ":active": {
-          backgroundColor: "#D9D9D9",
         },
       }}
     >
@@ -76,8 +74,10 @@ const HelpSessionTickets = ({ tickets }: Props) => {
           <Card
             key={ticket.id}
             sx={{
+              m: "auto",
               mt: "20px",
-              border: "2px solid #CC0000",
+              width: "80%",
+              border: ticket.active ? "2px solid green" : "2px solid #CC0000",
               backgroundClip: "padding-box",
               color: "black",
               borderRadius: "15px",
@@ -90,10 +90,10 @@ const HelpSessionTickets = ({ tickets }: Props) => {
             <CardContent sx={{ padding: 0 }}>
               <Box
                 sx={{
-                  background: "#CC0000",
+                  // Highlight active ticket
+                  background: ticket.active ? "green" : "#CC0000",
                   color: "white",
                   pt: "10px",
-
                   pb: "15px",
                 }}
               >

@@ -38,10 +38,8 @@ const ViewHelpSession = ({ tickets }: Props) => {
           width: "80%",
         }}
       >
-        It looks like you haven't started a help session yet.
-        <br />
-        To start a help session, use the <b>'Start help session'</b> option to
-        the left.
+        It looks like you haven't started a help session yet. To start a help
+        session, use the <b>'Start help session'</b> option to the left.
       </Typography>
     );
   } else if (
@@ -85,10 +83,10 @@ const ViewHelpSession = ({ tickets }: Props) => {
           My help session queue
         </Typography>
         <Divider
-          sx={{ borderTop: "1px solid black", width: "80%", mb: "10px" }}
+          sx={{ borderTop: "1px solid black", width: "100%", mb: "10px" }}
         />
         {noTicketsMsg}
-        <HelpSessionTickets tickets={tickets} />
+        {ongoingSession ? <HelpSessionTickets tickets={tickets} /> : null}
       </Box>
     </Box>
   );
